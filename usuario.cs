@@ -7,20 +7,21 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using SysTINSClass;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace coldmak
 {
     public class usuario
     {
-        public int Id;
-        public string? Nome;
-        public string? Rg;
-        public string? Cpf;
-        public string? Endereco;
-        public string? Cep;
-        public string? Email;
-        public string? Telefone;
+        public int Id { get; set; };
+        public string Nome { get; set; };
+        public string Rg { get; set; };
+        public string Cpf { get; set; };
+        public string Endereco { get; set; };
+        public string Cep { get; set; };
+        public string Email { get; set; };
+        public string Telefone { get; set; };
 
         public usuario()
         {
@@ -167,4 +168,13 @@ public static Usuario EfetuarLogin(string email, string senha)
            );
     }
     return usuario;
+}
+public void Excluir()
+{
+    var cmd = Banco.Abrir();
+    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+    cmd.CommandText = "sp_usuario_delete";
+    cmd.Parameters.AddWithValue("spid", Id);
+    cmd.ExecuteNonQuery();
+    cmd.Connection.Close();
 }
