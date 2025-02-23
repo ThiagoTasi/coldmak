@@ -5,8 +5,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using coldmakClass;
 
-namespace coldmak
+namespace coldmakClass
 {
     public class Usuario
     {
@@ -21,9 +23,9 @@ namespace coldmak
         public DateTime DataNascimento { get; set; }
         public int NivelId { get; set; }
         public bool Ativo { get; set; }
-        public string Senha { get; set; } // Adicionado para manter a compatibilidade com o código existente
+        public string Senha { get; set; }
 
-        public Nivel Nivel { get; set; } // Adicionado para manter a compatibilidade com o código existente
+        public Nivel Nivel { get; set; }
 
         public Usuario()
         {
@@ -56,7 +58,7 @@ namespace coldmak
             Nivel = nivel;
         }
 
-        public Usuario(string nome, string email, string senha, Nível nivel)
+        public Usuario(string nome, string email, string senha, Nivel nivel)
         {
             Nome = nome;
             Email = email;
@@ -98,7 +100,7 @@ namespace coldmak
             Ativo = ativo;
         }
 
-        // inserir
+        // Inserir
         public void Inserir()
         {
             var cmd = Banco.Abrir();
@@ -106,9 +108,21 @@ namespace coldmak
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_usuario_insert";
             cmd.Parameters.Add("spnome", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Nome;
+            cmd.Parameters.AddWithValue("sprg", Rg);
+            cmd.Parameters.AddWithValue("spcpf", Cpf);
+            cmd.Parameters.AddWithValue("spendereco", Endereco);
+            cmd.Parameters.AddWithValue("spcep", Cep);
             cmd.Parameters.AddWithValue("spemail", Email);
+            cmd.Parameters.AddWithValue("sptelefone", Telefone);
+            cmd.Parameters.AddWithValue("spdata_nascimento", DataNascimento);
+            cmd.Parameters.AddWithValue("spnivelid", NivelId);
+            cmd.Parameters.AddWithValue("spativo", Ativo);
             cmd.Parameters.AddWithValue("spsenha", Senha);
-            cmd.Parameters.AddWithValue("spnivel", Nivel.Id);
+
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = "select last_insert_id()";
+            cmd.ExecuteNonQuery();
+
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
@@ -131,8 +145,14 @@ namespace coldmak
                     dr.GetString(1),
                     dr.GetString(2),
                     dr.GetString(3),
-                    Nivel.ObterPorId(dr.GetInt32(4)),
-                    dr.GetBoolean(5)
+                    dr.GetString(4),
+                    dr.GetString(5),
+                    dr.GetString(6),
+                    dr.GetString(7),
+                    dr.GetDateTime(8),
+                    dr.GetInt32(9),
+                    dr.GetBoolean(10)
+
                 );
             }
             return usuario;
@@ -151,8 +171,14 @@ namespace coldmak
                     dr.GetString(1),
                     dr.GetString(2),
                     dr.GetString(3),
-                    Nivel.ObterPorId(dr.GetInt32(4)),
-                    dr.GetBoolean(5)
+                    dr.GetString(4),
+                    dr.GetString(5),
+                    dr.GetString(6),
+                    dr.GetString(7),
+                    dr.GetDateTime(8),
+                    dr.GetInt32(9),
+                    dr.GetBoolean(10)
+
                 ));
             }
             return lista;
@@ -165,12 +191,22 @@ namespace coldmak
             cmd.CommandText = "sp_usuario_altera";
             cmd.Parameters.AddWithValue("spid", Id);
             cmd.Parameters.AddWithValue("spnome", Nome);
+            cmd.Parameters.AddWithValue("sprg", Rg);
+            cmd.Parameters.AddWithValue("spcpf", Cpf);
+            cmd.Parameters.AddWithValue("spendereco", Endereco);
+            cmd.Parameters.AddWithValue("spcep", Cep);
+            cmd.Parameters.AddWithValue("spemail", Email);
+            cmd.Parameters.AddWithValue("sptelefone", Telefone);
+            cmd.Parameters.AddWithValue("spdata_nascimento", DataNascimento);
+            cmd.Parameters.AddWithValue("spnivelid", NivelId);
+            cmd.Parameters.AddWithValue("spativo", Ativo);
             cmd.Parameters.AddWithValue("spsenha", Senha);
-            cmd.Parameters.AddWithValue("spnivel", Nivel.Id);
-            return cmd.ExecuteNonQuery() > 0 ? true : false;
+
+            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery() > 0;
         }
 
-        // efetuar login
+        // Efetuar login
         public static Usuario EfetuarLogin(string email, string senha)
         {
             Usuario usuario = new();
@@ -184,8 +220,14 @@ namespace coldmak
                     dr.GetString(1),
                     dr.GetString(2),
                     dr.GetString(3),
-                    Nivel.ObterPorId(dr.GetInt32(4)),
-                    dr.GetBoolean(5)
+                    dr.GetString(4),
+                    dr.GetString(5),
+                    dr.GetString(6),
+                    dr.GetString(7),
+                    dr.GetDateTime(8),
+                    dr.GetInt32(9),
+                    dr.GetBoolean(10)
+
                 );
             }
             return usuario;

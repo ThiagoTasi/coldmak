@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SysTINSClass
+namespace coldmakClass
 {
     // classe Banco é nossa classe de conexão
     public static class Banco // static pois não precisaremos criar uma instancia de Banco para conectar às nossas base dados
