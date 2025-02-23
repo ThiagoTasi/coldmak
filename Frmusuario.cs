@@ -1,25 +1,29 @@
-﻿using coldmak;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using coldmak;
+using coldmakClass;
+using ZstdSharp.Unsafe;
 
-namespace coldmak
+namespace coldmakApp
 {
-    public partial class Frmusuario : Form
+    public partial class FrmUsuarios : Form
     {
-        public Frmusuario()
+        public FrmUsuarios()
         {
             InitializeComponent();
         }
+
         private void FrmUsuarios_Load(object sender, EventArgs e)
         {
-            // carregando o comboBox de níveis 
+            // carregando o comboBox de níveis
             cmbNivel.DataSource = Nivel.ObterLista();
             cmbNivel.DisplayMember = "Nome";
             cmbNivel.ValueMember = "Id";
@@ -28,35 +32,40 @@ namespace coldmak
             CarregaGridUsuarios();
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void btnInserir_Click(object sender, EventArgs e)
         {
-            Usuario usuario = new(
-                txtNome.Text,
-                txtRg.Text,
-                txtCpf.Text,
-                txtEndereco.Text,
-                txtCep.Text,
-                txtEmail.Text,
-                txtTelefone.Text,
-                txtSenha.Text,
-                txtData_Nascimento.Text,
-                Nivel.ObterPorId(Convert.ToInt32(cmbNivel.SelectedValue))
+            try
+            {
+                Usuario usuario = new Usuario(
+                    textNome.Text,
+                    textRg.Text,
+                    textCpf.Text,
+                    textEndereco.Text,
+                    textCep.Text,
+                    textEmail.Text,
+                    textTelefone.Text,
+                    textDataNascimento.Text,
+                    Convert.ToInt32(cmbNivel.SelectedValue),
+                    chkAtivo.Checked
                 );
 
-            usuario.Inserir();
-            if (usuario.Id > 0)
+                usuario.Inserir();
+
+                if (usuario.Id > 0)
+                {
+                    // carrega grid
+                    CarregaGridUsuarios();
+                    MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso");
+                    btnInserir.Enabled = false;
+                    LimparCampos(); // Limpa os campos após a inserção
+                }
+            }
+            catch (Exception ex)
             {
-                // carrega grid
-                CarregaGridUsuarios();
-                MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso");
-                btnInserir.Enabled = false;
+                MessageBox.Show($"Erro ao inserir usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void CarregaGridUsuarios()
         {
             dgvUsuarios.Rows.Clear();
@@ -73,65 +82,116 @@ namespace coldmak
                 dgvUsuarios.Rows[linha].Cells[5].Value = usuario.Cep;
                 dgvUsuarios.Rows[linha].Cells[6].Value = usuario.Email;
                 dgvUsuarios.Rows[linha].Cells[7].Value = usuario.Telefone;
-                dgvUsuarios.Rows[linha].Cells[8].Value = usuario.Senha;
-                dgvUsuarios.Rows[linha].Cells[9].Value = usuario.Data_nascimento;
-                dgvUsuarios.Rows[linha].Cells[10].Value = usuario.Nivel.Nome;
-                dgvUsuarios.Rows[linha].Cells[11].Value = usuario.Ativo;
+                dgvUsuarios.Rows[linha].Cells[8].Value = usuario.DataNascimento;
+                dgvUsuarios.Rows[linha].Cells[9].Value = usuario.Nivel.Nome;
+                dgvUsuarios.Rows[linha].Cells[10].Value = usuario.Ativo;
                 linha++;
             }
         }
 
         private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            int linhaAtual = dgvUsuarios.CurrentRow.Index;
-            int idUser = Convert.ToInt32(dgvUsuarios.Rows[linhaAtual].Cells[0].Value);
-            var usuario = Usuario.ObterPorId(idUser);
-            txtId.Text = usuario.Id.ToString();
-            txtNome.Text = usuario.Nome;
-            txtRg.Text = usuario.Rg;
-            txtCpf.Text = usuario.Cpf;
-            txtEndereco.Text = usuario.Endereco;
-            txtCep.Text = usuario.Cep;
-            txtEmail.Text = usuario.Email;
-            txtTelefone.Text = usuario.Telefone;
-            txtSenha.Text = usuario.Senha;
-            txtData_Nascimento.Text = usuario.Data_nascimento;
-            cmbNivel.SelectedValue = usuario.Nivel.Id;
-            chkAtivo.Checked = usuario.Ativo;
-            btnAtualizar.Enabled = true;
-
-            //MessageBox.Show(idUser.ToString());
+            if (e.RowIndex >= 0)
+            {
+                int linhaAtual = dgvUsuarios.CurrentRow.Index;
+                int idUser = Convert.ToInt32(dgvUsuarios.Rows[linhaAtual].Cells[0].Value);
+                var usuario = Usuario.ObterPorId(idUser);
+                textId.Text = usuario.Id.ToString();
+                textNome.Text = usuario.Nome;
+                textRg.Text = usuario.Rg;
+                textCpf.Text = usuario.Cpf;
+                textEndereco.Text = usuario.Endereco;
+                textCep.Text = usuario.Cep;
+                textEmail.Text = usuario.Email;
+                textTelefone.Text = usuario.Telefone;
+                textDataNascimento.Text = usuario.DataNascimento;
+                chkAtivo.Checked = usuario.Ativo;
+                cmbNivel.SelectedValue = usuario.Nivel.Id;
+                btnAtualizar.Enabled = true;
+                btnDeletar.Enabled = true;
+            }
         }
-    } 
 
         private void btnAtualizar_Click(object sender, EventArgs e)
         {
-            Usuario usuario = new();
-            usuario.Id = int.Parse(txtId.Text);
-            usuario.Nome = txtNome.Text;
-            usuario.Rg = txtRg.Text;
-            usuario.Cpf = txtCpf.Text;
-            usuario.Endereco = txtEndereco.Text;
-            usuario.Cep = txtCep.Text;
-            usuario.Email = txtEmail.Text;
-            usuario.Telefone = txtTelefone.Text;
-            usuario.Senha = txtSenha.Text;
-            usuario.Data_nascimento = txtData_Nascimento.Text;
-            cmbNivel.SelectedValue = usuario.Nivel.Id;
-            usuario.Ativo = chkAtivo.Checked;
-
-            usuario.Nivel = Nivel.ObterPorId(Convert.ToInt32(cmbNivel.SelectedValue));
-            if (usuario.Atualizar())
+            try
             {
-                CarregaGridUsuarios();
-                MessageBox.Show("Usuário atualizado com sucesso!");
-            }
+                Usuario usuario = new Usuario();
+                usuario.Id = int.Parse(textId.Text);
+                usuario.Nome = textNome.Text;
+                usuario.Rg = textRg.Text;
+                usuario.Cpf = textCpf.Text;
+                usuario.Endereco = textEndereco.Text;
+                usuario.Cep = textCep.Text;
+                usuario.Email = textEmail.Text;
+                usuario.Telefone = textTelefone.Text;
+                usuario.DataNascimento = textDataNascimento.Text;
+                usuario.Nivel = Nível.ObterPorId(Convert.ToInt32(cmbNivel.SelectedValue));
+                usuario.Ativo = chkAtivo.Checked;
 
+                if (usuario.Atualizar())
+                {
+                    CarregaGridUsuarios();
+                    MessageBox.Show("Usuário atualizado com sucesso!");
+                    LimparCampos(); // Limpa os campos após a atualização
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDeletar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idUsuario = int.Parse(textId.Text);
+                Usuario usuario = Usuario.ObterPorId(idUsuario);
+
+                if (usuario != null)
+                {
+                    if (MessageBox.Show($"Deseja realmente excluir o usuário {usuario.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        if (usuario.deletar())
+                        {
+                            CarregaGridUsuarios();
+                            MessageBox.Show("Usuário excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o usuário.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Usuário não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao excluir usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LimparCampos()
+        {
+            textId.Text = "";
+            textNome.Text = "";
+            textRg.Text = "";
+            textCpf.Text = "";
+            textEndereco.Text = "";
+            textCep.Text = "";
+            textEmail.Text = "";
+            textTelefone.Text = "";
+            textDataNascimento.Text ="";
+            chkAtivo.Checked = false;
+            cmbNivel.SelectedIndex = 0; // Ou outro valor padrão
+            btnAtualizar.Enabled = false;
+            btnDeletar.Enabled = false;
+            btnInserir.Enabled = true;
         }
     }
 }
-
-    
-
-
-
