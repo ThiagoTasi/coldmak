@@ -126,12 +126,19 @@
     <Compile Include="FrmFornecedor.Designer.cs">
       <DependentUpon>FrmFornecedor.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmNivel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmNivel.Designer.cs">
+      <DependentUpon>FrmNivel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frmusuario.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Frmusuario.Designer.cs">
       <DependentUpon>Frmusuario.cs</DependentUpon>
     </Compile>
+    <Compile Include="nivel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="usuario.cs" />
@@ -143,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmFornecedor.resx">
       <DependentUpon>FrmFornecedor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmNivel.resx">
+      <DependentUpon>FrmNivel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frmusuario.resx">
       <DependentUpon>Frmusuario.cs</DependentUpon>

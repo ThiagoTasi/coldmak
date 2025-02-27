@@ -1,6 +1,6 @@
-﻿namespace coldmak
+﻿namespace coldmakApp
 {
-    partial class FrmFornecedor
+    partial class FrmFornecedores
     {
         /// <summary>
         /// Required designer variable.
@@ -36,21 +36,21 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textId = new System.Windows.Forms.TextBox();
-            this.textRazaoSoc = new System.Windows.Forms.TextBox();
+            this.textRazaosoc = new System.Windows.Forms.TextBox();
             this.textFanta = new System.Windows.Forms.TextBox();
             this.textCnpj = new System.Windows.Forms.TextBox();
             this.textTelefone = new System.Windows.Forms.TextBox();
             this.textEmail = new System.Windows.Forms.TextBox();
             this.dgvFornecedor = new System.Windows.Forms.DataGridView();
-            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnRazao_social = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnFantasia = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnTelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
+            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnRazao_soc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnFanta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnTelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFornecedor)).BeginInit();
             this.SuspendLayout();
             // 
@@ -125,12 +125,12 @@
             this.textId.Size = new System.Drawing.Size(100, 22);
             this.textId.TabIndex = 7;
             // 
-            // textRazaoSoc
+            // textRazaosoc
             // 
-            this.textRazaoSoc.Location = new System.Drawing.Point(123, 111);
-            this.textRazaoSoc.Name = "textRazaoSoc";
-            this.textRazaoSoc.Size = new System.Drawing.Size(216, 22);
-            this.textRazaoSoc.TabIndex = 8;
+            this.textRazaosoc.Location = new System.Drawing.Point(123, 111);
+            this.textRazaosoc.Name = "textRazaosoc";
+            this.textRazaosoc.Size = new System.Drawing.Size(216, 22);
+            this.textRazaosoc.TabIndex = 8;
             // 
             // textFanta
             // 
@@ -165,8 +165,8 @@
             this.dgvFornecedor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFornecedor.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClnId,
-            this.ClnRazao_social,
-            this.ClnFantasia,
+            this.ClnRazao_soc,
+            this.ClnFanta,
             this.ClnCnpj,
             this.ClnTelefone,
             this.ClnEmail});
@@ -176,49 +176,6 @@
             this.dgvFornecedor.RowTemplate.Height = 24;
             this.dgvFornecedor.Size = new System.Drawing.Size(799, 150);
             this.dgvFornecedor.TabIndex = 13;
-            // 
-            // ClnId
-            // 
-            this.ClnId.HeaderText = "Id";
-            this.ClnId.MinimumWidth = 6;
-            this.ClnId.Name = "ClnId";
-            this.ClnId.Visible = false;
-            this.ClnId.Width = 125;
-            // 
-            // ClnRazao_social
-            // 
-            this.ClnRazao_social.HeaderText = "Razao_social";
-            this.ClnRazao_social.MinimumWidth = 6;
-            this.ClnRazao_social.Name = "ClnRazao_social";
-            this.ClnRazao_social.Width = 125;
-            // 
-            // ClnFantasia
-            // 
-            this.ClnFantasia.HeaderText = "Fantasia";
-            this.ClnFantasia.MinimumWidth = 6;
-            this.ClnFantasia.Name = "ClnFantasia";
-            this.ClnFantasia.Width = 125;
-            // 
-            // ClnCnpj
-            // 
-            this.ClnCnpj.HeaderText = "Cnpj";
-            this.ClnCnpj.MinimumWidth = 6;
-            this.ClnCnpj.Name = "ClnCnpj";
-            this.ClnCnpj.Width = 125;
-            // 
-            // ClnTelefone
-            // 
-            this.ClnTelefone.HeaderText = "Telefone";
-            this.ClnTelefone.MinimumWidth = 6;
-            this.ClnTelefone.Name = "ClnTelefone";
-            this.ClnTelefone.Width = 125;
-            // 
-            // ClnEmail
-            // 
-            this.ClnEmail.HeaderText = "Email";
-            this.ClnEmail.MinimumWidth = 6;
-            this.ClnEmail.Name = "ClnEmail";
-            this.ClnEmail.Width = 125;
             // 
             // btnInserir
             // 
@@ -248,7 +205,50 @@
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
             // 
-            // FrmFornecedor
+            // ClnId
+            // 
+            this.ClnId.HeaderText = "Id";
+            this.ClnId.MinimumWidth = 6;
+            this.ClnId.Name = "ClnId";
+            this.ClnId.Visible = false;
+            this.ClnId.Width = 125;
+            // 
+            // ClnRazao_soc
+            // 
+            this.ClnRazao_soc.HeaderText = "Razao_social";
+            this.ClnRazao_soc.MinimumWidth = 6;
+            this.ClnRazao_soc.Name = "ClnRazao_soc";
+            this.ClnRazao_soc.Width = 125;
+            // 
+            // ClnFanta
+            // 
+            this.ClnFanta.HeaderText = "Fantasia";
+            this.ClnFanta.MinimumWidth = 6;
+            this.ClnFanta.Name = "ClnFanta";
+            this.ClnFanta.Width = 125;
+            // 
+            // ClnCnpj
+            // 
+            this.ClnCnpj.HeaderText = "Cnpj";
+            this.ClnCnpj.MinimumWidth = 6;
+            this.ClnCnpj.Name = "ClnCnpj";
+            this.ClnCnpj.Width = 125;
+            // 
+            // ClnTelefone
+            // 
+            this.ClnTelefone.HeaderText = "Telefone";
+            this.ClnTelefone.MinimumWidth = 6;
+            this.ClnTelefone.Name = "ClnTelefone";
+            this.ClnTelefone.Width = 125;
+            // 
+            // ClnEmail
+            // 
+            this.ClnEmail.HeaderText = "Email";
+            this.ClnEmail.MinimumWidth = 6;
+            this.ClnEmail.Name = "ClnEmail";
+            this.ClnEmail.Width = 125;
+            // 
+            // FrmFornecedores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -261,7 +261,7 @@
             this.Controls.Add(this.textTelefone);
             this.Controls.Add(this.textCnpj);
             this.Controls.Add(this.textFanta);
-            this.Controls.Add(this.textRazaoSoc);
+            this.Controls.Add(this.textRazaosoc);
             this.Controls.Add(this.textId);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -270,7 +270,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "FrmFornecedor";
+            this.Name = "FrmFornecedores";
             this.Text = "FrmFornecedor";
             ((System.ComponentModel.ISupportInitialize)(this.dgvFornecedor)).EndInit();
             this.ResumeLayout(false);
@@ -288,20 +288,20 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textId;
-        private System.Windows.Forms.TextBox textRazaoSoc;
+        private System.Windows.Forms.TextBox textRazaosoc;
         private System.Windows.Forms.TextBox textFanta;
         private System.Windows.Forms.TextBox textCnpj;
         private System.Windows.Forms.TextBox textTelefone;
         private System.Windows.Forms.TextBox textEmail;
         private System.Windows.Forms.DataGridView dgvFornecedor;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnRazao_social;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnFantasia;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCnpj;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnTelefone;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnEmail;
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnRazao_soc;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnFanta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCnpj;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnTelefone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnEmail;
     }
 }
