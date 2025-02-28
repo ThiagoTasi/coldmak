@@ -132,6 +132,18 @@
     <Compile Include="FrmNivel.Designer.cs">
       <DependentUpon>FrmNivel.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmOrdemdeservico.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmOrdemdeservico.Designer.cs">
+      <DependentUpon>FrmOrdemdeservico.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FrmSolicitacadeatendimento.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmSolicitacadeatendimento.Designer.cs">
+      <DependentUpon>FrmSolicitacadeatendimento.cs</DependentUpon>
+    </Compile>
     <Compile Include="Frmusuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,8 +151,10 @@
       <DependentUpon>Frmusuario.cs</DependentUpon>
     </Compile>
     <Compile Include="nivel.cs" />
+    <Compile Include="ordemdeservico.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="solicitacaodeatendimento.cs.cs" />
     <Compile Include="usuario.cs" />
     <EmbeddedResource Include="FrmCliente.resx">
       <DependentUpon>FrmCliente.cs</DependentUpon>
@@ -153,6 +167,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmNivel.resx">
       <DependentUpon>FrmNivel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmOrdemdeservico.resx">
+      <DependentUpon>FrmOrdemdeservico.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmSolicitacadeatendimento.resx">
+      <DependentUpon>FrmSolicitacadeatendimento.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Frmusuario.resx">
       <DependentUpon>Frmusuario.cs</DependentUpon>
