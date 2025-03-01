@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using coldmak;
 using coldmakClass;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace coldmakApp
 {
@@ -22,41 +22,41 @@ namespace coldmakApp
 
         private void FrmSolicitacaoAtendimento_Load(object sender, EventArgs e)
         {
-            CarregaGridSolicitacoes();
+            CarregaGridSolicitacoesAtendimento();
         }
 
-        private void btnAgendar_Click(object sender, EventArgs e)
+        private void btnInserir_Click(object sender, EventArgs e)
         {
             try
             {
-                SolicitacaoAtendimento solicitacao = new SolicitacaoAtendimento(
-                    dateTimePickerDatag.Value.Date,
-                    TimeSpan.Parse(maskedTextBoxHoag.Text),
-                    textBoxTipserv.Text
+                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
+                    textDatag.Text,
+                    textHoag.Text,
+                    textTipserv.Text
                 );
 
-                solicitacao.Inserir();
+                solicitacaoAtendimento.Inserir();
 
-                if (solicitacao.IdSolicitacaoAtendimento > 0)
+                if (solicitacaoAtendimento.IdSolicitacaoAtendimento > 0)
                 {
-                    CarregaGridSolicitacoes();
-                    MessageBox.Show($"Solicitação de atendimento agendada com sucesso");
+                    CarregaGridSolicitacoesAtendimento();
+                    MessageBox.Show($"Solicitação de atendimento inserida com sucesso");
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao agendar solicitação: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao inserir solicitação de atendimento: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void CarregaGridSolicitacoes()
+        private void CarregaGridSolicitacoesAtendimento()
         {
             dgvsolaten.Rows.Clear();
-            var listaDeSolicitacoes = SolicitacaoAtendimento.ObterLista();
+            var listaDeSolicitacoesAtendimento = SolicitacaoAtendimento.ObterLista();
             int linha = 0;
-            foreach (var solicitacao in listaDeSolicitacoes)
+            foreach (var solicitacao in listaDeSolicitacoesAtendimento)
             {
                 dgvsolaten.Rows.Add();
                 dgvsolaten.Rows[linha].Cells[0].Value = solicitacao.IdSolicitacaoAtendimento;
@@ -67,18 +67,18 @@ namespace coldmakApp
             }
         }
 
-        private void dgvSolicitacoes_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvSolicitacoesAtendimento_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
                 int linhaAtual = dgvsolaten.CurrentRow.Index;
-                int idSolicitacao = Convert.ToInt32(dgvsolaten.Rows[linhaAtual].Cells[0].Value);
-                var solicitacao = SolicitacaoAtendimento.ObterPorId(idSolicitacao);
+                int idSolicitacaoAtendimento = Convert.ToInt32(dgvsolaten.Rows[linhaAtual].Cells[0].Value);
+                var solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
-                textId.Text = solicitacao.IdSolicitacaoAtendimento.ToString();
-                dateTimePickerDatag.Value = solicitacao.DataAgendamento;
-                maskedTextBoxHoag.Text = solicitacao.HorarioAgendamento.ToString();
-                textBoxTiposerv.Text = solicitacao.TipoServico;
+                textId.Text = solicitacaoAtendimento.IdSolicitacaoAtendimento.ToString();
+                textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString();
+                textHoag.Text = solicitacaoAtendimento.HorarioAgendamento;
+                textTipserv.Text = solicitacaoAtendimento.TipoServico;
 
                 btnAtualizar.Enabled = true;
                 btnDeletar.Enabled = true;
@@ -89,23 +89,22 @@ namespace coldmakApp
         {
             try
             {
-                SolicitacaoAtendimento solicitacao = new SolicitacaoAtendimento(
-                    int.Parse(textId.Text),
-                    dateTimePickerDatag.Value.Date,
-                    TimeSpan.Parse(maskedTextBoxHoag.Text),
-                    textBoxTipserv.Text
-                );
+                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
+                solicitacaoAtendimento.IdSolicitacaoAtendimento = int.Parse(textId.Text);
+                solicitacaoAtendimento.DataAgendamento = DateTime.Parse(textDatag.Text);
+                solicitacaoAtendimento.HorarioAgendamento = maskedTextHoag.Text;
+                solicitacaoAtendimento.TipoServico = textTipserv.Text;
 
-                if (solicitacao.Atualizar())
+                if (solicitacaoAtendimento.Atualizar())
                 {
-                    CarregaGridSolicitacoes();
+                    CarregaGridSolicitacoesAtendimento();
                     MessageBox.Show("Solicitação de atendimento atualizada com sucesso!");
                     LimparCampos();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar solicitação: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao atualizar solicitação de atendimento: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,24 +112,25 @@ namespace coldmakApp
         {
             try
             {
-                int idSolicitacao = int.Parse(textId.Text);
-                SolicitacaoAtendimento solicitacao = SolicitacaoAtendimento.ObterPorId(idSolicitacao);
+                int idSolicitacaoAtendimento = int.Parse(textId.Text);
+                SolicitacaoAtendimento solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
-                if (solicitacao != null)
+                if (solicitacaoAtendimento != null)
                 {
                     if (MessageBox.Show($"Deseja realmente excluir a solicitação de atendimento?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Adicione um método "Deletar" na classe SolicitacaoAtendimento se necessário
-                        // if (solicitacao.Deletar())
-                        // {
-                        CarregaGridSolicitacoes();
-                        MessageBox.Show("Solicitação de atendimento excluída com sucesso!");
-                        LimparCampos();
-                        // }
-                        // else
-                        // {
-                        //     MessageBox.Show("Falha ao excluir a solicitação de atendimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        // }
+                        //Adicione um método deletar na classe SolicitacaoAtendimento.
+                        //if (solicitacaoAtendimento.deletar())
+                        //{
+                        //    CarregaGridSolicitacoesAtendimento();
+                        //    MessageBox.Show("Solicitação de atendimento excluída com sucesso!");
+                        //    LimparCampos();
+                        //}
+                        //else
+                        //{
+                        //    MessageBox.Show("Falha ao excluir a solicitação de atendimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        //}
+                        MessageBox.Show("Metodo deletar não implementado na classe SolicitacaoAtendimento", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
                 else
@@ -140,17 +140,16 @@ namespace coldmakApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao excluir solicitação: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao excluir solicitação de atendimento: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void LimparCampos()
         {
             textId.Text = "";
-            dateTimePickerDatag.Value = DateTime.Now;
-            maskedTextBoxHoag.Clear();
-            textBoxTipserv.Clear();
-
+            textDatag.Text = "";
+            TextHoag.Clear();
+            textTipserv.Text = "";
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;

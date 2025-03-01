@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using coldmakClass;
 
 namespace coldmakClass
 {
@@ -9,21 +14,21 @@ namespace coldmakClass
     {
         public int IdSolicitacaoAtendimento { get; set; }
         public DateTime DataAgendamento { get; set; }
-        public TimeSpan HorarioAgendamento { get; set; }
+        public DateTime HorarioAgendamento { get; set; }
         public string TipoServico { get; set; }
 
         public SolicitacaoAtendimento()
         {
         }
 
-        public SolicitacaoAtendimento(DateTime dataAgendamento, TimeSpan horarioAgendamento, string tipoServico)
+        public SolicitacaoAtendimento(DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
         {
             DataAgendamento = dataAgendamento;
             HorarioAgendamento = horarioAgendamento;
             TipoServico = tipoServico;
         }
 
-        public SolicitacaoAtendimento(int idSolicitacaoAtendimento, DateTime dataAgendamento, TimeSpan horarioAgendamento, string tipoServico)
+        public SolicitacaoAtendimento(int idSolicitacaoAtendimento, DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
         {
             IdSolicitacaoAtendimento = idSolicitacaoAtendimento;
             DataAgendamento = dataAgendamento;
@@ -64,7 +69,7 @@ namespace coldmakClass
                 solicitacaoAtendimento = new SolicitacaoAtendimento(
                     dr.GetInt32(0),
                     dr.GetDateTime(1),
-                    (TimeSpan)dr.GetValue(2),
+                    (DateTime)dr.GetValue(2),
                     dr.GetString(3)
                 );
             }
@@ -82,7 +87,7 @@ namespace coldmakClass
                 lista.Add(new SolicitacaoAtendimento(
                     dr.GetInt32(0),
                     dr.GetDateTime(1),
-                    (TimeSpan)dr.GetValue(2),
+                    (DateTime)dr.GetValue(2),
                     dr.GetString(3)
                 ));
             }
