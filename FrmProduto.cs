@@ -29,7 +29,7 @@ namespace coldmakApp
             {
                 Produto produto = new Produto(
                     textCodBar.Text,
-                    int.Parse(textIdCat.Text),
+                    textCat.Text,
                     int.Parse(textIdForn.Text),
                     textDesc.Text,
                     decimal.Parse(textValun.Text),
@@ -62,7 +62,7 @@ namespace coldmakApp
                 Produto produto = new Produto(
                     int.Parse(textIdProd.Text),
                     textCodBar.Text,
-                    int.Parse(textIdCat.Text),
+                    textCat.Text,
                     int.Parse(textIdForn.Text),
                     textDesc.Text,
                     decimal.Parse(textValun.Text),
@@ -144,7 +144,7 @@ namespace coldmakApp
                 int rowIndex = dgvprod.Rows.Add();
                 dgvprod.Rows[rowIndex].Cells["IdProduto"].Value = produto.IdProduto;
                 dgvprod.Rows[rowIndex].Cells["CodBarras"].Value = produto.CodBarras;
-                dgvprod.Rows[rowIndex].Cells["IdCategoria"].Value = produto.IdCategoria;
+                dgvprod.Rows[rowIndex].Cells["IdCategoria"].Value = produto.Categoria;
                 dgvprod.Rows[rowIndex].Cells["IdFornecedor"].Value = produto.IdFornecedor;
                 dgvprod.Rows[rowIndex].Cells["Descricao"].Value = produto.Descricao;
                 dgvprod.Rows[rowIndex].Cells["ValorUnitario"].Value = produto.ValorUnitario;
@@ -163,7 +163,7 @@ namespace coldmakApp
                 DataGridViewRow row = dgvprod.Rows[e.RowIndex];
                 textIdProd.Text = row.Cells["IdProduto"].Value.ToString();
                 textCodBar.Text = row.Cells["CodBarras"].Value.ToString();
-                textIdCat.Text = row.Cells["IdCategoria"].Value.ToString();
+                textCat.Text = row.Cells["IdCategoria"].Value.ToString();
                 textIdForn.Text = row.Cells["IdFornecedor"].Value.ToString();
                 textDesc.Text = row.Cells["Descricao"].Value.ToString();
                 textValun.Text = row.Cells["ValorUnitario"].Value.ToString();
@@ -179,7 +179,7 @@ namespace coldmakApp
         {
             textIdProd.Text = "";
             textCodBar.Text = "";
-            textIdCat.Text = "";
+            textCat.Text = "";
             textIdForn.Text = "";
             textDesc.Text = "";
             textValun.Text = "";

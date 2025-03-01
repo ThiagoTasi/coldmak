@@ -14,7 +14,7 @@ namespace coldmakClass
     {
         public int IdProduto { get; set; }
         public string CodBarras { get; set; }
-        public int IdCategoria { get; set; }
+        public string Categoria { get; set; }
         public int IdFornecedor { get; set; }
         public string Descricao { get; set; }
         public decimal ValorUnitario { get; set; }
@@ -28,10 +28,10 @@ namespace coldmakClass
         {
         }
 
-        public Produto(string codBarras, int idCategoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
+        public Produto(string codBarras, string Categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
         {
             CodBarras = codBarras;
-            IdCategoria = idCategoria;
+            Categoria = Categoria;
             IdFornecedor = idFornecedor;
             Descricao = descricao;
             ValorUnitario = valorUnitario;
@@ -42,11 +42,11 @@ namespace coldmakClass
             DataCadastro = dataCadastro;
         }
 
-        public Produto(int idProduto, string codBarras, int idCategoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
+        public Produto(int idProduto, string codBarras, string Categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
         {
             IdProduto = idProduto;
             CodBarras = codBarras;
-            IdCategoria = idCategoria;
+            Categoria = Categoria;
             IdFornecedor = idFornecedor;
             Descricao = descricao;
             ValorUnitario = valorUnitario;
@@ -65,7 +65,7 @@ namespace coldmakClass
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_produto_insert"; // Substitua pelo nome da sua stored procedure
             cmd.Parameters.Add("spcodbarras", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = CodBarras;
-            cmd.Parameters.AddWithValue("spidcategoria", IdCategoria);
+            cmd.Parameters.AddWithValue("spcategoria", Categoria);
             cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
             cmd.Parameters.AddWithValue("spdescricao", Descricao);
             cmd.Parameters.AddWithValue("spvalorunitario", ValorUnitario);
@@ -98,7 +98,7 @@ namespace coldmakClass
                 produto = new Produto(
                     dr.GetInt32(0),
                     dr.GetString(1),
-                    dr.GetInt32(2),
+                    dr.GetString(2),
                     dr.GetInt32(3),
                     dr.GetString(4),
                     dr.GetDecimal(5),
@@ -123,7 +123,7 @@ namespace coldmakClass
                 lista.Add(new Produto(
                     dr.GetInt32(0),
                     dr.GetString(1),
-                    dr.GetInt32(2),
+                    dr.GetString(2),
                     dr.GetInt32(3),
                     dr.GetString(4),
                     dr.GetDecimal(5),
@@ -144,7 +144,7 @@ namespace coldmakClass
             cmd.CommandText = "sp_produto_altera"; // Substitua pelo nome da sua stored procedure
             cmd.Parameters.AddWithValue("spidproduto", IdProduto);
             cmd.Parameters.AddWithValue("spcodbarras", CodBarras);
-            cmd.Parameters.AddWithValue("spidcategoria", IdCategoria);
+            cmd.Parameters.AddWithValue("spidcategoria", Categoria);
             cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
             cmd.Parameters.AddWithValue("spdescricao", Descricao);
             cmd.Parameters.AddWithValue("spvalorunitario", ValorUnitario);

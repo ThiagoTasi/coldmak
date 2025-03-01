@@ -31,7 +31,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -41,7 +40,6 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.textIdProd = new System.Windows.Forms.TextBox();
-            this.textIdCat = new System.Windows.Forms.TextBox();
             this.textIdForn = new System.Windows.Forms.TextBox();
             this.textCodBar = new System.Windows.Forms.TextBox();
             this.textDesc = new System.Windows.Forms.TextBox();
@@ -56,7 +54,7 @@
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
             this.ClnIdprod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnIdcat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnIdforn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCodbar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Clndesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,6 +64,8 @@
             this.Clndatcad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Clnestmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Clnimg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textCat = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvprod)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,25 +90,16 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 145);
+            this.label3.Location = new System.Drawing.Point(329, 163);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(94, 16);
             this.label3.TabIndex = 2;
             this.label3.Text = "Codigo Barras";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(359, 80);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 16);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "IdCategorias";
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(784, 74);
+            this.label5.Location = new System.Drawing.Point(784, 80);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(88, 16);
             this.label5.TabIndex = 4;
@@ -117,7 +108,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(370, 142);
+            this.label6.Location = new System.Drawing.Point(589, 157);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 16);
             this.label6.TabIndex = 5;
@@ -126,7 +117,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(809, 145);
+            this.label7.Location = new System.Drawing.Point(9, 240);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(88, 16);
             this.label7.TabIndex = 6;
@@ -135,7 +126,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 219);
+            this.label8.Location = new System.Drawing.Point(229, 243);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(102, 16);
             this.label8.TabIndex = 7;
@@ -144,7 +135,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 283);
+            this.label9.Location = new System.Drawing.Point(457, 304);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(103, 16);
             this.label9.TabIndex = 8;
@@ -153,7 +144,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(370, 219);
+            this.label10.Location = new System.Drawing.Point(634, 237);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(108, 16);
             this.label10.TabIndex = 9;
@@ -162,7 +153,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(803, 221);
+            this.label11.Location = new System.Drawing.Point(12, 298);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(94, 16);
             this.label11.TabIndex = 10;
@@ -171,7 +162,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(725, 277);
+            this.label12.Location = new System.Drawing.Point(784, 298);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(56, 16);
             this.label12.TabIndex = 11;
@@ -185,17 +176,9 @@
             this.textIdProd.Size = new System.Drawing.Size(130, 22);
             this.textIdProd.TabIndex = 12;
             // 
-            // textIdCat
-            // 
-            this.textIdCat.Location = new System.Drawing.Point(457, 77);
-            this.textIdCat.Name = "textIdCat";
-            this.textIdCat.ReadOnly = true;
-            this.textIdCat.Size = new System.Drawing.Size(145, 22);
-            this.textIdCat.TabIndex = 13;
-            // 
             // textIdForn
             // 
-            this.textIdForn.Location = new System.Drawing.Point(878, 71);
+            this.textIdForn.Location = new System.Drawing.Point(887, 74);
             this.textIdForn.Name = "textIdForn";
             this.textIdForn.ReadOnly = true;
             this.textIdForn.Size = new System.Drawing.Size(125, 22);
@@ -203,56 +186,56 @@
             // 
             // textCodBar
             // 
-            this.textCodBar.Location = new System.Drawing.Point(110, 145);
+            this.textCodBar.Location = new System.Drawing.Point(457, 157);
             this.textCodBar.Name = "textCodBar";
             this.textCodBar.Size = new System.Drawing.Size(100, 22);
             this.textCodBar.TabIndex = 15;
             // 
             // textDesc
             // 
-            this.textDesc.Location = new System.Drawing.Point(438, 139);
+            this.textDesc.Location = new System.Drawing.Point(669, 148);
             this.textDesc.Name = "textDesc";
             this.textDesc.Size = new System.Drawing.Size(343, 22);
             this.textDesc.TabIndex = 16;
             // 
             // textValun
             // 
-            this.textValun.Location = new System.Drawing.Point(903, 142);
+            this.textValun.Location = new System.Drawing.Point(123, 240);
             this.textValun.Name = "textValun";
             this.textValun.Size = new System.Drawing.Size(100, 22);
             this.textValun.TabIndex = 17;
             // 
             // textUnidvend
             // 
-            this.textUnidvend.Location = new System.Drawing.Point(121, 219);
+            this.textUnidvend.Location = new System.Drawing.Point(366, 237);
             this.textUnidvend.Name = "textUnidvend";
             this.textUnidvend.Size = new System.Drawing.Size(243, 22);
             this.textUnidvend.TabIndex = 18;
             // 
             // textCladesc
             // 
-            this.textCladesc.Location = new System.Drawing.Point(484, 221);
+            this.textCladesc.Location = new System.Drawing.Point(776, 231);
             this.textCladesc.Name = "textCladesc";
             this.textCladesc.Size = new System.Drawing.Size(297, 22);
             this.textCladesc.TabIndex = 19;
             // 
             // textDatcad
             // 
-            this.textDatcad.Location = new System.Drawing.Point(903, 213);
+            this.textDatcad.Location = new System.Drawing.Point(121, 298);
             this.textDatcad.Name = "textDatcad";
             this.textDatcad.Size = new System.Drawing.Size(100, 22);
             this.textDatcad.TabIndex = 20;
             // 
             // textEstmin
             // 
-            this.textEstmin.Location = new System.Drawing.Point(121, 283);
+            this.textEstmin.Location = new System.Drawing.Point(580, 298);
             this.textEstmin.Name = "textEstmin";
             this.textEstmin.Size = new System.Drawing.Size(198, 22);
             this.textEstmin.TabIndex = 21;
             // 
             // textImg
             // 
-            this.textImg.Location = new System.Drawing.Point(787, 271);
+            this.textImg.Location = new System.Drawing.Point(848, 292);
             this.textImg.Name = "textImg";
             this.textImg.Size = new System.Drawing.Size(225, 22);
             this.textImg.TabIndex = 22;
@@ -262,7 +245,7 @@
             this.dgvprod.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvprod.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClnIdprod,
-            this.ClnIdcat,
+            this.ClnCat,
             this.ClnIdforn,
             this.ClnCodbar,
             this.Clndesc,
@@ -316,13 +299,12 @@
             this.ClnIdprod.Visible = false;
             this.ClnIdprod.Width = 125;
             // 
-            // ClnIdcat
+            // ClnCat
             // 
-            this.ClnIdcat.HeaderText = "IdCategorias";
-            this.ClnIdcat.MinimumWidth = 6;
-            this.ClnIdcat.Name = "ClnIdcat";
-            this.ClnIdcat.Visible = false;
-            this.ClnIdcat.Width = 125;
+            this.ClnCat.HeaderText = "Categorias";
+            this.ClnCat.MinimumWidth = 6;
+            this.ClnCat.Name = "ClnCat";
+            this.ClnCat.Width = 125;
             // 
             // ClnIdforn
             // 
@@ -389,11 +371,29 @@
             this.Clnimg.Name = "Clnimg";
             this.Clnimg.Width = 125;
             // 
-            // FrmProduto
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(21, 166);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 16);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "Categoria";
+            // 
+            // textCat
+            // 
+            this.textCat.Location = new System.Drawing.Point(110, 166);
+            this.textCat.Name = "textCat";
+            this.textCat.Size = new System.Drawing.Size(203, 22);
+            this.textCat.TabIndex = 28;
+            // 
+            // FrmProdutos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1086, 547);
+            this.Controls.Add(this.textCat);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
@@ -407,7 +407,6 @@
             this.Controls.Add(this.textDesc);
             this.Controls.Add(this.textCodBar);
             this.Controls.Add(this.textIdForn);
-            this.Controls.Add(this.textIdCat);
             this.Controls.Add(this.textIdProd);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.label11);
@@ -417,11 +416,10 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "FrmProduto";
+            this.Name = "FrmProdutos";
             this.Text = "FrmProduto";
             ((System.ComponentModel.ISupportInitialize)(this.dgvprod)).EndInit();
             this.ResumeLayout(false);
@@ -434,7 +432,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
@@ -444,7 +441,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textIdProd;
-        private System.Windows.Forms.TextBox textIdCat;
         private System.Windows.Forms.TextBox textIdForn;
         private System.Windows.Forms.TextBox textCodBar;
         private System.Windows.Forms.TextBox textDesc;
@@ -459,7 +455,7 @@
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnIdprod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnIdcat;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCat;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnIdforn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnCodbar;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clndesc;
@@ -469,5 +465,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Clndatcad;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clnestmin;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clnimg;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textCat;
     }
 }
