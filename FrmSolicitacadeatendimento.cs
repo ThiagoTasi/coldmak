@@ -92,7 +92,7 @@ namespace coldmakApp
                 SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
                 solicitacaoAtendimento.IdSolicitacaoAtendimento = int.Parse(textId.Text);
                 solicitacaoAtendimento.DataAgendamento = DateTime.Parse(textDatag.Text);
-                solicitacaoAtendimento.HorarioAgendamento = maskedTextHoag.Text;
+                solicitacaoAtendimento.HorarioAgendamento = maskedtextHoag.Text;
                 solicitacaoAtendimento.TipoServico = textTipserv.Text;
 
                 if (solicitacaoAtendimento.Atualizar())
@@ -148,7 +148,7 @@ namespace coldmakApp
         {
             textId.Text = "";
             textDatag.Text = "";
-            TextHoag.Clear();
+            textHoag.Clear();
             textTipserv.Text = "";
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
