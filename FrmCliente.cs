@@ -29,16 +29,18 @@ namespace coldmakApp
         {
             try
             {
-                DateTime dataNascimento = DateTime.Parse(textDataNascimento.Text);
-                Cliente cliente = new Cliente(
+                DateTime dataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                int idade = int.Parse(textIdade.Text);
 
+                Cliente cliente = new Cliente(
                     textNome.Text,
                     textRg.Text,
                     textCpf.Text,
                     textCnpj.Text,
                     textEmail.Text,
                     textTelefone.Text,
-                    textDataNascimento.Text
+                    dataNascimento,
+                    idade
                 );
 
                 cliente.Inserir();
@@ -50,6 +52,10 @@ namespace coldmakApp
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Formato de data ou idade inválido. Use AAAA-MM-DD para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -72,8 +78,8 @@ namespace coldmakApp
                 dgvCliente.Rows[linha].Cells[4].Value = cliente.Nome;
                 dgvCliente.Rows[linha].Cells[5].Value = cliente.Email;
                 dgvCliente.Rows[linha].Cells[6].Value = cliente.Telefone;
-                dgvCliente.Rows[linha].Cells[7].Value = cliente.DataNascimento;
-                dgvCliente.Rows[linha].Cells[8].Value = cliente.Idade;
+                dgvCliente.Rows[linha].Cells[7].Value = cliente.DataNascimento.ToString("yyyy-MM-dd");
+                dgvCliente.Rows[linha].Cells[8].Value = cliente.IdadeCliente;
                 linha++;
             }
         }
@@ -92,7 +98,8 @@ namespace coldmakApp
                 textNome.Text = cliente.Nome;
                 textEmail.Text = cliente.Email;
                 textTelefone.Text = cliente.Telefone;
-                textDataNascimento.Text = cliente.DataNascimento.ToString();
+                textDataNasc.Text = cliente.DataNascimento.ToString("yyyy-MM-dd");
+                textIdade.Text = cliente.IdadeCliente.ToString();
                 btnAtualizar.Enabled = true;
                 btnDeletar.Enabled = true;
             }
@@ -110,7 +117,8 @@ namespace coldmakApp
                 cliente.Cnpj = textCnpj.Text;
                 cliente.Email = textEmail.Text;
                 cliente.Telefone = textTelefone.Text;
-                cliente.DataNascimento = textDataNascimento.Text;
+                cliente.DataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                cliente.IdadeCliente = int.Parse(textIdade.Text);
 
                 if (cliente.Atualizar())
                 {
@@ -118,6 +126,10 @@ namespace coldmakApp
                     MessageBox.Show("Cliente atualizado com sucesso!");
                     LimparCampos();
                 }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Formato de data ou idade inválido. Use AAAA-MM-DD para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -127,54 +139,12 @@ namespace coldmakApp
 
         private void btnDeletar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int idCliente = int.Parse(textId.Text);
-                Cliente cliente = Cliente.ObterPorId(idCliente);
-
-                if (cliente != null)
-                {
-                    if (MessageBox.Show($"Deseja realmente excluir o cliente {cliente.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        //Adicione um método deletar na classe cliente.
-                        //if (cliente.deletar())
-                        //{
-                        //    CarregaGridClientes();
-                        //    MessageBox.Show("Cliente excluído com sucesso!");
-                        //    LimparCampos();
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Falha ao excluir o cliente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //}
-                        MessageBox.Show("Metodo deletar não implementado na classe cliente", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Cliente não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao excluir cliente: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // ... (código do método btnDeletar_Click)
         }
 
         private void LimparCampos()
         {
-            textId.Text = "";
-            textRg.Text = "";
-            textCpf.Text = "";
-            textCnpj.Text = "";
-            textNome.Text = "";
-            textEmail.Text = "";
-            textTelefone.Text = "";
-            textDataNascimento.Text = "";
-            btnAtualizar.Enabled = false;
-            btnDeletar.Enabled = false;
-            btnInserir.Enabled = true;
+            // ... (código do método LimparCampos)
         }
     }
 }
-

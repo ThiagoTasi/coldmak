@@ -54,7 +54,7 @@ namespace coldmakApp
 
         private void CarregaGridItensPedido()
         {
-            dgvItensPedido.Rows.Clear();
+            dgvitped.Rows.Clear();
             var listaDeItensPedido = ItemPedido.ObterLista();
             int linha = 0;
             foreach (var itemPedido in listaDeItensPedido)

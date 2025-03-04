@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using coldmak;
 using coldmakClass;
 
-
 namespace coldmakApp
 {
     public partial class FrmUsuarios : Form
@@ -36,28 +35,36 @@ namespace coldmakApp
         {
             try
             {
-                Usuario usuario = new Usuario(
-                    textNome.Text,
-                    textRg.Text,
-                    textCpf.Text,
-                    textEndereco.Text,
-                    textCep.Text,
-                    textEmail.Text,
-                    textTelefone.Text,
-                    textDataNascimento.Text,
-                    Convert.ToInt32(cmbNivel.SelectedValue),
-                    chkAtivo.Checked
-                );
-
-                usuario.Inserir();
-
-                if (usuario.Id > 0)
+                DateTime dataNascimento;
+                if (DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
                 {
-                    // carrega grid
-                    CarregaGridUsuarios();
-                    MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso");
-                    btnInserir.Enabled = false;
-                    LimparCampos(); // Limpa os campos após a inserção
+                    Usuario usuario = new Usuario(
+                        textNome.Text,
+                        textRg.Text,
+                        textCpf.Text,
+                        textEndereco.Text,
+                        textCep.Text,
+                        textEmail.Text,
+                        textTelefone.Text,
+                        dataNascimento,
+                        Convert.ToInt32(cmbNivel.SelectedValue),
+                        chkAtivo.Checked,
+                        textSenha.Text
+                    );
+
+                    usuario.Inserir();
+
+                    if (usuario.Id > 0)
+                    {
+                        CarregaGridUsuarios();
+                        MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso");
+                        btnInserir.Enabled = false;
+                        LimparCampos();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Formato de data inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
@@ -104,9 +111,9 @@ namespace coldmakApp
                 textCep.Text = usuario.Cep;
                 textEmail.Text = usuario.Email;
                 textTelefone.Text = usuario.Telefone;
-                textDataNascimento.Text = usuario.DataNascimento;
+                textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
                 chkAtivo.Checked = usuario.Ativo;
-                cmbNivel.SelectedValue = usuario.Nivel.Id;
+                cmbNivel.SelectedValue = usuario.NivelId;
                 btnAtualizar.Enabled = true;
                 btnDeletar.Enabled = true;
             }
@@ -125,15 +132,27 @@ namespace coldmakApp
                 usuario.Cep = textCep.Text;
                 usuario.Email = textEmail.Text;
                 usuario.Telefone = textTelefone.Text;
-                usuario.DataNascimento = textDataNascimento.Text;
-                usuario.Nivel = Nível.ObterPorId(Convert.ToInt32(cmbNivel.SelectedValue));
+
+                DateTime dataNascimento;
+                if (DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
+                {
+                    usuario.DataNascimento = dataNascimento;
+                }
+                else
+                {
+                    MessageBox.Show("Formato de data inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                usuario.NivelId = Convert.ToInt32(cmbNivel.SelectedValue);
                 usuario.Ativo = chkAtivo.Checked;
+                usuario.Senha = textSenha.Text;
 
                 if (usuario.Atualizar())
                 {
                     CarregaGridUsuarios();
                     MessageBox.Show("Usuário atualizado com sucesso!");
-                    LimparCampos(); // Limpa os campos após a atualização
+                    LimparCampos();
                 }
             }
             catch (Exception ex)
@@ -153,7 +172,7 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o usuário {usuario.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        if (usuario.deletar())
+                        if (usuario.Deletar())
                         {
                             CarregaGridUsuarios();
                             MessageBox.Show("Usuário excluído com sucesso!");
@@ -186,9 +205,9 @@ namespace coldmakApp
             textCep.Text = "";
             textEmail.Text = "";
             textTelefone.Text = "";
-            textDataNascimento.Text ="";
+            textDataNascimento.Text = "";
             chkAtivo.Checked = false;
-            cmbNivel.SelectedIndex = 0; // Ou outro valor padrão
+            cmbNivel.SelectedIndex = 0;
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;

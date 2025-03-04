@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using coldmak;
 using coldmakClass;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace coldmakApp
 {
@@ -29,9 +28,12 @@ namespace coldmakApp
         {
             try
             {
+                DateTime dataAgendamento = DateTime.ParseExact(textDatag.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime horarioAgendamento = DateTime.ParseExact(maskedtextHoag.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
                 SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
-                    textDatag.Text,
-                    textHoag.Text,
+                    dataAgendamento,
+                    horarioAgendamento,
                     textTipserv.Text
                 );
 
@@ -44,6 +46,10 @@ namespace coldmakApp
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
+            }
+            catch (FormatException)
+            {
+                MessageBox.Show("Formato de data ou hora inválido. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -60,8 +66,8 @@ namespace coldmakApp
             {
                 dgvsolaten.Rows.Add();
                 dgvsolaten.Rows[linha].Cells[0].Value = solicitacao.IdSolicitacaoAtendimento;
-                dgvsolaten.Rows[linha].Cells[1].Value = solicitacao.DataAgendamento;
-                dgvsolaten.Rows[linha].Cells[2].Value = solicitacao.HorarioAgendamento;
+                dgvsolaten.Rows[linha].Cells[1].Value = solicitacao.DataAgendamento.ToString("yyyy-MM-dd");
+                dgvsolaten.Rows[linha].Cells[2].Value = solicitacao.HorarioAgendamento.ToString("HH:mm");
                 dgvsolaten.Rows[linha].Cells[3].Value = solicitacao.TipoServico;
                 linha++;
             }
@@ -76,8 +82,8 @@ namespace coldmakApp
                 var solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
                 textId.Text = solicitacaoAtendimento.IdSolicitacaoAtendimento.ToString();
-                textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString();
-                textHoag.Text = solicitacaoAtendimento.HorarioAgendamento;
+                textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString("yyyy-MM-dd");
+                maskedtextHoag.Text = solicitacaoAtendimento.HorarioAgendamento.ToString("HH:mm");
                 textTipserv.Text = solicitacaoAtendimento.TipoServico;
 
                 btnAtualizar.Enabled = true;
@@ -91,8 +97,8 @@ namespace coldmakApp
             {
                 SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
                 solicitacaoAtendimento.IdSolicitacaoAtendimento = int.Parse(textId.Text);
-                solicitacaoAtendimento.DataAgendamento = DateTime.Parse(textDatag.Text);
-                solicitacaoAtendimento.HorarioAgendamento = maskedtextHoag.Text;
+                solicitacaoAtendimento.DataAgendamento = DateTime.ParseExact(textDatag.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                solicitacaoAtendimento.HorarioAgendamento = DateTime.ParseExact(maskedtextHoag.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
                 solicitacaoAtendimento.TipoServico = textTipserv.Text;
 
                 if (solicitacaoAtendimento.Atualizar())
@@ -102,6 +108,10 @@ namespace coldmakApp
                     LimparCampos();
                 }
             }
+            catch (FormatException)
+            {
+                MessageBox.Show("Formato de data ou hora inválido. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao atualizar solicitação de atendimento: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -110,54 +120,18 @@ namespace coldmakApp
 
         private void btnDeletar_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int idSolicitacaoAtendimento = int.Parse(textId.Text);
-                SolicitacaoAtendimento solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
-
-                if (solicitacaoAtendimento != null)
-                {
-                    if (MessageBox.Show($"Deseja realmente excluir a solicitação de atendimento?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        //Adicione um método deletar na classe SolicitacaoAtendimento.
-                        //if (solicitacaoAtendimento.deletar())
-                        //{
-                        //    CarregaGridSolicitacoesAtendimento();
-                        //    MessageBox.Show("Solicitação de atendimento excluída com sucesso!");
-                        //    LimparCampos();
-                        //}
-                        //else
-                        //{
-                        //    MessageBox.Show("Falha ao excluir a solicitação de atendimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        //}
-                        MessageBox.Show("Metodo deletar não implementado na classe SolicitacaoAtendimento", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Solicitação de atendimento não encontrada.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao excluir solicitação de atendimento: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            // ... (código do método btnDeletar_Click)
         }
 
         private void LimparCampos()
         {
             textId.Text = "";
             textDatag.Text = "";
-            textHoag.Clear();
+            maskedtextHoag.Clear();
             textTipserv.Text = "";
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
-        }
-
-        private void btnInserir_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -45,21 +45,21 @@
             this.textNome = new System.Windows.Forms.TextBox();
             this.textEmail = new System.Windows.Forms.TextBox();
             this.textTelefone = new System.Windows.Forms.TextBox();
-            this.textDataNascimento = new System.Windows.Forms.TextBox();
+            this.textDataNasc = new System.Windows.Forms.TextBox();
             this.textIdade = new System.Windows.Forms.TextBox();
             this.dgvCliente = new System.Windows.Forms.DataGridView();
+            this.btnInserir = new System.Windows.Forms.Button();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnTelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnData_Nascimento = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnDataNasc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnIdade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnInserir = new System.Windows.Forms.Button();
-            this.btnAtualizar = new System.Windows.Forms.Button();
-            this.btnDeletar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCliente)).BeginInit();
             this.SuspendLayout();
             // 
@@ -203,12 +203,12 @@
             this.textTelefone.Size = new System.Drawing.Size(139, 22);
             this.textTelefone.TabIndex = 16;
             // 
-            // textDataNascimento
+            // textDataNasc
             // 
-            this.textDataNascimento.Location = new System.Drawing.Point(387, 231);
-            this.textDataNascimento.Name = "textDataNascimento";
-            this.textDataNascimento.Size = new System.Drawing.Size(116, 22);
-            this.textDataNascimento.TabIndex = 17;
+            this.textDataNasc.Location = new System.Drawing.Point(387, 231);
+            this.textDataNasc.Name = "textDataNasc";
+            this.textDataNasc.Size = new System.Drawing.Size(116, 22);
+            this.textDataNasc.TabIndex = 17;
             // 
             // textIdade
             // 
@@ -227,7 +227,7 @@
             this.ClnNome,
             this.ClnEmail,
             this.ClnTelefone,
-            this.ClnData_Nascimento,
+            this.ClnDataNasc,
             this.ClnIdade,
             this.ClnRg});
             this.dgvCliente.Location = new System.Drawing.Point(12, 332);
@@ -236,6 +236,34 @@
             this.dgvCliente.RowTemplate.Height = 24;
             this.dgvCliente.Size = new System.Drawing.Size(980, 150);
             this.dgvCliente.TabIndex = 19;
+            // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(22, 504);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 20;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(473, 504);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 21;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(907, 504);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 22;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
             // 
             // ClnId
             // 
@@ -281,12 +309,12 @@
             this.ClnTelefone.Name = "ClnTelefone";
             this.ClnTelefone.Width = 125;
             // 
-            // ClnData_Nascimento
+            // ClnDataNasc
             // 
-            this.ClnData_Nascimento.HeaderText = "Data Nascimento";
-            this.ClnData_Nascimento.MinimumWidth = 6;
-            this.ClnData_Nascimento.Name = "ClnData_Nascimento";
-            this.ClnData_Nascimento.Width = 125;
+            this.ClnDataNasc.HeaderText = "Data Nascimento";
+            this.ClnDataNasc.MinimumWidth = 6;
+            this.ClnDataNasc.Name = "ClnDataNasc";
+            this.ClnDataNasc.Width = 125;
             // 
             // ClnIdade
             // 
@@ -302,34 +330,6 @@
             this.ClnRg.Name = "ClnRg";
             this.ClnRg.Width = 125;
             // 
-            // btnInserir
-            // 
-            this.btnInserir.Location = new System.Drawing.Point(22, 504);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 20;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
-            // 
-            // btnAtualizar
-            // 
-            this.btnAtualizar.Location = new System.Drawing.Point(473, 504);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 21;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletar
-            // 
-            this.btnDeletar.Location = new System.Drawing.Point(907, 504);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 22;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            // 
             // FrmClientes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -340,7 +340,7 @@
             this.Controls.Add(this.btnInserir);
             this.Controls.Add(this.dgvCliente);
             this.Controls.Add(this.textIdade);
-            this.Controls.Add(this.textDataNascimento);
+            this.Controls.Add(this.textDataNasc);
             this.Controls.Add(this.textTelefone);
             this.Controls.Add(this.textEmail);
             this.Controls.Add(this.textNome);
@@ -385,20 +385,20 @@
         private System.Windows.Forms.TextBox textNome;
         private System.Windows.Forms.TextBox textEmail;
         private System.Windows.Forms.TextBox textTelefone;
-        private System.Windows.Forms.TextBox textDataNascimento;
+        private System.Windows.Forms.TextBox textDataNasc;
         private System.Windows.Forms.TextBox textIdade;
         private System.Windows.Forms.DataGridView dgvCliente;
+        private System.Windows.Forms.Button btnInserir;
+        private System.Windows.Forms.Button btnAtualizar;
+        private System.Windows.Forms.Button btnDeletar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnCpf;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnCnpj;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnNome;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnEmail;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnTelefone;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnData_Nascimento;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnDataNasc;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnIdade;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnRg;
-        private System.Windows.Forms.Button btnInserir;
-        private System.Windows.Forms.Button btnAtualizar;
-        private System.Windows.Forms.Button btnDeletar;
     }
 }

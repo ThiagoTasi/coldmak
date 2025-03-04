@@ -66,7 +66,7 @@ namespace coldmakClass
         // ObterPorId
         public static Vendas ObterPorId(int id)
         {
-            Vendas venda = new();
+            Vendas venda = new Vendas();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from vendas where idvendas = {id}";
             var dr = cmd.ExecuteReader();
@@ -85,7 +85,7 @@ namespace coldmakClass
 
         public static List<Vendas> ObterLista()
         {
-            List<Vendas> lista = new();
+            List<Vendas> lista = new List<Vendas>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from vendas order by datavenda desc";
             var dr = cmd.ExecuteReader();
@@ -115,5 +115,16 @@ namespace coldmakClass
             cmd.ExecuteNonQuery();
             return cmd.ExecuteNonQuery() > 0;
         }
+
+        public bool Deletar()
+        {
+            var cmd = Banco.Abrir();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "sp_vendas_delete"; // Assumindo que você tem uma stored procedure chamada sp_vendas_delete
+            cmd.Parameters.AddWithValue("spidvendas", IdVendas);
+            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery() > 0;
+        }
     }
 }
+ 

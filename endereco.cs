@@ -1,12 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace coldmakClass
 {
@@ -48,92 +43,169 @@ namespace coldmakClass
             Uf = uf;
         }
 
-        // Inserir
         public void Inserir()
         {
-            var cmd = Banco.Abrir();
-
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "sp_endereco_insert";
-            cmd.Parameters.Add("spcep", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Cep;
-            cmd.Parameters.AddWithValue("splogradouro", Logradouro);
-            cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
-            cmd.Parameters.AddWithValue("spcomplemento", Complemento);
-            cmd.Parameters.AddWithValue("spbairro", Bairro);
-            cmd.Parameters.AddWithValue("spcidade", Cidade);
-            cmd.Parameters.AddWithValue("spuf", Uf);
-            cmd.ExecuteNonQuery();
-            cmd.CommandText = "select last_insert_id()";
-            cmd.ExecuteNonQuery();
-
-            var dr = cmd.ExecuteReader();
-            if (dr.Read())
+            try
             {
-                Id = dr.GetInt32(0);
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_endereco_insert";
+                cmd.Parameters.Add("spcep", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Cep;
+                cmd.Parameters.AddWithValue("splogradouro", Logradouro);
+                cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
+                cmd.Parameters.AddWithValue("spcomplemento", Complemento);
+                cmd.Parameters.AddWithValue("spbairro", Bairro);
+                cmd.Parameters.AddWithValue("spcidade", Cidade);
+                cmd.Parameters.AddWithValue("spuf", Uf);
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "select last_insert_id()";
+                cmd.ExecuteNonQuery();
+
+                var dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    Id = dr.GetInt32(0);
+                }
+                dr.Close();
+                cmd.Connection.Close();
             }
-            cmd.Connection.Close();
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Erro de banco de dados ao inserir endereço: " + ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao inserir endereço: " + ex.Message);
+                throw;
+            }
         }
 
-        // ObterPorId
         public static Endereco ObterPorId(int id)
         {
-            Endereco endereco = new();
-            var cmd = Banco.Abrir();
-            cmd.CommandText = $"select * from enderecos where id = {id}";
-            var dr = cmd.ExecuteReader();
-            if (dr.Read())
+            Endereco endereco = new Endereco();
+            try
             {
-                endereco = new Endereco(
-                    dr.GetInt32(0),
-                    dr.GetString(1),
-                    dr.GetString(2),
-                    dr.GetString(3),
-                    dr.GetString(4),
-                    dr.GetString(5),
-                    dr.GetString(6),
-                    dr.GetString(7)
-                );
+                var cmd = Banco.Abrir();
+                cmd.CommandText = $"select * from enderecos where id = {id}";
+                var dr = cmd.ExecuteReader();
+                if (dr.Read())
+                {
+                    endereco = new Endereco(
+                        dr.GetInt32(0),
+                        dr.GetString(1),
+                        dr.GetString(2),
+                        dr.GetString(3),
+                        dr.GetString(4),
+                        dr.GetString(5),
+                        dr.GetString(6),
+                        dr.GetString(7)
+                    );
+                }
+                dr.Close();
+                cmd.Connection.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Erro de banco de dados ao obter endereço por ID: " + ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao obter endereço por ID: " + ex.Message);
+                throw;
             }
             return endereco;
         }
 
         public static List<Endereco> ObterLista()
         {
-            List<Endereco> lista = new();
-            var cmd = Banco.Abrir();
-            cmd.CommandText = $"select * from enderecos order by logradouro asc";
-            var dr = cmd.ExecuteReader();
-            while (dr.Read())
+            List<Endereco> lista = new List<Endereco>();
+            try
             {
-                lista.Add(new Endereco(
-                    dr.GetInt32(0),
-                    dr.GetString(1),
-                    dr.GetString(2),
-                    dr.GetString(3),
-                    dr.GetString(4),
-                    dr.GetString(5),
-                    dr.GetString(6),
-                    dr.GetString(7)
-                ));
+                var cmd = Banco.Abrir();
+                cmd.CommandText = $"select * from enderecos order by logradouro asc";
+                var dr = cmd.ExecuteReader();
+                while (dr.Read())
+                {
+                    lista.Add(new Endereco(
+                        dr.GetInt32(0),
+                        dr.GetString(1),
+                        dr.GetString(2),
+                        dr.GetString(3),
+                        dr.GetString(4),
+                        dr.GetString(5),
+                        dr.GetString(6),
+                        dr.GetString(7)
+                    ));
+                }
+                dr.Close();
+                cmd.Connection.Close();
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Erro de banco de dados ao obter lista de endereços: " + ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao obter lista de endereços: " + ex.Message);
+                throw;
             }
             return lista;
         }
 
         public bool Atualizar()
         {
-            var cmd = Banco.Abrir();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "sp_endereco_altera";
-            cmd.Parameters.AddWithValue("spid", Id);
-            cmd.Parameters.AddWithValue("spcep", Cep);
-            cmd.Parameters.AddWithValue("splogradouro", Logradouro);
-            cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
-            cmd.Parameters.AddWithValue("spcomplemento", Complemento);
-            cmd.Parameters.AddWithValue("spbairro", Bairro);
-            cmd.Parameters.AddWithValue("spcidade", Cidade);
-            cmd.Parameters.AddWithValue("spuf", Uf);
-            cmd.ExecuteNonQuery();
-            return cmd.ExecuteNonQuery() > 0 ? true : false;
+            try
+            {
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_endereco_altera";
+                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.Parameters.AddWithValue("spcep", Cep);
+                cmd.Parameters.AddWithValue("splogradouro", Logradouro);
+                cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
+                cmd.Parameters.AddWithValue("spcomplemento", Complemento);
+                cmd.Parameters.AddWithValue("spbairro", Bairro);
+                cmd.Parameters.AddWithValue("spcidade", Cidade);
+                cmd.Parameters.AddWithValue("spuf", Uf);
+                cmd.ExecuteNonQuery();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Erro de banco de dados ao atualizar endereço: " + ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao atualizar endereço: " + ex.Message);
+                throw;
+            }
+        }
+
+        public bool Deletar()
+        {
+            try
+            {
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_endereco_delete";
+                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.ExecuteNonQuery();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine("Erro de banco de dados ao deletar endereço: " + ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao deletar endereço: " + ex.Message);
+                throw;
+            }
         }
     }
 }
