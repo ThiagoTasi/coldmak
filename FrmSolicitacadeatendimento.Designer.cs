@@ -174,7 +174,7 @@
             this.btnInserir.TabIndex = 10;
             this.btnInserir.Text = "Inserir";
             this.btnInserir.UseVisualStyleBackColor = true;
-
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click_1);
             // 
             // btnAtualizar
             // 

@@ -59,7 +59,7 @@ namespace coldmakApp
 
         private void CarregaGridClientes()
         {
-            dgvClientes.Rows.Clear();
+            dgvCliente.Rows.Clear();
             var listaDeClientes = Cliente.ObterLista();
             int linha = 0;
             foreach (var cliente in listaDeClientes)
@@ -72,7 +72,7 @@ namespace coldmakApp
                 dgvCliente.Rows[linha].Cells[4].Value = cliente.Nome;
                 dgvCliente.Rows[linha].Cells[5].Value = cliente.Email;
                 dgvCliente.Rows[linha].Cells[6].Value = cliente.Telefone;
-                dgvCliente.Rows[linha].Cells[7].Value = cliente.Data.Nascimento;
+                dgvCliente.Rows[linha].Cells[7].Value = cliente.DataNascimento;
                 dgvCliente.Rows[linha].Cells[8].Value = cliente.Idade;
                 linha++;
             }
