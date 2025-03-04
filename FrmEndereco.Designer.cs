@@ -68,7 +68,6 @@
             this.label1.Size = new System.Drawing.Size(83, 16);
             this.label1.TabIndex = 0;
             this.label1.Text = "ENDERECO";
-          
             // 
             // label2
             // 
@@ -303,8 +302,9 @@
             this.btnDeletar.TabIndex = 20;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
             // 
-            // FrmEndereco
+            // FrmEnderecos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -330,7 +330,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "FrmEndereco";
+            this.Name = "FrmEnderecos";
             this.Text = "FrmEndereco";
             ((System.ComponentModel.ISupportInitialize)(this.dgvEndereco)).EndInit();
             this.ResumeLayout(false);

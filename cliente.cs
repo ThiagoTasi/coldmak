@@ -167,5 +167,22 @@ namespace coldmakClass
                 throw;
             }
         }
+        public bool Deletar()
+        {
+            try
+            {
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_cliente_delete";
+                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.ExecuteNonQuery();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao deletar cliente: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

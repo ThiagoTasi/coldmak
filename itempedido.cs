@@ -120,5 +120,14 @@ namespace coldmakClass
             }
             return lista;
         }
+        public bool Deletar()
+        {
+            var cmd = Banco.Abrir();
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.CommandText = "sp_itempedido_delete"; // Substitua pelo nome da sua stored procedure
+            cmd.Parameters.AddWithValue("spiditempedido", IdItemPedido);
+            cmd.ExecuteNonQuery();
+            return cmd.ExecuteNonQuery() > 0;
+        }
     }
 }

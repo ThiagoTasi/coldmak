@@ -166,6 +166,7 @@
             this.btnDeletar.TabIndex = 10;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
             // 
             // FrmNiveis
             // 

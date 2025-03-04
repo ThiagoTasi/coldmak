@@ -129,17 +129,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o fornecedor {fornecedor.Razao_Social}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Adicione um método "Deletar" na classe Fornecedor se necessário
-                        // if (fornecedor.Deletar())
-                        // {
-                        CarregaGridFornecedores();
-                        MessageBox.Show("Fornecedor excluído com sucesso!");
-                        LimparCampos();
-                        // }
-                        // else
-                        // {
-                        //     MessageBox.Show("Falha ao excluir o fornecedor.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        // }
+                        if (fornecedor.Deletar())
+                        {
+                            CarregaGridFornecedores();
+                            MessageBox.Show("Fornecedor excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o fornecedor.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -162,10 +161,14 @@ namespace coldmakApp
             textTelefone.Text = "";
             textEmail.Text = "";
 
-
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
+        }
+
+        private void btnDeletar_Click_1(object sender, EventArgs e)
+        {
+            btnDeletar_Click(sender, e);
         }
     }
 }

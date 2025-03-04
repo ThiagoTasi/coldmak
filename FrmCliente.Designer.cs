@@ -48,9 +48,6 @@
             this.textDataNasc = new System.Windows.Forms.TextBox();
             this.textIdade = new System.Windows.Forms.TextBox();
             this.dgvCliente = new System.Windows.Forms.DataGridView();
-            this.btnInserir = new System.Windows.Forms.Button();
-            this.btnAtualizar = new System.Windows.Forms.Button();
-            this.btnDeletar = new System.Windows.Forms.Button();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,6 +57,9 @@
             this.ClnDataNasc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnIdade = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnInserir = new System.Windows.Forms.Button();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCliente)).BeginInit();
             this.SuspendLayout();
             // 
@@ -237,34 +237,6 @@
             this.dgvCliente.Size = new System.Drawing.Size(980, 150);
             this.dgvCliente.TabIndex = 19;
             // 
-            // btnInserir
-            // 
-            this.btnInserir.Location = new System.Drawing.Point(22, 504);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 20;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
-            // 
-            // btnAtualizar
-            // 
-            this.btnAtualizar.Location = new System.Drawing.Point(473, 504);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 21;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletar
-            // 
-            this.btnDeletar.Location = new System.Drawing.Point(907, 504);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 22;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            // 
             // ClnId
             // 
             this.ClnId.HeaderText = "Id";
@@ -329,6 +301,35 @@
             this.ClnRg.MinimumWidth = 6;
             this.ClnRg.Name = "ClnRg";
             this.ClnRg.Width = 125;
+            // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(22, 504);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 20;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(473, 504);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 21;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(907, 504);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 22;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
             // 
             // FrmClientes
             // 

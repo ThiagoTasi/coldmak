@@ -50,9 +50,6 @@
             this.textEstmin = new System.Windows.Forms.TextBox();
             this.textImg = new System.Windows.Forms.TextBox();
             this.dgvprod = new System.Windows.Forms.DataGridView();
-            this.btnInserir = new System.Windows.Forms.Button();
-            this.btnAtualizar = new System.Windows.Forms.Button();
-            this.btnDeletar = new System.Windows.Forms.Button();
             this.ClnIdprod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnIdforn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +61,9 @@
             this.Clndatcad = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Clnestmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Clnimg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnInserir = new System.Windows.Forms.Button();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.textCat = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvprod)).BeginInit();
@@ -262,34 +262,6 @@
             this.dgvprod.Size = new System.Drawing.Size(1061, 150);
             this.dgvprod.TabIndex = 23;
             // 
-            // btnInserir
-            // 
-            this.btnInserir.Location = new System.Drawing.Point(12, 499);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 24;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
-            // 
-            // btnAtualizar
-            // 
-            this.btnAtualizar.Location = new System.Drawing.Point(506, 499);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 25;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletar
-            // 
-            this.btnDeletar.Location = new System.Drawing.Point(998, 499);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 26;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            // 
             // ClnIdprod
             // 
             this.ClnIdprod.HeaderText = "IdProduto";
@@ -370,6 +342,35 @@
             this.Clnimg.MinimumWidth = 6;
             this.Clnimg.Name = "Clnimg";
             this.Clnimg.Width = 125;
+            // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(12, 499);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 24;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(506, 499);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 25;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(998, 499);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 26;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+           
             // 
             // label4
             // 

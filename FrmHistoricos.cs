@@ -134,8 +134,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o histórico {historico.IdHistoricos}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Adicione um método deletar na classe Historicos.
-                        MessageBox.Show("Método deletar não implementado na classe Historicos", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        if (historico.Deletar())
+                        {
+                            CarregaGridHistoricos();
+                            MessageBox.Show("Histórico excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o histórico.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -160,6 +168,11 @@ namespace coldmakApp
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
+        }
+
+        private void btnDeletar_Click_1(object sender, EventArgs e)
+        {
+            btnDeletar_Click(sender, e);
         }
     }
 }

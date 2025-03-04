@@ -132,17 +132,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir a ordem de serviço?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Adicione um método "Deletar" na classe OrdemDeServico se necessário
-                        // if (ordemDeServico.Deletar())
-                        // {
-                        CarregaGridOrdemDeServico();
-                        MessageBox.Show("Ordem de serviço excluída com sucesso!");
-                        LimparCampos();
-                        // }
-                        // else
-                        // {
-                        //     MessageBox.Show("Falha ao excluir a ordem de serviço.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        // }
+                        if (ordemDeServico.Deletar())
+                        {
+                            CarregaGridOrdemDeServico();
+                            MessageBox.Show("Ordem de serviço excluída com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir a ordem de serviço.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -165,7 +164,6 @@ namespace coldmakApp
             textStatus.Text = "";
             textDesc.Text = "";
             textVato.Text = "";
-
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
@@ -173,7 +171,11 @@ namespace coldmakApp
 
         private void btnInserir_Click_1(object sender, EventArgs e)
         {
+        }
 
+        private void btnDeletar_Click_1(object sender, EventArgs e)
+        {
+            btnDeletar_Click(sender, e);
         }
     }
 }

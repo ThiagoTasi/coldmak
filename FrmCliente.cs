@@ -139,12 +139,57 @@ namespace coldmakApp
 
         private void btnDeletar_Click(object sender, EventArgs e)
         {
-            // ... (código do método btnDeletar_Click)
+            try
+            {
+                int idCliente = int.Parse(textId.Text);
+                Cliente cliente = Cliente.ObterPorId(idCliente);
+
+                if (cliente != null)
+                {
+                    if (MessageBox.Show($"Deseja realmente excluir o cliente {cliente.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        if (cliente.Deletar())
+                        {
+                            CarregaGridClientes();
+                            MessageBox.Show("Cliente excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o cliente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Cliente não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao excluir cliente: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LimparCampos()
         {
-            // ... (código do método LimparCampos)
+            textId.Text = "";
+            textRg.Text = "";
+            textCpf.Text = "";
+            textCnpj.Text = "";
+            textNome.Text = "";
+            textEmail.Text = "";
+            textTelefone.Text = "";
+            textDataNasc.Text = "";
+            textIdade.Text = "";
+            btnAtualizar.Enabled = false;
+            btnDeletar.Enabled = false;
+            btnInserir.Enabled = true;
+        }
+
+        private void btnDeletar_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

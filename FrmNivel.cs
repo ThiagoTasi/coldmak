@@ -117,17 +117,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o nível {nivel.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Adicione um método "Deletar" na classe Nivel se necessário
-                        // if (nivel.Deletar())
-                        // {
-                        CarregaGridNiveis();
-                        MessageBox.Show("Nível excluído com sucesso!");
-                        LimparCampos();
-                        // }
-                        // else
-                        // {
-                        //     MessageBox.Show("Falha ao excluir o nível.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        // }
+                        if (nivel.Deletar())
+                        {
+                            CarregaGridNiveis();
+                            MessageBox.Show("Nível excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o nível.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -150,6 +149,11 @@ namespace coldmakApp
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
+        }
+
+        private void btnDeletar_Click_1(object sender, EventArgs e)
+        {
+            btnDeletar_Click(sender, e);
         }
     }
 }

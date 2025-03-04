@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -9,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using coldmak;
 using coldmakClass;
+using System.IO;
 
 namespace coldmakApp
 {
@@ -98,19 +97,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o produto {produto.Descricao}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        // Implemente a lógica de exclusão no banco de dados aqui
-                        // Exemplo:
-                        // if (Produto.Deletar(idProduto))
-                        // {
-                        //     CarregaGridProdutos();
-                        //     MessageBox.Show("Produto excluído com sucesso!");
-                        //     LimparCampos();
-                        // }
-                        // else
-                        // {
-                        //     MessageBox.Show("Falha ao excluir o produto.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        // }
-                        MessageBox.Show("Implemente a lógica de exclusão no banco de dados.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        if (produto.Deletar())
+                        {
+                            CarregaGridProdutos();
+                            MessageBox.Show("Produto excluído com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir o produto.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -131,7 +127,16 @@ namespace coldmakApp
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                pictureBoxImagem.Image = Image.FromFile(openFileDialog.FileName);
+                try
+                {
+                    // Carregar a imagem no PictureBox
+                    pictureBoxImagem.Image = Image.FromFile(openFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    // Caso ocorra erro ao carregar a imagem
+                    MessageBox.Show($"Erro ao carregar imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -152,7 +157,24 @@ namespace coldmakApp
                 dgvprod.Rows[rowIndex].Cells["UnidadeVenda"].Value = produto.UnidadeVenda;
                 dgvprod.Rows[rowIndex].Cells["EstoqueMinimo"].Value = produto.EstoqueMinimo;
                 dgvprod.Rows[rowIndex].Cells["ClasseDesconto"].Value = produto.ClasseDesconto;
-                dgvprod.Rows[rowIndex].Cells["Imagem"].Value = ByteArrayToImage(produto.Imagem);
+
+                if (produto.Imagem != null)
+                {
+                    try
+                    {
+                        dgvprod.Rows[rowIndex].Cells["Imagem"].Value = ByteArrayToImage(produto.Imagem);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao exibir imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        dgvprod.Rows[rowIndex].Cells["Imagem"].Value = null;
+                    }
+                }
+                else
+                {
+                    dgvprod.Rows[rowIndex].Cells["Imagem"].Value = null;
+                }
+
                 dgvprod.Rows[rowIndex].Cells["DataCadastro"].Value = produto.DataCadastro;
             }
         }
@@ -171,7 +193,24 @@ namespace coldmakApp
                 textUnidvend.Text = row.Cells["UnidadeVenda"].Value.ToString();
                 textEstmin.Text = row.Cells["EstoqueMinimo"].Value.ToString();
                 textCladesc.Text = row.Cells["ClasseDesconto"].Value.ToString();
-                pictureBoxImagem.Image = row.Cells["Imagem"].Value as Image;
+
+                if (row.Cells["Imagem"].Value != null && row.Cells["Imagem"].Value != DBNull.Value)
+                {
+                    try
+                    {
+                        pictureBoxImagem.Image = (Image)row.Cells["Imagem"].Value;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erro ao exibir imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        pictureBoxImagem.Image = null;
+                    }
+                }
+                else
+                {
+                    pictureBoxImagem.Image = null;
+                }
+
                 textDatcad.Text = ((DateTime)row.Cells["DataCadastro"].Value).ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
@@ -187,12 +226,15 @@ namespace coldmakApp
             textUnidvend.Text = "";
             textEstmin.Text = "";
             textCladesc.Text = "";
-            pictureBoxImagem.Image = null;
+            pictureBoxImagem.Image = null; // Limpar a imagem ao limpar os campos
             textDatcad.Text = "";
         }
 
         private byte[] ImageToByteArray(Image image)
         {
+            if (image == null)
+                return null;
+
             using (MemoryStream ms = new MemoryStream())
             {
                 image.Save(ms, image.RawFormat);
@@ -202,7 +244,9 @@ namespace coldmakApp
 
         private Image ByteArrayToImage(byte[] byteArray)
         {
-            if (byteArray == null) return null;
+            if (byteArray == null || byteArray.Length == 0)
+                return null;
+
             using (MemoryStream ms = new MemoryStream(byteArray))
             {
                 return Image.FromStream(ms);
