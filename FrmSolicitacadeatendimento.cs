@@ -17,6 +17,8 @@ namespace coldmakApp
         public FrmSolicitacaoAtendimento()
         {
             InitializeComponent();
+            maskedtextHorarioAgendamento.Mask = "00:00"; // Máscara para HH:mm
+            maskedtextHorarioAgendamento.ValidatingType = typeof(DateTime);
         }
 
         private void FrmSolicitacaoAtendimento_Load(object sender, EventArgs e)
@@ -29,11 +31,15 @@ namespace coldmakApp
             try
             {
                 DateTime dataAgendamento = DateTime.ParseExact(textDatag.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                DateTime horarioAgendamento = DateTime.ParseExact(maskedtextHoag.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+                if (!maskedtextHorarioAgendamento.MaskCompleted)
+                    throw new FormatException("Horário incompleto. Preencha no formato HH:mm.");
+                DateTime horarioAgendamento = DateTime.ParseExact(maskedtextHorarioAgendamento.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+                // Combinamos a data atual com o horário para criar um datetime completo
+                DateTime horarioCompleto = DateTime.Today.Add(horarioAgendamento.TimeOfDay);
 
                 SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
                     dataAgendamento,
-                    horarioAgendamento,
+                    horarioCompleto,
                     textTipserv.Text
                 );
 
@@ -42,14 +48,14 @@ namespace coldmakApp
                 if (solicitacaoAtendimento.IdSolicitacaoAtendimento > 0)
                 {
                     CarregaGridSolicitacoesAtendimento();
-                    MessageBox.Show($"Solicitação de atendimento inserida com sucesso");
+                    MessageBox.Show($"Solicitação de atendimento inserida com sucesso!");
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
-                MessageBox.Show("Formato de data ou hora inválido. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro no formato de data ou hora: {ex.Message}. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -60,9 +66,9 @@ namespace coldmakApp
         private void CarregaGridSolicitacoesAtendimento()
         {
             dgvsolaten.Rows.Clear();
-            var listaDeSolicitacoesAtendimento = SolicitacaoAtendimento.ObterLista();
+            var listaDeSolicitacoes = SolicitacaoAtendimento.ObterLista();
             int linha = 0;
-            foreach (var solicitacao in listaDeSolicitacoesAtendimento)
+            foreach (var solicitacao in listaDeSolicitacoes)
             {
                 dgvsolaten.Rows.Add();
                 dgvsolaten.Rows[linha].Cells[0].Value = solicitacao.IdSolicitacaoAtendimento;
@@ -81,13 +87,16 @@ namespace coldmakApp
                 int idSolicitacaoAtendimento = Convert.ToInt32(dgvsolaten.Rows[linhaAtual].Cells[0].Value);
                 var solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
-                textId.Text = solicitacaoAtendimento.IdSolicitacaoAtendimento.ToString();
-                textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString("yyyy-MM-dd");
-                maskedtextHoag.Text = solicitacaoAtendimento.HorarioAgendamento.ToString("HH:mm");
-                textTipserv.Text = solicitacaoAtendimento.TipoServico;
+                if (solicitacaoAtendimento != null)
+                {
+                    textId.Text = solicitacaoAtendimento.IdSolicitacaoAtendimento.ToString();
+                    textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString("yyyy-MM-dd");
+                    maskedtextHorarioAgendamento.Text = solicitacaoAtendimento.HorarioAgendamento.ToString("HH:mm");
+                    textTipserv.Text = solicitacaoAtendimento.TipoServico;
 
-                btnAtualizar.Enabled = true;
-                btnDeletar.Enabled = true;
+                    btnAtualizar.Enabled = true;
+                    btnDeletar.Enabled = true;
+                }
             }
         }
 
@@ -95,11 +104,19 @@ namespace coldmakApp
         {
             try
             {
-                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
-                solicitacaoAtendimento.IdSolicitacaoAtendimento = int.Parse(textId.Text);
-                solicitacaoAtendimento.DataAgendamento = DateTime.ParseExact(textDatag.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                solicitacaoAtendimento.HorarioAgendamento = DateTime.ParseExact(maskedtextHoag.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
-                solicitacaoAtendimento.TipoServico = textTipserv.Text;
+                if (!maskedtextHorarioAgendamento.MaskCompleted)
+                    throw new FormatException("Horário incompleto. Preencha no formato HH:mm.");
+
+                DateTime dataAgendamento = DateTime.ParseExact(textDatag.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime horarioAgendamento = DateTime.ParseExact(maskedtextHorarioAgendamento.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime horarioCompleto = DateTime.Today.Add(horarioAgendamento.TimeOfDay);
+
+                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
+                    int.Parse(textId.Text),
+                    dataAgendamento,
+                    horarioCompleto,
+                    textTipserv.Text
+                );
 
                 if (solicitacaoAtendimento.Atualizar())
                 {
@@ -107,10 +124,14 @@ namespace coldmakApp
                     MessageBox.Show("Solicitação de atendimento atualizada com sucesso!");
                     LimparCampos();
                 }
+                else
+                {
+                    MessageBox.Show("Falha ao atualizar solicitação de atendimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (FormatException)
+            catch (FormatException ex)
             {
-                MessageBox.Show("Formato de data ou hora inválido. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro no formato de data ou hora: {ex.Message}. Use AAAA-MM-DD para data e HH:mm para hora.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -129,10 +150,16 @@ namespace coldmakApp
                 {
                     if (MessageBox.Show($"Deseja realmente excluir a solicitação de atendimento {solicitacaoAtendimento.IdSolicitacaoAtendimento}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        solicitacaoAtendimento.Deletar();
-                        CarregaGridSolicitacoesAtendimento();
-                        MessageBox.Show("Solicitação de atendimento excluída com sucesso!");
-                        LimparCampos();
+                        if (solicitacaoAtendimento.Deletar())
+                        {
+                            CarregaGridSolicitacoesAtendimento();
+                            MessageBox.Show("Solicitação de atendimento excluída com sucesso!");
+                            LimparCampos();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Falha ao excluir solicitação de atendimento.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
                 else
@@ -150,16 +177,12 @@ namespace coldmakApp
         {
             textId.Text = "";
             textDatag.Text = "";
-            maskedtextHoag.Clear();
+            maskedtextHorarioAgendamento.Text = "";
             textTipserv.Text = "";
+
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
-        }
-
-        private void btnDeletar_Click_1(object sender, EventArgs e)
-        {
-            btnDeletar_Click(sender, e);
         }
     }
 }

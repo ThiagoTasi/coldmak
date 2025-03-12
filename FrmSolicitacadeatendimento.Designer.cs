@@ -35,7 +35,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.textId = new System.Windows.Forms.TextBox();
             this.textDatag = new System.Windows.Forms.TextBox();
-            this.textHoag = new System.Windows.Forms.TextBox();
             this.textTipserv = new System.Windows.Forms.TextBox();
             this.dgvsolaten = new System.Windows.Forms.DataGridView();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -45,6 +44,7 @@
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
+            this.maskedtextHorarioAgendamento = new System.Windows.Forms.MaskedTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvsolaten)).BeginInit();
             this.SuspendLayout();
             // 
@@ -107,13 +107,6 @@
             this.textDatag.Name = "textDatag";
             this.textDatag.Size = new System.Drawing.Size(100, 22);
             this.textDatag.TabIndex = 6;
-            // 
-            // textHoag
-            // 
-            this.textHoag.Location = new System.Drawing.Point(410, 126);
-            this.textHoag.Name = "textHoag";
-            this.textHoag.Size = new System.Drawing.Size(100, 22);
-            this.textHoag.TabIndex = 7;
             // 
             // textTipserv
             // 
@@ -192,19 +185,25 @@
             this.btnDeletar.TabIndex = 12;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
+            // 
+            // maskedtextHorarioAgendamento
+            // 
+            this.maskedtextHorarioAgendamento.Location = new System.Drawing.Point(410, 130);
+            this.maskedtextHorarioAgendamento.Name = "maskedtextHorarioAgendamento";
+            this.maskedtextHorarioAgendamento.Size = new System.Drawing.Size(100, 22);
+            this.maskedtextHorarioAgendamento.TabIndex = 13;
             // 
             // FrmSolicitacaoAtendimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(768, 450);
+            this.Controls.Add(this.maskedtextHorarioAgendamento);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
             this.Controls.Add(this.dgvsolaten);
             this.Controls.Add(this.textTipserv);
-            this.Controls.Add(this.textHoag);
             this.Controls.Add(this.textDatag);
             this.Controls.Add(this.textId);
             this.Controls.Add(this.label5);
@@ -229,7 +228,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox textId;
         private System.Windows.Forms.TextBox textDatag;
-        private System.Windows.Forms.TextBox textHoag;
         private System.Windows.Forms.TextBox textTipserv;
         private System.Windows.Forms.DataGridView dgvsolaten;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
@@ -239,5 +237,6 @@
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.MaskedTextBox maskedtextHorarioAgendamento;
     }
 }

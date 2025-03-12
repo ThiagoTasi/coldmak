@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
 
 namespace coldmakClass
 {
@@ -42,7 +37,6 @@ namespace coldmakClass
         public void Inserir()
         {
             var cmd = Banco.Abrir();
-
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_caixa_insert"; // Substitua pelo nome da sua stored procedure
             cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
@@ -52,8 +46,6 @@ namespace coldmakClass
 
             cmd.ExecuteNonQuery();
             cmd.CommandText = "select last_insert_id()";
-            cmd.ExecuteNonQuery();
-
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
@@ -64,21 +56,42 @@ namespace coldmakClass
 
         public static Caixa ObterPorId(int id)
         {
-            Caixa caixa = new Caixa( );
+            Caixa caixa = null;
             var cmd = Banco.Abrir();
-            cmd.CommandText = $"select * from caixas where idcaixa = {id}"; // Substitua pelo nome da sua tabela
+            cmd.CommandText = $"select * from caixa where id_caixa = {id}"; // Substitua pelo nome da sua tabela
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
                 caixa = new Caixa(
-                    dr.GetInt32(0),
-                    dr.GetInt32(1),
-                    dr.GetDateTime(2),
-                    dr.GetDecimal(3),
-                    dr.GetString(4)
+                    dr.GetInt32(0), // id_caixa
+                    dr.GetInt32(1), // id_usuario
+                    dr.GetDateTime(2), // data_abertura
+                    dr.GetDecimal(3), // saldo_inicial
+                    dr.GetString(4) // status
                 );
             }
+            cmd.Connection.Close();
             return caixa;
+        }
+
+        public static List<Caixa> ObterTodos()
+        {
+            List<Caixa> caixas = new List<Caixa>();
+            var cmd = Banco.Abrir();
+            cmd.CommandText = "select * from caixa"; // Substitua pelo nome da sua tabela
+            var dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                caixas.Add(new Caixa(
+                    dr.GetInt32(0), // id_caixa
+                    dr.GetInt32(1), // id_usuario
+                    dr.GetDateTime(2), // data_abertura
+                    dr.GetDecimal(3), // saldo_inicial
+                    dr.GetString(4) // status
+                ));
+            }
+            cmd.Connection.Close();
+            return caixas;
         }
 
         public bool Atualizar()
@@ -91,18 +104,20 @@ namespace coldmakClass
             cmd.Parameters.AddWithValue("spdataabertura", DataAbertura);
             cmd.Parameters.AddWithValue("spsaldoinicial", SaldoInicial);
             cmd.Parameters.AddWithValue("spstatus", Status);
-            cmd.ExecuteNonQuery();
-            return cmd.ExecuteNonQuery() > 0;
+            int rowsAffected = cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+            return rowsAffected > 0;
         }
+
         public bool Deletar()
         {
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_caixa_delete"; // Substitua pelo nome da sua stored procedure de deleção
             cmd.Parameters.AddWithValue("spidcaixa", IdCaixa);
-            cmd.ExecuteNonQuery();
-            return cmd.ExecuteNonQuery() > 0;
+            int rowsAffected = cmd.ExecuteNonQuery();
+            cmd.Connection.Close();
+            return rowsAffected > 0;
         }
     }
 }
-    

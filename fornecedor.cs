@@ -68,7 +68,7 @@ namespace coldmakClass
 
         public static Fornecedor ObterPorId(int idFornecedor)
         {
-            Fornecedor fornecedor = new();
+            Fornecedor fornecedor = new Fornecedor();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from fornecedores where id_fornecedor = {idFornecedor}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
@@ -88,7 +88,7 @@ namespace coldmakClass
 
         public static List<Fornecedor> ObterLista()
         {
-            List<Fornecedor> lista = new();
+            List<Fornecedor> lista = new List<Fornecedor>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from fornecedores order by razao_social asc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();

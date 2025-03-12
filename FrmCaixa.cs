@@ -54,7 +54,7 @@ namespace coldmakApp
         private void CarregaGridCaixas()
         {
             dgvcaixa.Rows.Clear();
-            var listaDeCaixas = Caixa.ObterLista();
+            var listaDeCaixas = Caixa.ObterTodos();
             int linha = 0;
             foreach (var caixa in listaDeCaixas)
             {
@@ -75,13 +75,16 @@ namespace coldmakApp
                 int linhaAtual = dgvcaixa.CurrentRow.Index;
                 int idCaixa = Convert.ToInt32(dgvcaixa.Rows[linhaAtual].Cells[0].Value);
                 var caixa = Caixa.ObterPorId(idCaixa);
-                textIdCaixa.Text = caixa.IdCaixa.ToString();
-                textIdUsuario.Text = caixa.IdUsuario.ToString();
-                textDatab.Text = caixa.DataAbertura.ToString();
-                textSalini.Text = caixa.SaldoInicial.ToString();
-                textStt.Text = caixa.Status;
-                btnAtualizar.Enabled = true;
-                btnDeletar.Enabled = true;
+                if (caixa != null)
+                {
+                    textIdCaixa.Text = caixa.IdCaixa.ToString();
+                    textIdUsuario.Text = caixa.IdUsuario.ToString();
+                    textDatab.Text = caixa.DataAbertura.ToString();
+                    textSalini.Text = caixa.SaldoInicial.ToString();
+                    textStt.Text = caixa.Status;
+                    btnAtualizar.Enabled = true;
+                    btnDeletar.Enabled = true;
+                }
             }
         }
 
@@ -89,18 +92,24 @@ namespace coldmakApp
         {
             try
             {
-                Caixa caixa = new Caixa();
-                caixa.IdCaixa = int.Parse(textIdCaixa.Text);
-                caixa.IdUsuario = int.Parse(textIdUsuario.Text);
-                caixa.DataAbertura = DateTime.Parse(textDatab.Text);
-                caixa.SaldoInicial = decimal.Parse(textSalini.Text);
-                caixa.Status = textStt.Text;
+                Caixa caixa = new Caixa
+                {
+                    IdCaixa = int.Parse(textIdCaixa.Text),
+                    IdUsuario = int.Parse(textIdUsuario.Text),
+                    DataAbertura = DateTime.Parse(textDatab.Text),
+                    SaldoInicial = decimal.Parse(textSalini.Text),
+                    Status = textStt.Text
+                };
 
                 if (caixa.Atualizar())
                 {
                     CarregaGridCaixas();
                     MessageBox.Show("Caixa atualizado com sucesso!");
                     LimparCampos();
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao atualizar o caixa.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
@@ -116,7 +125,7 @@ namespace coldmakApp
                 int idCaixa = int.Parse(textIdCaixa.Text);
                 Caixa caixa = Caixa.ObterPorId(idCaixa);
 
-                if (caixa != null)
+                if (caixa != null && caixa.IdCaixa > 0)
                 {
                     if (MessageBox.Show($"Deseja realmente excluir o caixa {caixa.IdCaixa}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -153,11 +162,6 @@ namespace coldmakApp
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
-        }
-
-        private void btnDeletar_Click_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
