@@ -36,7 +36,7 @@ namespace coldmakApp
                     textUnidvend.Text,
                     int.Parse(textEstmin.Text),
                     textCladesc.Text,
-                    pictureBoxImagem.Image != null ? ImageToByteArray(pictureBoxImagem.Image) : null,
+                    pictureBox1.Image != null ? ImageToByteArray(pictureBox1.Image) : null,
                     DateTime.Parse(textDatcad.Text)
                 );
 
@@ -69,7 +69,7 @@ namespace coldmakApp
                     textUnidvend.Text,
                     int.Parse(textEstmin.Text),
                     textCladesc.Text,
-                    pictureBoxImagem.Image != null ? ImageToByteArray(pictureBoxImagem.Image) : null,
+                    pictureBox1.Image != null ? ImageToByteArray(pictureBox1.Image) : null,
                     DateTime.Parse(textDatcad.Text)
                 );
 
@@ -130,7 +130,7 @@ namespace coldmakApp
                 try
                 {
                     // Carregar a imagem no PictureBox
-                    pictureBoxImagem.Image = Image.FromFile(openFileDialog.FileName);
+                    pictureBox1.Image = Image.FromFile(openFileDialog.FileName);
                 }
                 catch (Exception ex)
                 {
@@ -198,17 +198,17 @@ namespace coldmakApp
                 {
                     try
                     {
-                        pictureBoxImagem.Image = (Image)row.Cells["Imagem"].Value;
+                        pictureBox1.Image = (Image)row.Cells["Imagem"].Value;
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show($"Erro ao exibir imagem: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        pictureBoxImagem.Image = null;
+                        pictureBox1.Image = null;
                     }
                 }
                 else
                 {
-                    pictureBoxImagem.Image = null;
+                    pictureBox1.Image = null;
                 }
 
                 textDatcad.Text = ((DateTime)row.Cells["DataCadastro"].Value).ToString("yyyy-MM-dd HH:mm:ss");
@@ -226,7 +226,7 @@ namespace coldmakApp
             textUnidvend.Text = "";
             textEstmin.Text = "";
             textCladesc.Text = "";
-            pictureBoxImagem.Image = null; // Limpar a imagem ao limpar os campos
+            pictureBox1.Image = null; // Limpar a imagem ao limpar os campos
             textDatcad.Text = "";
         }
 
