@@ -68,7 +68,7 @@ namespace coldmakClass
         // ObterPorId
         public static Historicos ObterPorId(int id)
         {
-            Historicos historico = new();
+            Historicos historico = new Historicos();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from historicos where id_historicos = {id}";
             var dr = cmd.ExecuteReader();
@@ -88,7 +88,7 @@ namespace coldmakClass
 
         public static List<Historicos> ObterLista()
         {
-            List<Historicos> lista = new();
+            List<Historicos> lista = new List<Historicos>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from historicos order by data_venda desc";
             var dr = cmd.ExecuteReader();

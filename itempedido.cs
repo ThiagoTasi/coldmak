@@ -68,10 +68,10 @@ namespace coldmakClass
 
         public static ItemPedido ObterPorId(int id)
         {
-            ItemPedido itemPedido = new();
+            ItemPedido itemPedido = new ItemPedido();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from itenspedido where iditempedido = {id}"; // Substitua pelo nome da sua tabela
-            var dr = cmd.ExecuteReader();
+            var dr = cmd.ExecuteReader(); 
             if (dr.Read())
             {
                 itemPedido = new ItemPedido(
@@ -103,7 +103,7 @@ namespace coldmakClass
 
         public static List<ItemPedido> ObterLista()
         {
-            List<ItemPedido> lista = new();
+            List<ItemPedido> lista = new List<ItemPedido>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from itenspedido"; // Substitua pelo nome da sua tabela
             var dr = cmd.ExecuteReader();

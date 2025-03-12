@@ -56,7 +56,7 @@ namespace coldmakClass
 
         public static Nivel ObterPorId(int idNivel)
         {
-            Nivel nivel = new();
+            Nivel nivel = new Nivel();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from niveis where id_nivel = {idNivel}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
@@ -73,7 +73,7 @@ namespace coldmakClass
 
         public static List<Nivel> ObterLista()
         {
-            List<Nivel> lista = new();
+            List<Nivel> lista = new List<Nivel>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from niveis order by nome asc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();

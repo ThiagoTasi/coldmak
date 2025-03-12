@@ -60,7 +60,7 @@ namespace coldmakClass
 
         public static SolicitacaoAtendimento ObterPorId(int idSolicitacaoAtendimento)
         {
-            SolicitacaoAtendimento solicitacaoAtendimento = new();
+            SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from solicitacao_atendimento where idsolicitacao_atendimento = {idSolicitacaoAtendimento}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
@@ -78,7 +78,7 @@ namespace coldmakClass
 
         public static List<SolicitacaoAtendimento> ObterLista()
         {
-            List<SolicitacaoAtendimento> lista = new();
+            List<SolicitacaoAtendimento> lista = new List<SolicitacaoAtendimento>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from solicitacao_atendimento order by data_agendamento desc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();

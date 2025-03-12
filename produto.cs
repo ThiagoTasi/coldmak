@@ -89,7 +89,7 @@ namespace coldmakClass
         // ObterPorId
         public static Produto ObterPorId(int id)
         {
-            Produto produto = new();
+            Produto produto = new Produto();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from produtos where idproduto = {id}"; // Substitua pelo nome da sua tabela
             var dr = cmd.ExecuteReader();
@@ -114,7 +114,7 @@ namespace coldmakClass
 
         public static List<Produto> ObterLista()
         {
-            List<Produto> lista = new();
+            List<Produto> lista = new List<Produto>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from produtos order by descricao asc"; // Substitua pelo nome da sua tabela
             var dr = cmd.ExecuteReader();

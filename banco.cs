@@ -15,8 +15,8 @@ namespace coldmakClass
         public static MySqlCommand Abrir(int cod = 0) // método para abrir conexão
         {
             string strcon = @"server=127.0.0.1;database=coldmak;user=root;password=";
-            MySqlConnection cn = new(strcon);
-            MySqlCommand cmd = new();
+            MySqlConnection cn = new  MySqlConnection(strcon);
+            MySqlCommand cmd = new MySqlCommand();
             try
             {
                 cn.Open();

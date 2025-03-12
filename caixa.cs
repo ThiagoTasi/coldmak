@@ -64,7 +64,7 @@ namespace coldmakClass
 
         public static Caixa ObterPorId(int id)
         {
-            Caixa caixa = new();
+            Caixa caixa = new Caixa( );
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from caixas where idcaixa = {id}"; // Substitua pelo nome da sua tabela
             var dr = cmd.ExecuteReader();

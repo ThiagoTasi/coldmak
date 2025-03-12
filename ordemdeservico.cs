@@ -72,8 +72,8 @@ namespace coldmakClass
 
         public static OrdemDeServico ObterPorId(int idOrdemDeServico)
         {
-            OrdemDeServico ordemDeServico = new();
-            var cmd = Banco.Abrir();
+            OrdemDeServico ordemDeServico = new OrdemDeServico();
+            var cmd = Banco.Abrir(); 
             cmd.CommandText = $"select * from ordem_de_servico where idordem_de_servico = {idOrdemDeServico}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
             if (dr.Read())
@@ -93,7 +93,7 @@ namespace coldmakClass
 
         public static List<OrdemDeServico> ObterLista()
         {
-            List<OrdemDeServico> lista = new();
+            List<OrdemDeServico> lista = new List<OrdemDeServico>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from ordem_de_servico order by data desc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();

@@ -82,7 +82,7 @@ namespace coldmakClass
         // ObterPorId
         public static Cliente ObterPorId(int id)
         {
-            Cliente cliente = new();
+            Cliente cliente = new Cliente();
             try
             {
                 var cmd = Banco.Abrir();
@@ -113,7 +113,7 @@ namespace coldmakClass
 
         public static List<Cliente> ObterLista()
         {
-            List<Cliente> lista = new();
+            List<Cliente> lista = new List<Cliente>();
             try
             {
                 var cmd = Banco.Abrir();
