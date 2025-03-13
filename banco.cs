@@ -1,34 +1,14 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace coldmakClass
 {
-    // classe Banco é nossa classe de conexão
-    public static class Banco // static pois não precisaremos criar uma instancia de Banco para conectar às nossas base dados
+    public static class Banco
     {
-        public static MySqlCommand Abrir(int cod = 0) // método para abrir conexão
+        public static MySqlCommand Abrir()
         {
-            string strcon = @"server=127.0.0.1;database=coldmak;user=root;password=";
-            MySqlConnection cn = new  MySqlConnection(strcon);
-            MySqlCommand cmd = new MySqlCommand();
-            try
-            {
-                cn.Open();
-                cmd.Connection = cn;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
-            return cmd;
+            var cn = new MySqlConnection("server=127.0.0.1;database=coldmak;user=root;password=");
+            cn.Open();
+            return new MySqlCommand { Connection = cn };
         }
     }
 }
