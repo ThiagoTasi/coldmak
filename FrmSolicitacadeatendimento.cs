@@ -184,5 +184,10 @@ namespace coldmakApp
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
         }
+
+        private void btnInserir_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
