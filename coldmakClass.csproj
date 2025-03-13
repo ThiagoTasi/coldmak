@@ -102,6 +102,12 @@
     <Compile Include="caixa.cs" />
     <Compile Include="cliente.cs" />
     <Compile Include="endereco.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="fornecedor.cs" />
     <Compile Include="FrmCaixa.cs">
       <SubType>Form</SubType>
@@ -185,6 +191,9 @@
     <Compile Include="solicitacaodeatendimento..cs" />
     <Compile Include="usuario.cs" />
     <Compile Include="vendas.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmCaixa.resx">
       <DependentUpon>FrmCaixa.cs</DependentUpon>
     </EmbeddedResource>
