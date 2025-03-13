@@ -78,5 +78,89 @@ namespace coldmak
         {
             Application.Exit();
         }
+
+        private void btnProduto_Click_1(object sender, EventArgs e)
+        {
+            FrmProdutos frmProdutos = new FrmProdutos();
+            frmProdutos.IsMdiContainer = true;
+            frmProdutos.Show();
+        }
+
+        private void btnUsuario_Click(object sender, EventArgs e)
+        {
+            FrmUsuarios frmUsuarios = new FrmUsuarios();
+            frmUsuarios.IsMdiContainer = true;
+            frmUsuarios.Show();
+        }
+
+        private void btnCaixa_Click(object sender, EventArgs e)
+        {
+            FrmCaixa frmCaixa = new FrmCaixa();
+            frmCaixa.IsMdiContainer = true;
+            frmCaixa.Show();
+        }
+
+        private void btnCliente_Click_1(object sender, EventArgs e)
+        {
+            FrmClientes frmClientes = new FrmClientes();
+            frmClientes.IsMdiContainer = true;
+            frmClientes.Show();
+        }
+
+        private void btnEndereco_Click(object sender, EventArgs e)
+        {
+            FrmEnderecos frmEnderecos = new FrmEnderecos();
+            frmEnderecos.IsMdiContainer = true;
+            frmEnderecos.Show();
+        }
+
+        private void btnFornecedor_Click(object sender, EventArgs e)
+        {
+            FrmFornecedores frmFornecedores = new FrmFornecedores();
+            frmFornecedores.IsMdiContainer = true;
+            frmFornecedores.Show();
+        }
+
+        private void btnHistoricos_Click(object sender, EventArgs e)
+        {
+            FrmHistoricos frmHistoricos = new FrmHistoricos();
+            frmHistoricos.IsMdiContainer = true;
+            frmHistoricos.Show();
+        }
+
+        private void btnItempedido_Click(object sender, EventArgs e)
+        {
+            FrmItemPedido frmItempedido = new FrmItemPedido();
+            frmItempedido.IsMdiContainer = true;
+            frmItempedido.Show();
+        }
+
+        private void btnNivel_Click(object sender, EventArgs e)
+        {
+            FrmNiveis frmNiveis = new FrmNiveis();
+            frmNiveis.IsMdiContainer = true;
+            frmNiveis.Show();
+        }
+
+        private void btnOrdem_Click_1(object sender, EventArgs e)
+        {
+            FrmOrdemDeServico FrmOrdemDeServico = new FrmOrdemDeServico();
+            FrmOrdemDeServico.IsMdiContainer = true;
+            FrmOrdemDeServico.Show();
+        }
+
+        private void btnSolicitacao_Click(object sender, EventArgs e)
+        {
+            FrmSolicitacaoAtendimento FrmSolicitacaoAtendimento = new FrmSolicitacaoAtendimento();
+            FrmSolicitacaoAtendimento.IsMdiContainer = true;
+            FrmSolicitacaoAtendimento.Show();
+        }
+
+        private void btnVenda_Click_1(object sender, EventArgs e)
+        {
+            FrmVendas FrmVendas = new FrmVendas();
+            FrmVendas.IsMdiContainer = true;
+            FrmVendas.Show();
+        }
     }
 }
