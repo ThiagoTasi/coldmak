@@ -169,5 +169,10 @@ namespace coldmakApp
         {
             btnDeletar_Click(sender, e);
         }
+
+        private void FrmVendas_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -244,6 +244,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmVendas";
             this.Text = "FrmVendas";
+            this.Load += new System.EventHandler(this.FrmVendas_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvendas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
