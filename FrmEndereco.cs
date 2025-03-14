@@ -41,7 +41,7 @@ namespace coldmakApp
 
                 endereco.Inserir();
 
-                if (endereco.Id > 0)
+                if (endereco.IdEndereco > 0)
                 {
                     CarregaGridEnderecos();
                     MessageBox.Show($"Endereço inserido com sucesso");
@@ -63,14 +63,14 @@ namespace coldmakApp
             foreach (var endereco in listaDeEnderecos)
             {
                 dgvEndereco.Rows.Add();
-                dgvEndereco.Rows[linha].Cells[0].Value = endereco.Id;
+                dgvEndereco.Rows[linha].Cells[0].Value = endereco.IdEndereco;
                 dgvEndereco.Rows[linha].Cells[1].Value = endereco.Cep;
                 dgvEndereco.Rows[linha].Cells[2].Value = endereco.Logradouro;
                 dgvEndereco.Rows[linha].Cells[3].Value = endereco.NumeroResidencial;
                 dgvEndereco.Rows[linha].Cells[4].Value = endereco.Complemento;
                 dgvEndereco.Rows[linha].Cells[5].Value = endereco.Bairro;
                 dgvEndereco.Rows[linha].Cells[6].Value = endereco.Cidade;
-                dgvEndereco.Rows[linha].Cells[7].Value = endereco.Uf;
+                dgvEndereco.Rows[linha].Cells[7].Value = endereco.UF;
                 linha++;
             }
         }
@@ -82,14 +82,14 @@ namespace coldmakApp
                 int linhaAtual = dgvEndereco.CurrentRow.Index;
                 int idEndereco = Convert.ToInt32(dgvEndereco.Rows[linhaAtual].Cells[0].Value);
                 var endereco = Endereco.ObterPorId(idEndereco);
-                textId.Text = endereco.Id.ToString();
+                textId.Text = endereco.IdEndereco.ToString();
                 textCep.Text = endereco.Cep;
                 textLogra.Text = endereco.Logradouro;
                 textNumRes.Text = endereco.NumeroResidencial;
                 textComple.Text = endereco.Complemento;
                 textBairro.Text = endereco.Bairro;
                 textCidade.Text = endereco.Cidade;
-                textUf.Text = endereco.Uf;
+                textUf.Text = endereco.UF;
                 btnAtualizar.Enabled = true;
                 btnDeletar.Enabled = true;
             }
@@ -100,14 +100,14 @@ namespace coldmakApp
             try
             {
                 Endereco endereco = new Endereco();
-                endereco.Id = int.Parse(textId.Text);
+                endereco.IdEndereco = int.Parse(textId.Text);
                 endereco.Cep = textCep.Text;
                 endereco.Logradouro = textLogra.Text;
                 endereco.NumeroResidencial = textNumRes.Text;
                 endereco.Complemento = textComple.Text;
                 endereco.Bairro = textBairro.Text;
                 endereco.Cidade = textCidade.Text;
-                endereco.Uf = textUf.Text;
+                endereco.UF = textUf.Text;
 
                 if (endereco.Atualizar())
                 {

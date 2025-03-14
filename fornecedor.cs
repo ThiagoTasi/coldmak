@@ -12,8 +12,8 @@ namespace coldmakClass
 {
     public class Fornecedor
     {
-        public int Id_Fornecedor { get; set; }
-        public string Razao_Social { get; set; }
+        public int IdFornecedor { get; set; }
+        public string RazaoSocial { get; set; }
         public string Fantasia { get; set; }
         public string Cnpj { get; set; }
         public string Telefone { get; set; }
@@ -25,7 +25,7 @@ namespace coldmakClass
 
         public Fornecedor(string razaoSocial, string fantasia, string cnpj, string telefone, string email)
         {
-            Razao_Social = razaoSocial;
+            RazaoSocial = razaoSocial;
             Fantasia = fantasia;
             Cnpj = cnpj;
             Telefone = telefone;
@@ -34,8 +34,8 @@ namespace coldmakClass
 
         public Fornecedor(int idFornecedor, string razaoSocial, string fantasia, string cnpj, string telefone, string email)
         {
-            Id_Fornecedor = idFornecedor;
-            Razao_Social = razaoSocial;
+            IdFornecedor = idFornecedor;
+            RazaoSocial = razaoSocial;
             Fantasia = fantasia;
             Cnpj = cnpj;
             Telefone = telefone;
@@ -48,7 +48,7 @@ namespace coldmakClass
 
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_fornecedor_insert"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("sprazaosocial", Razao_Social);
+            cmd.Parameters.AddWithValue("sprazaosocial", RazaoSocial);
             cmd.Parameters.AddWithValue("spfantasia", Fantasia);
             cmd.Parameters.AddWithValue("spcnpj", Cnpj);
             cmd.Parameters.AddWithValue("sptelefone", Telefone);
@@ -61,7 +61,7 @@ namespace coldmakClass
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                Id_Fornecedor = dr.GetInt32(0);
+                IdFornecedor = dr.GetInt32(0);
             }
             cmd.Connection.Close();
         }
@@ -111,8 +111,8 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_fornecedor_altera"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidfornecedor", Id_Fornecedor);
-            cmd.Parameters.AddWithValue("sprazaosocial", Razao_Social);
+            cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
+            cmd.Parameters.AddWithValue("sprazaosocial", RazaoSocial);
             cmd.Parameters.AddWithValue("spfantasia", Fantasia);
             cmd.Parameters.AddWithValue("spcnpj", Cnpj);
             cmd.Parameters.AddWithValue("sptelefone", Telefone);
@@ -125,7 +125,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_fornecedor_delete"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidfornecedor", Id_Fornecedor);
+            cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
             cmd.ExecuteNonQuery();
             return cmd.ExecuteNonQuery() > 0;
         }

@@ -12,16 +12,16 @@ using coldmakClass;
 
 namespace coldmakApp
 {
-    public partial class FrmSolicitacaoAtendimento : Form
+    public partial class FrmSolicitacaodeAtendimento : Form
     {
-        public FrmSolicitacaoAtendimento()
+        public FrmSolicitacaodeAtendimento()
         {
             InitializeComponent();
             maskedtextHorarioAgendamento.Mask = "00:00"; // Máscara para HH:mm
             maskedtextHorarioAgendamento.ValidatingType = typeof(DateTime);
         }
 
-        private void FrmSolicitacaoAtendimento_Load(object sender, EventArgs e)
+        private void FrmSolicitacaodeAtendimento_Load(object sender, EventArgs e)
         {
             CarregaGridSolicitacoesAtendimento();
         }
@@ -37,7 +37,7 @@ namespace coldmakApp
                 // Combinamos a data atual com o horário para criar um datetime completo
                 DateTime horarioCompleto = DateTime.Today.Add(horarioAgendamento.TimeOfDay);
 
-                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
+                SolicitacaodeAtendimento solicitacaoAtendimento = new SolicitacaodeAtendimento(
                     dataAgendamento,
                     horarioCompleto,
                     textTipserv.Text
@@ -45,7 +45,7 @@ namespace coldmakApp
 
                 solicitacaoAtendimento.Inserir();
 
-                if (solicitacaoAtendimento.IdSolicitacaoAtendimento > 0)
+                if (solicitacaoAtendimento.IdSolicitacaodeAtendimento > 0)
                 {
                     CarregaGridSolicitacoesAtendimento();
                     MessageBox.Show($"Solicitação de atendimento inserida com sucesso!");
@@ -66,12 +66,12 @@ namespace coldmakApp
         private void CarregaGridSolicitacoesAtendimento()
         {
             dgvsolaten.Rows.Clear();
-            var listaDeSolicitacoes = SolicitacaoAtendimento.ObterLista();
+            var listaDeSolicitacoes = SolicitacaodeAtendimento.ObterLista();
             int linha = 0;
             foreach (var solicitacao in listaDeSolicitacoes)
             {
                 dgvsolaten.Rows.Add();
-                dgvsolaten.Rows[linha].Cells[0].Value = solicitacao.IdSolicitacaoAtendimento;
+                dgvsolaten.Rows[linha].Cells[0].Value = solicitacao.IdSolicitacaodeAtendimento;
                 dgvsolaten.Rows[linha].Cells[1].Value = solicitacao.DataAgendamento.ToString("yyyy-MM-dd");
                 dgvsolaten.Rows[linha].Cells[2].Value = solicitacao.HorarioAgendamento.ToString("HH:mm");
                 dgvsolaten.Rows[linha].Cells[3].Value = solicitacao.TipoServico;
@@ -85,11 +85,11 @@ namespace coldmakApp
             {
                 int linhaAtual = dgvsolaten.CurrentRow.Index;
                 int idSolicitacaoAtendimento = Convert.ToInt32(dgvsolaten.Rows[linhaAtual].Cells[0].Value);
-                var solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
+                var solicitacaoAtendimento = SolicitacaodeAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
                 if (solicitacaoAtendimento != null)
                 {
-                    textId.Text = solicitacaoAtendimento.IdSolicitacaoAtendimento.ToString();
+                    textIdSolicitacaodeAtendimento.Text = solicitacaoAtendimento.IdSolicitacaodeAtendimento.ToString();
                     textDatag.Text = solicitacaoAtendimento.DataAgendamento.ToString("yyyy-MM-dd");
                     maskedtextHorarioAgendamento.Text = solicitacaoAtendimento.HorarioAgendamento.ToString("HH:mm");
                     textTipserv.Text = solicitacaoAtendimento.TipoServico;
@@ -111,8 +111,8 @@ namespace coldmakApp
                 DateTime horarioAgendamento = DateTime.ParseExact(maskedtextHorarioAgendamento.Text, "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
                 DateTime horarioCompleto = DateTime.Today.Add(horarioAgendamento.TimeOfDay);
 
-                SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento(
-                    int.Parse(textId.Text),
+                SolicitacaodeAtendimento solicitacaoAtendimento = new SolicitacaodeAtendimento(
+                    int.Parse(textIdSolicitacaodeAtendimento.Text),
                     dataAgendamento,
                     horarioCompleto,
                     textTipserv.Text
@@ -143,12 +143,12 @@ namespace coldmakApp
         {
             try
             {
-                int idSolicitacaoAtendimento = int.Parse(textId.Text);
-                SolicitacaoAtendimento solicitacaoAtendimento = SolicitacaoAtendimento.ObterPorId(idSolicitacaoAtendimento);
+                int idSolicitacaoAtendimento = int.Parse(textIdSolicitacaodeAtendimento.Text);
+                SolicitacaodeAtendimento solicitacaoAtendimento = SolicitacaodeAtendimento.ObterPorId(idSolicitacaoAtendimento);
 
                 if (solicitacaoAtendimento != null)
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir a solicitação de atendimento {solicitacaoAtendimento.IdSolicitacaoAtendimento}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"Deseja realmente excluir a solicitação de atendimento {solicitacaoAtendimento.IdSolicitacaodeAtendimento}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         if (solicitacaoAtendimento.Deletar())
                         {
@@ -175,7 +175,7 @@ namespace coldmakApp
 
         private void LimparCampos()
         {
-            textId.Text = "";
+            textIdSolicitacaodeAtendimento.Text = "";
             textDatag.Text = "";
             maskedtextHorarioAgendamento.Text = "";
             textTipserv.Text = "";

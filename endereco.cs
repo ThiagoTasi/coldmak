@@ -10,14 +10,14 @@ namespace coldmakClass
 {
     public class Endereco
     {
-        public int Id { get; set; }
+        public int IdEndereco { get; set; }
         public string Cep { get; set; }
         public string Logradouro { get; set; }
         public string NumeroResidencial { get; set; }
         public string Complemento { get; set; }
         public string Bairro { get; set; }
         public string Cidade { get; set; }
-        public string Uf { get; set; }
+        public string UF { get; set; }
 
         public Endereco()
         {
@@ -31,19 +31,19 @@ namespace coldmakClass
             Complemento = complemento;
             Bairro = bairro;
             Cidade = cidade;
-            Uf = uf;
+            UF = uf;
         }
 
-        public Endereco(int id, string cep, string logradouro, string numeroResidencial, string complemento, string bairro, string cidade, string uf)
+        public Endereco(int idEndereco, string cep, string logradouro, string numeroResidencial, string complemento, string bairro, string cidade, string uf)
         {
-            Id = id;
+            IdEndereco = idEndereco;
             Cep = cep;
             Logradouro = logradouro;
             NumeroResidencial = numeroResidencial;
             Complemento = complemento;
             Bairro = bairro;
             Cidade = cidade;
-            Uf = uf;
+            UF = uf;
         }
 
         public void Inserir()
@@ -59,7 +59,7 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spcomplemento", Complemento);
                 cmd.Parameters.AddWithValue("spbairro", Bairro);
                 cmd.Parameters.AddWithValue("spcidade", Cidade);
-                cmd.Parameters.AddWithValue("spuf", Uf);
+                cmd.Parameters.AddWithValue("spuf", UF);
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "select last_insert_id()";
                 cmd.ExecuteNonQuery();
@@ -67,7 +67,7 @@ namespace coldmakClass
                 var dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    Id = dr.GetInt32(0);
+                    IdEndereco = dr.GetInt32(0);
                 }
                 dr.Close();
                 cmd.Connection.Close();
@@ -165,14 +165,14 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_endereco_altera";
-                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.Parameters.AddWithValue("spid", IdEndereco);
                 cmd.Parameters.AddWithValue("spcep", Cep);
                 cmd.Parameters.AddWithValue("splogradouro", Logradouro);
                 cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
                 cmd.Parameters.AddWithValue("spcomplemento", Complemento);
                 cmd.Parameters.AddWithValue("spbairro", Bairro);
                 cmd.Parameters.AddWithValue("spcidade", Cidade);
-                cmd.Parameters.AddWithValue("spuf", Uf);
+                cmd.Parameters.AddWithValue("spuf", UF);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -195,7 +195,7 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_endereco_delete";
-                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.Parameters.AddWithValue("spid", IdEndereco);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
             }

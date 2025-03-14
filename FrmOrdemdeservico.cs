@@ -29,7 +29,7 @@ namespace coldmakApp
         {
             try
             {
-                OrdemDeServico ordemDeServico = new OrdemDeServico(
+                OrdemdeServico ordemDeServico = new OrdemdeServico(
                     int.Parse(textIdusu.Text),
                     int.Parse(textIdcli.Text),
                     DateTime.Parse(textData.Text),
@@ -40,7 +40,7 @@ namespace coldmakApp
 
                 ordemDeServico.Inserir();
 
-                if (ordemDeServico.IdOrdemDeServico > 0)
+                if (ordemDeServico.IdOrdemdeServico > 0)
                 {
                     CarregaGridOrdemDeServico();
                     MessageBox.Show($"Ordem de serviço inserida com sucesso");
@@ -57,12 +57,12 @@ namespace coldmakApp
         private void CarregaGridOrdemDeServico()
         {
             dgvords.Rows.Clear();
-            var listaDeOrdemDeServico = OrdemDeServico.ObterLista();
+            var listaDeOrdemDeServico = OrdemdeServico.ObterLista();
             int linha = 0;
             foreach (var ordem in listaDeOrdemDeServico)
             {
                 dgvords.Rows.Add();
-                dgvords.Rows[linha].Cells[0].Value = ordem.IdOrdemDeServico;
+                dgvords.Rows[linha].Cells[0].Value = ordem.IdOrdemdeServico;
                 dgvords.Rows[linha].Cells[1].Value = ordem.IdUsuario;
                 dgvords.Rows[linha].Cells[2].Value = ordem.IdCliente;
                 dgvords.Rows[linha].Cells[3].Value = ordem.Data;
@@ -79,9 +79,9 @@ namespace coldmakApp
             {
                 int linhaAtual = dgvords.CurrentRow.Index;
                 int idOrdemDeServico = Convert.ToInt32(dgvords.Rows[linhaAtual].Cells[0].Value);
-                var ordemDeServico = OrdemDeServico.ObterPorId(idOrdemDeServico);
+                var ordemDeServico = OrdemdeServico.ObterPorId(idOrdemDeServico);
 
-                textId.Text = ordemDeServico.IdOrdemDeServico.ToString();
+                textId.Text = ordemDeServico.IdOrdemdeServico.ToString();
                 textIdusu.Text = ordemDeServico.IdUsuario.ToString();
                 textIdcli.Text = ordemDeServico.IdCliente.ToString();
                 textData.Text = ordemDeServico.Data.ToString();
@@ -98,7 +98,7 @@ namespace coldmakApp
         {
             try
             {
-                OrdemDeServico ordemDeServico = new OrdemDeServico(
+                OrdemdeServico ordemDeServico = new OrdemdeServico(
                     int.Parse(textId.Text),
                     int.Parse(textIdusu.Text),
                     int.Parse(textIdcli.Text),
@@ -126,7 +126,7 @@ namespace coldmakApp
             try
             {
                 int idOrdemDeServico = int.Parse(textId.Text);
-                OrdemDeServico ordemDeServico = OrdemDeServico.ObterPorId(idOrdemDeServico);
+                OrdemdeServico ordemDeServico = OrdemdeServico.ObterPorId(idOrdemDeServico);
 
                 if (ordemDeServico != null)
                 {

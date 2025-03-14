@@ -61,7 +61,7 @@ namespace coldmakApp
             {
                 dgvitped.Rows.Add();
                 dgvitped.Rows[linha].Cells[0].Value = itemPedido.IdItemPedido;
-                dgvitped.Rows[linha].Cells[1].Value = itemPedido.IdOrdemDeServico;
+                dgvitped.Rows[linha].Cells[1].Value = itemPedido.IdOrdemdeServico;
                 dgvitped.Rows[linha].Cells[2].Value = itemPedido.IdProduto;
                 dgvitped.Rows[linha].Cells[3].Value = itemPedido.ValorUnitario;
                 dgvitped.Rows[linha].Cells[4].Value = itemPedido.QuantidadeItem;
@@ -78,7 +78,7 @@ namespace coldmakApp
                 int idItemPedido = Convert.ToInt32(dgvitped.Rows[linhaAtual].Cells[0].Value);
                 var itemPedido = ItemPedido.ObterPorId(idItemPedido);
                 textIdItemp.Text = itemPedido.IdItemPedido.ToString();
-                textIdord.Text = itemPedido.IdOrdemDeServico.ToString();
+                textIdord.Text = itemPedido.IdOrdemdeServico.ToString();
                 textIdprod.Text = itemPedido.IdProduto.ToString();
                 textValorunit.Text = itemPedido.ValorUnitario.ToString();
                 textQuant.Text = itemPedido.QuantidadeItem.ToString();
@@ -94,7 +94,7 @@ namespace coldmakApp
             {
                 ItemPedido itemPedido = new ItemPedido();
                 itemPedido.IdItemPedido = int.Parse(textIdItemp.Text);
-                itemPedido.IdOrdemDeServico = int.Parse(textIdord.Text);
+                itemPedido.IdOrdemdeServico = int.Parse(textIdord.Text);
                 itemPedido.IdProduto = int.Parse(textIdprod.Text);
                 itemPedido.ValorUnitario = decimal.Parse(textValorunit.Text);
                 itemPedido.QuantidadeItem = int.Parse(textQuant.Text);

@@ -38,7 +38,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.textId = new System.Windows.Forms.TextBox();
+            this.textIdCliente = new System.Windows.Forms.TextBox();
             this.textRg = new System.Windows.Forms.TextBox();
             this.textCpf = new System.Windows.Forms.TextBox();
             this.textCnpj = new System.Windows.Forms.TextBox();
@@ -46,7 +46,7 @@
             this.textEmail = new System.Windows.Forms.TextBox();
             this.textTelefone = new System.Windows.Forms.TextBox();
             this.textDataNasc = new System.Windows.Forms.TextBox();
-            this.textIdade = new System.Windows.Forms.TextBox();
+            this.textIdadeCliente = new System.Windows.Forms.TextBox();
             this.dgvCliente = new System.Windows.Forms.DataGridView();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -153,13 +153,13 @@
             this.label10.TabIndex = 9;
             this.label10.Text = "Idade";
             // 
-            // textId
+            // textIdCliente
             // 
-            this.textId.Location = new System.Drawing.Point(58, 53);
-            this.textId.Name = "textId";
-            this.textId.ReadOnly = true;
-            this.textId.Size = new System.Drawing.Size(100, 22);
-            this.textId.TabIndex = 10;
+            this.textIdCliente.Location = new System.Drawing.Point(58, 53);
+            this.textIdCliente.Name = "textIdCliente";
+            this.textIdCliente.ReadOnly = true;
+            this.textIdCliente.Size = new System.Drawing.Size(100, 22);
+            this.textIdCliente.TabIndex = 10;
             // 
             // textRg
             // 
@@ -210,12 +210,12 @@
             this.textDataNasc.Size = new System.Drawing.Size(116, 22);
             this.textDataNasc.TabIndex = 17;
             // 
-            // textIdade
+            // textIdadeCliente
             // 
-            this.textIdade.Location = new System.Drawing.Point(606, 234);
-            this.textIdade.Name = "textIdade";
-            this.textIdade.Size = new System.Drawing.Size(100, 22);
-            this.textIdade.TabIndex = 18;
+            this.textIdadeCliente.Location = new System.Drawing.Point(606, 234);
+            this.textIdadeCliente.Name = "textIdadeCliente";
+            this.textIdadeCliente.Size = new System.Drawing.Size(100, 22);
+            this.textIdadeCliente.TabIndex = 18;
             // 
             // dgvCliente
             // 
@@ -340,7 +340,7 @@
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
             this.Controls.Add(this.dgvCliente);
-            this.Controls.Add(this.textIdade);
+            this.Controls.Add(this.textIdadeCliente);
             this.Controls.Add(this.textDataNasc);
             this.Controls.Add(this.textTelefone);
             this.Controls.Add(this.textEmail);
@@ -348,7 +348,7 @@
             this.Controls.Add(this.textCnpj);
             this.Controls.Add(this.textCpf);
             this.Controls.Add(this.textRg);
-            this.Controls.Add(this.textId);
+            this.Controls.Add(this.textIdCliente);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -379,7 +379,7 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox textId;
+        private System.Windows.Forms.TextBox textIdCliente;
         private System.Windows.Forms.TextBox textRg;
         private System.Windows.Forms.TextBox textCpf;
         private System.Windows.Forms.TextBox textCnpj;
@@ -387,7 +387,7 @@
         private System.Windows.Forms.TextBox textEmail;
         private System.Windows.Forms.TextBox textTelefone;
         private System.Windows.Forms.TextBox textDataNasc;
-        private System.Windows.Forms.TextBox textIdade;
+        private System.Windows.Forms.TextBox textIdadeCliente;
         private System.Windows.Forms.DataGridView dgvCliente;
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;

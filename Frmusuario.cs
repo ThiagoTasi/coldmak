@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using coldmak;
-using coldmakClass;
+using coldmak;        // Namespace assumido para a classe Banco
+using coldmakClass;  // Namespace da classe Usuario
 
 namespace coldmakApp
 {
     public partial class FrmUsuarios : Form
     {
+        private int IdNivel => cmbNivel.SelectedValue != null ? Convert.ToInt32(cmbNivel.SelectedValue) : 0;
+
         public FrmUsuarios()
         {
             InitializeComponent();
@@ -22,100 +17,131 @@ namespace coldmakApp
 
         private void FrmUsuarios_Load(object sender, EventArgs e)
         {
-            // carregando o comboBox de níveis
-            cmbNivel.DataSource = Nivel.ObterLista();
+            try
+            {
+                CarregarComboNivel();
+                CarregaGridUsuarios();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar formulário: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void CarregarComboNivel()
+        {
+            cmbNivel.DataSource = Nivel.ObterLista(); // Assumindo que Nivel tem um método ObterLista()
             cmbNivel.DisplayMember = "Nome";
             cmbNivel.ValueMember = "Id";
-
-            // carregando o datagrid de usuários
-            CarregaGridUsuarios();
+            cmbNivel.SelectedIndex = -1;
         }
 
         private void btnInserir_Click(object sender, EventArgs e)
         {
             try
             {
+                if (!ValidarCampos()) return;
+
                 DateTime dataNascimento;
-                if (DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
+                if (!DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
                 {
-                    Usuario usuario = new Usuario(
-                        textNome.Text,
-                        textRg.Text,
-                        textCpf.Text,
-                        textEndereco.Text,
-                        textCep.Text,
-                        textEmail.Text,
-                        textTelefone.Text,
-                        dataNascimento,
-                        Convert.ToInt32(cmbNivel.SelectedValue),
-                        chkAtivo.Checked,
-                        textSenha.Text
-                    );
+                    MessageBox.Show("Formato de data inválido.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                    usuario.Inserir();
+                // Criando o usuário com o construtor de 11 parâmetros + null para Nivel
+                Usuario usuario = new Usuario(
+                    textNome.Text.Trim(),
+                    textRg.Text.Trim(),
+                    textCpf.Text.Trim(),
+                    textEndereco.Text.Trim(),
+                    textCep.Text.Trim(),
+                    textEmail.Text.Trim(),
+                    textTelefone.Text.Trim(),
+                    textSenha.Text,
+                    dataNascimento,
+                    IdNivel,
+                    chkAtivo.Checked,
+                    null // Nivel será inicializado como new Nivel() pelo construtor
+                );
 
-                    if (usuario.Id > 0)
-                    {
-                        CarregaGridUsuarios();
-                        MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso");
-                        btnInserir.Enabled = false;
-                        LimparCampos();
-                    }
+                // Inserir o usuário (método void, sucesso é verificado pelo IdUsuario)
+                usuario.Inserir();
+                if (usuario.IdUsuario > 0)
+                {
+                    CarregaGridUsuarios();
+                    MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso", "Sucesso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LimparCampos();
                 }
                 else
                 {
-                    MessageBox.Show("Formato de data inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Falha ao inserir o usuário. O ID não foi gerado.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao inserir usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao inserir usuário: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void CarregaGridUsuarios()
         {
-            dgvUsuarios.Rows.Clear();
-            var listaDeUsuarios = Usuario.ObterLista();
-            int linha = 0;
-            foreach (var usuario in listaDeUsuarios)
+            try
             {
-                dgvUsuarios.Rows.Add();
-                dgvUsuarios.Rows[linha].Cells[0].Value = usuario.Id;
-                dgvUsuarios.Rows[linha].Cells[1].Value = usuario.Nome;
-                dgvUsuarios.Rows[linha].Cells[2].Value = usuario.Rg;
-                dgvUsuarios.Rows[linha].Cells[3].Value = usuario.Cpf;
-                dgvUsuarios.Rows[linha].Cells[4].Value = usuario.Endereco;
-                dgvUsuarios.Rows[linha].Cells[5].Value = usuario.Cep;
-                dgvUsuarios.Rows[linha].Cells[6].Value = usuario.Email;
-                dgvUsuarios.Rows[linha].Cells[7].Value = usuario.Telefone;
-                dgvUsuarios.Rows[linha].Cells[8].Value = usuario.DataNascimento;
-                dgvUsuarios.Rows[linha].Cells[9].Value = usuario.Nivel.Nome;
-                dgvUsuarios.Rows[linha].Cells[10].Value = usuario.Ativo;
-                linha++;
+                dgvUsuarios.Rows.Clear();
+                var listaDeUsuarios = Usuario.ObterLista();
+
+                foreach (var usuario in listaDeUsuarios)
+                {
+                    dgvUsuarios.Rows.Add(
+                        usuario.IdUsuario,
+                        usuario.Nome,
+                        usuario.Rg,
+                        usuario.Cpf,
+                        usuario.Endereco,
+                        usuario.Cep,
+                        usuario.Email,
+                        usuario.Senha,
+                        usuario.Telefone,
+                        usuario.DataNascimento.ToString("dd/MM/yyyy"),
+                        usuario.Nivel?.Nome,
+                        usuario.Ativo
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar grid: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            try
             {
-                int linhaAtual = dgvUsuarios.CurrentRow.Index;
-                int idUser = Convert.ToInt32(dgvUsuarios.Rows[linhaAtual].Cells[0].Value);
+                int idUser = Convert.ToInt32(dgvUsuarios.Rows[e.RowIndex].Cells[0].Value);
                 var usuario = Usuario.ObterPorId(idUser);
-                textId.Text = usuario.Id.ToString();
-                textNome.Text = usuario.Nome;
-                textRg.Text = usuario.Rg;
-                textCpf.Text = usuario.Cpf;
-                textEndereco.Text = usuario.Endereco;
-                textCep.Text = usuario.Cep;
-                textEmail.Text = usuario.Email;
-                textTelefone.Text = usuario.Telefone;
-                textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
-                chkAtivo.Checked = usuario.Ativo;
-                cmbNivel.SelectedValue = usuario.NivelId;
-                btnAtualizar.Enabled = true;
-                btnDeletar.Enabled = true;
+
+                if (usuario != null)
+                {
+                    PreencherCampos(usuario);
+                    btnAtualizar.Enabled = true;
+                    btnDeletar.Enabled = true;
+                    btnInserir.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao selecionar usuário: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -123,41 +149,48 @@ namespace coldmakApp
         {
             try
             {
-                Usuario usuario = new Usuario();
-                usuario.Id = int.Parse(textId.Text);
-                usuario.Nome = textNome.Text;
-                usuario.Rg = textRg.Text;
-                usuario.Cpf = textCpf.Text;
-                usuario.Endereco = textEndereco.Text;
-                usuario.Cep = textCep.Text;
-                usuario.Email = textEmail.Text;
-                usuario.Telefone = textTelefone.Text;
+                if (!ValidarCamposAtualizacao()) return;
 
-                DateTime dataNascimento;
-                if (DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
+                var usuario = new Usuario
                 {
-                    usuario.DataNascimento = dataNascimento;
-                }
-                else
+                    IdUsuario = int.Parse(textId.Text),
+                    Nome = textNome.Text.Trim(),
+                    Rg = textRg.Text.Trim(),
+                    Cpf = textCpf.Text.Trim(),
+                    Endereco = textEndereco.Text.Trim(),
+                    Cep = textCep.Text.Trim(),
+                    Email = textEmail.Text.Trim(),
+                    Telefone = textTelefone.Text.Trim(),
+                    Senha = textSenha.Text,
+                    IdNivel = IdNivel,
+                    Ativo = chkAtivo.Checked
+                };
+
+                if (!DateTime.TryParse(textDataNascimento.Text, out DateTime dataNascimento))
                 {
-                    MessageBox.Show("Formato de data inválido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Formato de data inválido.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
-                usuario.NivelId = Convert.ToInt32(cmbNivel.SelectedValue);
-                usuario.Ativo = chkAtivo.Checked;
-                usuario.Senha = textSenha.Text;
+                usuario.DataNascimento = dataNascimento;
 
                 if (usuario.Atualizar())
                 {
                     CarregaGridUsuarios();
-                    MessageBox.Show("Usuário atualizado com sucesso!");
+                    MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LimparCampos();
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao atualizar o usuário.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -165,57 +198,104 @@ namespace coldmakApp
         {
             try
             {
-                int idUsuario = int.Parse(textId.Text);
-                Usuario usuario = Usuario.ObterPorId(idUsuario);
-
-                if (usuario != null)
+                if (string.IsNullOrEmpty(textId.Text))
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir o usuário {usuario.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        if (usuario.Deletar())
-                        {
-                            CarregaGridUsuarios();
-                            MessageBox.Show("Usuário excluído com sucesso!");
-                            LimparCampos();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Falha ao excluir o usuário.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+                    MessageBox.Show("Selecione um usuário para excluir.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
-                else
+
+                int idUsuario = int.Parse(textId.Text);
+                var usuario = Usuario.ObterPorId(idUsuario);
+
+                if (usuario != null && MessageBox.Show($"Deseja realmente excluir o usuário {usuario.Nome}?",
+                    "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    MessageBox.Show("Usuário não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (usuario.Deletar())
+                    {
+                        CarregaGridUsuarios();
+                        MessageBox.Show("Usuário excluído com sucesso!", "Sucesso",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LimparCampos();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Falha ao excluir o usuário.", "Erro",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao excluir usuário: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao excluir usuário: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private bool ValidarCampos()
+        {
+            if (string.IsNullOrWhiteSpace(textNome.Text))
+            {
+                MessageBox.Show("O nome é obrigatório.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textNome.Focus();
+                return false;
+            }
+            if (IdNivel == 0)
+            {
+                MessageBox.Show("Selecione um nível.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbNivel.Focus();
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidarCamposAtualizacao()
+        {
+            if (string.IsNullOrEmpty(textId.Text))
+            {
+                MessageBox.Show("Selecione um usuário para atualizar.", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return ValidarCampos();
+        }
+
+        private void PreencherCampos(Usuario usuario)
+        {
+            textId.Text = usuario.IdUsuario.ToString();
+            textNome.Text = usuario.Nome;
+            textRg.Text = usuario.Rg;
+            textCpf.Text = usuario.Cpf;
+            textEndereco.Text = usuario.Endereco;
+            textCep.Text = usuario.Cep;
+            textEmail.Text = usuario.Email;
+            textTelefone.Text = usuario.Telefone;
+            textSenha.Text = usuario.Senha;
+            textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
+            cmbNivel.SelectedValue = usuario.IdNivel;
+            chkAtivo.Checked = usuario.Ativo;
         }
 
         private void LimparCampos()
         {
-            textId.Text = "";
-            textNome.Text = "";
-            textRg.Text = "";
-            textCpf.Text = "";
-            textEndereco.Text = "";
-            textCep.Text = "";
-            textEmail.Text = "";
-            textTelefone.Text = "";
-            textDataNascimento.Text = "";
+            textId.Clear();
+            textNome.Clear();
+            textRg.Clear();
+            textCpf.Clear();
+            textEndereco.Clear();
+            textCep.Clear();
+            textEmail.Clear();
+            textTelefone.Clear();
+            textSenha.Clear();
+            textDataNascimento.Clear();
+            cmbNivel.SelectedIndex = -1;
             chkAtivo.Checked = false;
-            cmbNivel.SelectedIndex = 0;
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
-        }
-
-        private void btnDeletar_Click_1(object sender, EventArgs e)
-        {
-            btnDeletar_Click(sender, e);
+            textNome.Focus();
         }
     }
 }

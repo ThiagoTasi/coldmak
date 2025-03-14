@@ -12,7 +12,7 @@ namespace coldmakClass
     {
         public int IdHistoricos { get; set; }
         public int IdCliente { get; set; }
-        public int IdOrdemServico { get; set; }
+        public int IdOrdemdeServico { get; set; }
         public int IdFornecedor { get; set; }
         public int IdProduto { get; set; }
         public DateTime DataVenda { get; set; }
@@ -21,20 +21,20 @@ namespace coldmakClass
         {
         }
 
-        public Historicos(int idCliente, int idOrdemServico, int idFornecedor, int idProduto, DateTime dataVenda)
+        public Historicos(int idCliente, int idOrdemdeServico, int idFornecedor, int idProduto, DateTime dataVenda)
         {
             IdCliente = idCliente;
-            IdOrdemServico = idOrdemServico;
+            IdOrdemdeServico = idOrdemdeServico;
             IdFornecedor = idFornecedor;
             IdProduto = idProduto;
             DataVenda = dataVenda;
         }
 
-        public Historicos(int idHistoricos, int idCliente, int idOrdemServico, int idFornecedor, int idProduto, DateTime dataVenda)
+        public Historicos(int idHistoricos, int idCliente, int idOrdemdeServico, int idFornecedor, int idProduto, DateTime dataVenda)
         {
             IdHistoricos = idHistoricos;
             IdCliente = idCliente;
-            IdOrdemServico = idOrdemServico;
+            IdOrdemdeServico = idOrdemdeServico;
             IdFornecedor = idFornecedor;
             IdProduto = idProduto;
             DataVenda = dataVenda;
@@ -48,7 +48,7 @@ namespace coldmakClass
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_historicos_insert"; // Assumindo que você tem uma stored procedure chamada sp_historicos_insert
             cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-            cmd.Parameters.AddWithValue("spidordemservico", IdOrdemServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
             cmd.Parameters.AddWithValue("spidproduto", IdProduto);
             cmd.Parameters.AddWithValue("spdatavenda", DataVenda);
@@ -113,7 +113,7 @@ namespace coldmakClass
             cmd.CommandText = "sp_historicos_altera"; // Assumindo que você tem uma stored procedure chamada sp_historicos_altera
             cmd.Parameters.AddWithValue("spidhistoricos", IdHistoricos);
             cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-            cmd.Parameters.AddWithValue("spidordemservico", IdOrdemServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.Parameters.AddWithValue("spidfornecedor", IdFornecedor);
             cmd.Parameters.AddWithValue("spidproduto", IdProduto);
             cmd.Parameters.AddWithValue("spdatavenda", DataVenda);

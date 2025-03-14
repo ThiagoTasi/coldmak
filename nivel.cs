@@ -12,7 +12,7 @@ namespace coldmakClass
 {
     public class Nivel
     {
-        public int Id_Nivel { get; set; }
+        public int IdNivel { get; set; }
         public string Nome { get; set; }
         public string Sigla { get; set; }
 
@@ -28,7 +28,7 @@ namespace coldmakClass
 
         public Nivel(int idNivel, string nome, string sigla)
         {
-            Id_Nivel = idNivel;
+            IdNivel = idNivel;
             Nome = nome;
             Sigla = sigla;
         }
@@ -49,7 +49,7 @@ namespace coldmakClass
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                Id_Nivel = dr.GetInt32(0);
+                IdNivel = dr.GetInt32(0);
             }
             cmd.Connection.Close();
         }
@@ -93,7 +93,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_nivel_altera"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidnivel", Id_Nivel);
+            cmd.Parameters.AddWithValue("spidnivel", IdNivel);
             cmd.Parameters.AddWithValue("spnome", Nome);
             cmd.Parameters.AddWithValue("spsigla", Sigla);
             cmd.ExecuteNonQuery();
@@ -104,7 +104,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_nivel_delete"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidnivel", Id_Nivel);
+            cmd.Parameters.AddWithValue("spidnivel", IdNivel);
             cmd.ExecuteNonQuery();
             return cmd.ExecuteNonQuery() > 0;
         }

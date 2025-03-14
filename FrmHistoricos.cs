@@ -68,7 +68,7 @@ namespace coldmakApp
                 dgvhist.Rows.Add();
                 dgvhist.Rows[linha].Cells[0].Value = historico.IdHistoricos;
                 dgvhist.Rows[linha].Cells[1].Value = historico.IdCliente;
-                dgvhist.Rows[linha].Cells[2].Value = historico.IdOrdemServico;
+                dgvhist.Rows[linha].Cells[2].Value = historico.IdOrdemdeServico;
                 dgvhist.Rows[linha].Cells[3].Value = historico.IdFornecedor;
                 dgvhist.Rows[linha].Cells[4].Value = historico.IdProduto;
                 dgvhist.Rows[linha].Cells[5].Value = historico.DataVenda.ToString("yyyy-MM-dd"); // Formata a data para exibição
@@ -85,7 +85,7 @@ namespace coldmakApp
                 var historico = Historicos.ObterPorId(idHistorico);
                 textIdHist.Text = historico.IdHistoricos.ToString();
                 textIdCli.Text = historico.IdCliente.ToString();
-                textIdord.Text = historico.IdOrdemServico.ToString();
+                textIdord.Text = historico.IdOrdemdeServico.ToString();
                 textIdForn.Text = historico.IdFornecedor.ToString();
                 textIdProd.Text = historico.IdProduto.ToString();
                 textDatven.Text = historico.DataVenda.ToString("yyyy-MM-dd"); // Formata a data para exibição
@@ -101,7 +101,7 @@ namespace coldmakApp
                 Historicos historico = new Historicos();
                 historico.IdHistoricos = int.Parse(textIdHist.Text);
                 historico.IdCliente = int.Parse(textIdCli.Text);
-                historico.IdOrdemServico = int.Parse(textIdord.Text);
+                historico.IdOrdemdeServico = int.Parse(textIdord.Text);
                 historico.IdFornecedor = int.Parse(textIdForn.Text);
                 historico.IdProduto = int.Parse(textIdProd.Text);
                 historico.DataVenda = DateTime.ParseExact(textDatven.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);

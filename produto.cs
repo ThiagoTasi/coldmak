@@ -28,10 +28,10 @@ namespace coldmakClass
         {
         }
 
-        public Produto(string codBarras, string Categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
+        public Produto(string codBarras, string categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
         {
             CodBarras = codBarras;
-            Categoria = Categoria;
+            Categoria = categoria;
             IdFornecedor = idFornecedor;
             Descricao = descricao;
             ValorUnitario = valorUnitario;
@@ -42,11 +42,11 @@ namespace coldmakClass
             DataCadastro = dataCadastro;
         }
 
-        public Produto(int idProduto, string codBarras, string Categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
+        public Produto(int idProduto, string codBarras, string categoria, int idFornecedor, string descricao, decimal valorUnitario, string unidadeVenda, int estoqueMinimo, string classeDesconto, byte[] imagem, DateTime dataCadastro)
         {
             IdProduto = idProduto;
             CodBarras = codBarras;
-            Categoria = Categoria;
+            Categoria = categoria;
             IdFornecedor = idFornecedor;
             Descricao = descricao;
             ValorUnitario = valorUnitario;

@@ -1,6 +1,6 @@
 ﻿namespace coldmakApp
 {
-    partial class FrmSolicitacaoAtendimento
+    partial class FrmSolicitacaodeAtendimento
     {
         /// <summary>
         /// Required designer variable.
@@ -33,7 +33,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.textId = new System.Windows.Forms.TextBox();
+            this.textIdSolicitacaodeAtendimento = new System.Windows.Forms.TextBox();
             this.textDatag = new System.Windows.Forms.TextBox();
             this.textTipserv = new System.Windows.Forms.TextBox();
             this.dgvsolaten = new System.Windows.Forms.DataGridView();
@@ -93,13 +93,13 @@
             this.label5.TabIndex = 4;
             this.label5.Text = "Tipo serviço";
             // 
-            // textId
+            // textIdSolicitacaodeAtendimento
             // 
-            this.textId.Location = new System.Drawing.Point(52, 87);
-            this.textId.Name = "textId";
-            this.textId.ReadOnly = true;
-            this.textId.Size = new System.Drawing.Size(100, 22);
-            this.textId.TabIndex = 5;
+            this.textIdSolicitacaodeAtendimento.Location = new System.Drawing.Point(52, 87);
+            this.textIdSolicitacaodeAtendimento.Name = "textIdSolicitacaodeAtendimento";
+            this.textIdSolicitacaodeAtendimento.ReadOnly = true;
+            this.textIdSolicitacaodeAtendimento.Size = new System.Drawing.Size(100, 22);
+            this.textIdSolicitacaodeAtendimento.TabIndex = 5;
             // 
             // textDatag
             // 
@@ -194,7 +194,7 @@
             this.maskedtextHorarioAgendamento.Size = new System.Drawing.Size(100, 22);
             this.maskedtextHorarioAgendamento.TabIndex = 13;
             // 
-            // FrmSolicitacaoAtendimento
+            // FrmSolicitacaodeAtendimento
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -206,13 +206,13 @@
             this.Controls.Add(this.dgvsolaten);
             this.Controls.Add(this.textTipserv);
             this.Controls.Add(this.textDatag);
-            this.Controls.Add(this.textId);
+            this.Controls.Add(this.textIdSolicitacaodeAtendimento);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "FrmSolicitacaoAtendimento";
+            this.Name = "FrmSolicitacaodeAtendimento";
             this.Text = "FrmSolicitacadeatendimento";
             ((System.ComponentModel.ISupportInitialize)(this.dgvsolaten)).EndInit();
             this.ResumeLayout(false);
@@ -227,7 +227,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textId;
+        private System.Windows.Forms.TextBox textIdSolicitacaodeAtendimento;
         private System.Windows.Forms.TextBox textDatag;
         private System.Windows.Forms.TextBox textTipserv;
         private System.Windows.Forms.DataGridView dgvsolaten;

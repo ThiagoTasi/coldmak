@@ -164,8 +164,7 @@
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
             this.btnDeletar.UseWaitCursor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
-            // 
+            
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;

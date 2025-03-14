@@ -222,7 +222,6 @@
             this.btnDeletar.TabIndex = 14;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
-          
             // 
             // FrmCaixa
             // 
@@ -246,6 +245,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmCaixa";
             this.Text = "FrmCaixa";
+            this.Load += new System.EventHandler(this.FrmCaixa_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvcaixa)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

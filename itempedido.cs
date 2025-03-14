@@ -13,7 +13,7 @@ namespace coldmakClass
     public class ItemPedido
     {
         public int IdItemPedido { get; set; }
-        public int IdOrdemDeServico { get; set; }
+        public int IdOrdemdeServico { get; set; }
         public int IdProduto { get; set; }
         public decimal ValorUnitario { get; set; }
         public int QuantidadeItem { get; set; }
@@ -23,19 +23,19 @@ namespace coldmakClass
         {
         }
 
-        public ItemPedido(int idOrdemDeServico, int idProduto, decimal valorUnitario, int quantidadeItem, decimal descontoItem)
+        public ItemPedido(int idOrdemdeServico, int idProduto, decimal valorUnitario, int quantidadeItem, decimal descontoItem)
         {
-            IdOrdemDeServico = idOrdemDeServico;
+            IdOrdemdeServico = idOrdemdeServico;
             IdProduto = idProduto;
             ValorUnitario = valorUnitario;
             QuantidadeItem = quantidadeItem;
             DescontoItem = descontoItem;
         }
 
-        public ItemPedido(int idItemPedido, int idOrdemDeServico, int idProduto, decimal valorUnitario, int quantidadeItem, decimal descontoItem)
+        public ItemPedido(int idItemPedido, int idOrdemdeServico, int idProduto, decimal valorUnitario, int quantidadeItem, decimal descontoItem)
         {
             IdItemPedido = idItemPedido;
-            IdOrdemDeServico = idOrdemDeServico;
+            IdOrdemdeServico = idOrdemdeServico;
             IdProduto = idProduto;
             ValorUnitario = valorUnitario;
             QuantidadeItem = quantidadeItem;
@@ -48,7 +48,7 @@ namespace coldmakClass
 
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_itempedido_insert"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemDeServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.Parameters.AddWithValue("spidproduto", IdProduto);
             cmd.Parameters.AddWithValue("spvalorunitario", ValorUnitario);
             cmd.Parameters.AddWithValue("spquantidadeitem", QuantidadeItem);
@@ -92,7 +92,7 @@ namespace coldmakClass
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_itempedido_altera"; // Substitua pelo nome da sua stored procedure
             cmd.Parameters.AddWithValue("spiditempedido", IdItemPedido);
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemDeServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.Parameters.AddWithValue("spidproduto", IdProduto);
             cmd.Parameters.AddWithValue("spvalorunitario", ValorUnitario);
             cmd.Parameters.AddWithValue("spquantidadeitem", QuantidadeItem);

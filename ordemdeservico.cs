@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace coldmakClass
 {
-    public class OrdemDeServico
+    public class OrdemdeServico
     {
-        public int IdOrdemDeServico { get; set; }
+        public int IdOrdemdeServico { get; set; }
         public int IdUsuario { get; set; }
         public int IdCliente { get; set; }
         public DateTime Data { get; set; }
@@ -20,11 +20,11 @@ namespace coldmakClass
         public decimal Desconto { get; set; }
         public decimal ValorTotal { get; set; }
 
-        public OrdemDeServico()
+        public OrdemdeServico()
         {
         }
 
-        public OrdemDeServico(int idUsuario, int idCliente, DateTime data, string status, decimal desconto, decimal valorTotal)
+        public OrdemdeServico(int idUsuario, int idCliente, DateTime data, string status, decimal desconto, decimal valorTotal)
         {
             IdUsuario = idUsuario;
             IdCliente = idCliente;
@@ -34,9 +34,9 @@ namespace coldmakClass
             ValorTotal = valorTotal;
         }
 
-        public OrdemDeServico(int idOrdemDeServico, int idUsuario, int idCliente, DateTime data, string status, decimal desconto, decimal valorTotal)
+        public OrdemdeServico(int idOrdemDeServico, int idUsuario, int idCliente, DateTime data, string status, decimal desconto, decimal valorTotal)
         {
-            IdOrdemDeServico = idOrdemDeServico;
+            IdOrdemdeServico = idOrdemDeServico;
             IdUsuario = idUsuario;
             IdCliente = idCliente;
             Data = data;
@@ -65,20 +65,20 @@ namespace coldmakClass
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                IdOrdemDeServico = dr.GetInt32(0);
+                IdOrdemdeServico = dr.GetInt32(0);
             }
             cmd.Connection.Close();
         }
 
-        public static OrdemDeServico ObterPorId(int idOrdemDeServico)
+        public static OrdemdeServico ObterPorId(int idOrdemDeServico)
         {
-            OrdemDeServico ordemDeServico = new OrdemDeServico();
+            OrdemdeServico ordemDeServico = new OrdemdeServico();
             var cmd = Banco.Abrir(); 
             cmd.CommandText = $"select * from ordem_de_servico where idordem_de_servico = {idOrdemDeServico}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                ordemDeServico = new OrdemDeServico(
+                ordemDeServico = new OrdemdeServico(
                     dr.GetInt32(0),
                     dr.GetInt32(1),
                     dr.GetInt32(2),
@@ -91,15 +91,15 @@ namespace coldmakClass
             return ordemDeServico;
         }
 
-        public static List<OrdemDeServico> ObterLista()
+        public static List<OrdemdeServico> ObterLista()
         {
-            List<OrdemDeServico> lista = new List<OrdemDeServico>();
+            List<OrdemdeServico> lista = new List<OrdemdeServico>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from ordem_de_servico order by data desc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
-                lista.Add(new OrdemDeServico(
+                lista.Add(new OrdemdeServico(
                     dr.GetInt32(0),
                     dr.GetInt32(1),
                     dr.GetInt32(2),
@@ -117,7 +117,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_ordem_servico_altera"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemDeServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
             cmd.Parameters.AddWithValue("spidcliente", IdCliente);
             cmd.Parameters.AddWithValue("spdata", Data);
@@ -132,7 +132,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_ordem_servico_delete"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemDeServico);
+            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
             cmd.ExecuteNonQuery();
             return cmd.ExecuteNonQuery() > 0;
         }

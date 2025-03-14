@@ -37,7 +37,7 @@ namespace coldmakApp
 
                 nivel.Inserir();
 
-                if (nivel.Id_Nivel > 0)
+                if (nivel.IdNivel > 0)
                 {
                     CarregaGridNiveis();
                     MessageBox.Show($"Nível {nivel.Nome} inserido com sucesso");
@@ -59,7 +59,7 @@ namespace coldmakApp
             foreach (var nivel in listaDeNiveis)
             {
                 dgvNiveis.Rows.Add();
-                dgvNiveis.Rows[linha].Cells[0].Value = nivel.Id_Nivel;
+                dgvNiveis.Rows[linha].Cells[0].Value = nivel.IdNivel;
                 dgvNiveis.Rows[linha].Cells[1].Value = nivel.Nome;
                 dgvNiveis.Rows[linha].Cells[2].Value = nivel.Sigla;
                 linha++;
@@ -74,7 +74,7 @@ namespace coldmakApp
                 int idNivel = Convert.ToInt32(dgvNiveis.Rows[linhaAtual].Cells[0].Value);
                 var nivel = Nivel.ObterPorId(idNivel);
 
-                textId.Text = nivel.Id_Nivel.ToString();
+                textId.Text = nivel.IdNivel.ToString();
                 textNome.Text = nivel.Nome;
                 textSigla.Text = nivel.Sigla;
 

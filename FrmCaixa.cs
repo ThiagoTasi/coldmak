@@ -163,5 +163,10 @@ namespace coldmakApp
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
         }
+
+        private void FrmCaixa_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

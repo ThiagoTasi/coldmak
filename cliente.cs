@@ -12,7 +12,7 @@ namespace coldmakClass
 {
     public class Cliente
     {
-        public int Id { get; set; }
+        public int IdCliente { get; set; }
         public string Rg { get; set; }
         public string Cpf { get; set; }
         public string Cnpj { get; set; }
@@ -26,25 +26,26 @@ namespace coldmakClass
         {
         }
 
-        public Cliente(string nome, string rg, string cpf, string cnpj, string email, string telefone, DateTime dataNascimento, int idadeCliente)
+        public Cliente(string rg, string cpf, string cnpj,string nome, string email, string telefone, DateTime dataNascimento, int idadeCliente)
         {
-            Nome = nome;
+           
             Rg = rg;
             Cpf = cpf;
             Cnpj = cnpj;
+            Nome = nome;
             Email = email;
             Telefone = telefone;
             DataNascimento = dataNascimento;
             IdadeCliente = idadeCliente;
         }
 
-        public Cliente(int id, string nome, string rg, string cpf, string cnpj, string email, string telefone, DateTime dataNascimento, int idadeCliente)
+        public Cliente(int idcliente, string nome, string rg, string cpf, string cnpj, string email, string telefone, DateTime dataNascimento, int idadeCliente)
         {
-            Id = id;
-            Nome = nome;
+            IdCliente = idcliente;
             Rg = rg;
             Cpf = cpf;
             Cnpj = cnpj;
+            Nome = nome;
             Email = email;
             Telefone = telefone;
             DataNascimento = dataNascimento;
@@ -59,10 +60,10 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_insert";
-                cmd.Parameters.Add("spnome", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Nome;
                 cmd.Parameters.AddWithValue("sprg", Rg);
                 cmd.Parameters.AddWithValue("spcpf", Cpf);
                 cmd.Parameters.AddWithValue("spcnpj", Cnpj);
+                cmd.Parameters.Add("spnome", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Nome;
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
                 cmd.Parameters.AddWithValue("spdatanasc", DataNascimento);
@@ -73,7 +74,7 @@ namespace coldmakClass
                 var dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    Id = dr.GetInt32(0);
+                    IdCliente = dr.GetInt32(0);
                 }
                 cmd.Connection.Close();
             }
@@ -154,11 +155,11 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_altera";
-                cmd.Parameters.AddWithValue("spid", Id);
-                cmd.Parameters.AddWithValue("spnome", Nome);
+                cmd.Parameters.AddWithValue("spid", IdCliente);
                 cmd.Parameters.AddWithValue("sprg", Rg);
                 cmd.Parameters.AddWithValue("spcpf", Cpf);
                 cmd.Parameters.AddWithValue("spcnpj", Cnpj);
+                cmd.Parameters.AddWithValue("spnome", Nome);
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
                 cmd.Parameters.AddWithValue("spdatanasc", DataNascimento);
@@ -179,7 +180,7 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_delete";
-                cmd.Parameters.AddWithValue("spid", Id);
+                cmd.Parameters.AddWithValue("spid", IdCliente);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
             }

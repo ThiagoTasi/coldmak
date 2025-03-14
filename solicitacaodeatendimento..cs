@@ -10,27 +10,27 @@ using System.Threading.Tasks;
 
 namespace coldmakClass
 {
-    public class SolicitacaoAtendimento
+    public class SolicitacaodeAtendimento
     {
-        public int IdSolicitacaoAtendimento { get; set; }
+        public int IdSolicitacaodeAtendimento { get; set; }
         public DateTime DataAgendamento { get; set; }
         public DateTime HorarioAgendamento { get; set; }
         public string TipoServico { get; set; }
 
-        public SolicitacaoAtendimento()
+        public SolicitacaodeAtendimento()
         {
         }
 
-        public SolicitacaoAtendimento(DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
+        public SolicitacaodeAtendimento(DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
         {
             DataAgendamento = dataAgendamento;
             HorarioAgendamento = horarioAgendamento;
             TipoServico = tipoServico;
         }
 
-        public SolicitacaoAtendimento(int idSolicitacaoAtendimento, DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
+        public SolicitacaodeAtendimento(int idSolicitacaodeAtendimento, DateTime dataAgendamento, DateTime horarioAgendamento, string tipoServico)
         {
-            IdSolicitacaoAtendimento = idSolicitacaoAtendimento;
+            IdSolicitacaodeAtendimento = idSolicitacaodeAtendimento;
             DataAgendamento = dataAgendamento;
             HorarioAgendamento = horarioAgendamento;
             TipoServico = tipoServico;
@@ -53,38 +53,38 @@ namespace coldmakClass
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                IdSolicitacaoAtendimento = dr.GetInt32(0);
+                IdSolicitacaodeAtendimento = dr.GetInt32(0);
             }
             cmd.Connection.Close();
         }
 
-        public static SolicitacaoAtendimento ObterPorId(int idSolicitacaoAtendimento)
+        public static SolicitacaodeAtendimento ObterPorId(int idSolicitacaodeAtendimento)
         {
-            SolicitacaoAtendimento solicitacaoAtendimento = new SolicitacaoAtendimento();
+            SolicitacaodeAtendimento solicitacaodeAtendimento = new SolicitacaodeAtendimento();
             var cmd = Banco.Abrir();
-            cmd.CommandText = $"select * from solicitacao_atendimento where idsolicitacao_atendimento = {idSolicitacaoAtendimento}"; // Substitua pelo nome da sua tabela e coluna
+            cmd.CommandText = $"select * from solicitacao_atendimento where idsolicitacao_atendimento = {idSolicitacaodeAtendimento}"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
             if (dr.Read())
             {
-                solicitacaoAtendimento = new SolicitacaoAtendimento(
+                solicitacaodeAtendimento = new SolicitacaodeAtendimento(
                     dr.GetInt32(0),
                     dr.GetDateTime(1),
                     (DateTime)dr.GetValue(2),
                     dr.GetString(3)
                 );
             }
-            return solicitacaoAtendimento;
+            return solicitacaodeAtendimento;
         }
 
-        public static List<SolicitacaoAtendimento> ObterLista()
+        public static List<SolicitacaodeAtendimento> ObterLista()
         {
-            List<SolicitacaoAtendimento> lista = new List<SolicitacaoAtendimento>();
+            List<SolicitacaodeAtendimento> lista = new List<SolicitacaodeAtendimento>();
             var cmd = Banco.Abrir();
             cmd.CommandText = $"select * from solicitacao_atendimento order by data_agendamento desc"; // Substitua pelo nome da sua tabela e coluna
             var dr = cmd.ExecuteReader();
             while (dr.Read())
             {
-                lista.Add(new SolicitacaoAtendimento(
+                lista.Add(new SolicitacaodeAtendimento(
                     dr.GetInt32(0),
                     dr.GetDateTime(1),
                     (DateTime)dr.GetValue(2),
@@ -99,7 +99,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_solicitacao_atendimento_altera"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidsolicitacaoatendimento", IdSolicitacaoAtendimento);
+            cmd.Parameters.AddWithValue("spidsolicitacaoatendimento", IdSolicitacaodeAtendimento);
             cmd.Parameters.AddWithValue("spdataagendamento", DataAgendamento);
             cmd.Parameters.AddWithValue("sphorarioagendamento", HorarioAgendamento);
             cmd.Parameters.AddWithValue("sptiposervico", TipoServico);
@@ -111,7 +111,7 @@ namespace coldmakClass
             var cmd = Banco.Abrir();
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.CommandText = "sp_solicitacao_atendimento_delete"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidsolicitacaoatendimento", IdSolicitacaoAtendimento);
+            cmd.Parameters.AddWithValue("spidsolicitacaoatendimento", IdSolicitacaodeAtendimento);
             int rowsAffected = cmd.ExecuteNonQuery();
             cmd.Connection.Close();
             return rowsAffected > 0;

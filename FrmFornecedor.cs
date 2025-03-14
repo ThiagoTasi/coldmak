@@ -40,10 +40,10 @@ namespace coldmakApp
 
                 fornecedor.Inserir();
 
-                if (fornecedor.Id_Fornecedor > 0)
+                if (fornecedor.IdFornecedor > 0)
                 {
                     CarregaGridFornecedores();
-                    MessageBox.Show($"Fornecedor {fornecedor.Razao_Social} inserido com sucesso");
+                    MessageBox.Show($"Fornecedor {fornecedor.RazaoSocial} inserido com sucesso");
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
@@ -62,8 +62,8 @@ namespace coldmakApp
             foreach (var fornecedor in listaDeFornecedores)
             {
                 dgvFornecedor.Rows.Add();
-                dgvFornecedor.Rows[linha].Cells[0].Value = fornecedor.Id_Fornecedor;
-                dgvFornecedor.Rows[linha].Cells[1].Value = fornecedor.Razao_Social;
+                dgvFornecedor.Rows[linha].Cells[0].Value = fornecedor.IdFornecedor;
+                dgvFornecedor.Rows[linha].Cells[1].Value = fornecedor.RazaoSocial;
                 dgvFornecedor.Rows[linha].Cells[2].Value = fornecedor.Fantasia;
                 dgvFornecedor.Rows[linha].Cells[3].Value = fornecedor.Cnpj;
                 dgvFornecedor.Rows[linha].Cells[4].Value = fornecedor.Telefone;
@@ -80,8 +80,8 @@ namespace coldmakApp
                 int idFornecedor = Convert.ToInt32(dgvFornecedor.Rows[linhaAtual].Cells[0].Value);
                 var fornecedor = Fornecedor.ObterPorId(idFornecedor);
 
-                textId.Text = fornecedor.Id_Fornecedor.ToString();
-                textRazaosoc.Text = fornecedor.Razao_Social;
+                textId.Text = fornecedor.IdFornecedor.ToString();
+                textRazaosoc.Text = fornecedor.RazaoSocial;
                 textFanta.Text = fornecedor.Fantasia;
                 textCnpj.Text = fornecedor.Cnpj;
                 textTelefone.Text = fornecedor.Telefone;
@@ -127,7 +127,7 @@ namespace coldmakApp
 
                 if (fornecedor != null)
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir o fornecedor {fornecedor.Razao_Social}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"Deseja realmente excluir o fornecedor {fornecedor.RazaoSocial}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         if (fornecedor.Deletar())
                         {

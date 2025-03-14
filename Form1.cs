@@ -151,9 +151,9 @@ namespace coldmak
 
         private void btnSolicitacao_Click(object sender, EventArgs e)
         {
-            FrmSolicitacaoAtendimento FrmSolicitacaoAtendimento = new FrmSolicitacaoAtendimento();
-            FrmSolicitacaoAtendimento.IsMdiContainer = true;
-            FrmSolicitacaoAtendimento.Show();
+            FrmSolicitacaodeAtendimento FrmSolicitacaodeAtendimento = new FrmSolicitacaodeAtendimento();
+            FrmSolicitacaodeAtendimento.IsMdiContainer = true;
+            FrmSolicitacaodeAtendimento.Show();
         }
 
         private void btnVenda_Click_1(object sender, EventArgs e)

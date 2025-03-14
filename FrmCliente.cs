@@ -30,22 +30,22 @@ namespace coldmakApp
             try
             {
                 DateTime dataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                int idade = int.Parse(textIdade.Text);
+                int idadeCliente = int.Parse(textIdadeCliente.Text);
 
                 Cliente cliente = new Cliente(
-                    textNome.Text,
                     textRg.Text,
                     textCpf.Text,
                     textCnpj.Text,
+                    textNome.Text,
                     textEmail.Text,
                     textTelefone.Text,
                     dataNascimento,
-                    idade
+                    idadeCliente
                 );
 
                 cliente.Inserir();
 
-                if (cliente.Id > 0)
+                if (cliente.IdCliente > 0)
                 {
                     CarregaGridClientes();
                     MessageBox.Show($"Cliente {cliente.Nome} inserido com sucesso");
@@ -71,7 +71,7 @@ namespace coldmakApp
             foreach (var cliente in listaDeClientes)
             {
                 dgvCliente.Rows.Add();
-                dgvCliente.Rows[linha].Cells[0].Value = cliente.Id;
+                dgvCliente.Rows[linha].Cells[0].Value = cliente.IdCliente;
                 dgvCliente.Rows[linha].Cells[1].Value = cliente.Rg;
                 dgvCliente.Rows[linha].Cells[2].Value = cliente.Cpf;
                 dgvCliente.Rows[linha].Cells[3].Value = cliente.Cnpj;
@@ -91,7 +91,7 @@ namespace coldmakApp
                 int linhaAtual = dgvCliente.CurrentRow.Index;
                 int idCliente = Convert.ToInt32(dgvCliente.Rows[linhaAtual].Cells[0].Value);
                 var cliente = Cliente.ObterPorId(idCliente);
-                textId.Text = cliente.Id.ToString();
+                textIdCliente.Text = cliente.IdCliente.ToString();
                 textRg.Text = cliente.Rg;
                 textCpf.Text = cliente.Cpf;
                 textCnpj.Text = cliente.Cnpj;
@@ -99,7 +99,7 @@ namespace coldmakApp
                 textEmail.Text = cliente.Email;
                 textTelefone.Text = cliente.Telefone;
                 textDataNasc.Text = cliente.DataNascimento.ToString("yyyy-MM-dd");
-                textIdade.Text = cliente.IdadeCliente.ToString();
+                textIdadeCliente.Text = cliente.IdadeCliente.ToString();
                 btnAtualizar.Enabled = true;
                 btnDeletar.Enabled = true;
             }
@@ -110,15 +110,15 @@ namespace coldmakApp
             try
             {
                 Cliente cliente = new Cliente();
-                cliente.Id = int.Parse(textId.Text);
-                cliente.Nome = textNome.Text;
+                cliente.IdCliente = int.Parse(textIdCliente.Text);
                 cliente.Rg = textRg.Text;
                 cliente.Cpf = textCpf.Text;
                 cliente.Cnpj = textCnpj.Text;
+                cliente.Nome = textNome.Text;
                 cliente.Email = textEmail.Text;
                 cliente.Telefone = textTelefone.Text;
                 cliente.DataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                cliente.IdadeCliente = int.Parse(textIdade.Text);
+                cliente.IdadeCliente = int.Parse(textIdadeCliente.Text);
 
                 if (cliente.Atualizar())
                 {
@@ -141,7 +141,7 @@ namespace coldmakApp
         {
             try
             {
-                int idCliente = int.Parse(textId.Text);
+                int idCliente = int.Parse(textIdCliente.Text);
                 Cliente cliente = Cliente.ObterPorId(idCliente);
 
                 if (cliente != null)
@@ -173,7 +173,7 @@ namespace coldmakApp
 
         private void LimparCampos()
         {
-            textId.Text = "";
+            textIdCliente.Text = "";
             textRg.Text = "";
             textCpf.Text = "";
             textCnpj.Text = "";
@@ -181,7 +181,7 @@ namespace coldmakApp
             textEmail.Text = "";
             textTelefone.Text = "";
             textDataNasc.Text = "";
-            textIdade.Text = "";
+            textIdadeCliente.Text = "";
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
