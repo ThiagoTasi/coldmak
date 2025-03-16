@@ -66,7 +66,7 @@ namespace coldmakClass
                 cmd.Parameters.Add("spnome", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Nome;
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
-                cmd.Parameters.AddWithValue("spdatanasc", DataNascimento);
+                cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
                 cmd.Parameters.AddWithValue("spidade", IdadeCliente);
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "select last_insert_id()";
@@ -162,7 +162,7 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spnome", Nome);
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
-                cmd.Parameters.AddWithValue("spdatanasc", DataNascimento);
+                cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
                 cmd.Parameters.AddWithValue("spidade", IdadeCliente);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
