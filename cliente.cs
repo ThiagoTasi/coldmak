@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
 namespace coldmakClass
 {
     public class Cliente
@@ -19,16 +17,15 @@ namespace coldmakClass
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
-        public DateTime DataNascimento { get; set; } // Tipo corrigido
-        public int IdadeCliente { get; set; } // Tipo corrigido
+        public DateTime DataNascimento { get; set; }
+        public int IdadeCliente { get; set; }
 
         public Cliente()
         {
         }
 
-        public Cliente(string rg, string cpf, string cnpj,string nome, string email, string telefone, DateTime dataNascimento, int idadeCliente)
+        public Cliente(string rg, string cpf, string cnpj, string nome, string email, string telefone, DateTime dataNascimento, int idadeCliente)
         {
-           
             Rg = rg;
             Cpf = cpf;
             Cnpj = cnpj;
@@ -60,6 +57,7 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_insert";
+                cmd.Parameters.AddWithValue("spidcliente", IdCliente);
                 cmd.Parameters.AddWithValue("sprg", Rg);
                 cmd.Parameters.AddWithValue("spcpf", Cpf);
                 cmd.Parameters.AddWithValue("spcnpj", Cnpj);
@@ -68,20 +66,23 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
                 cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
                 cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
+
+                // Adicionar parâmetro de saída para p_IdCliente
+                var pIdCliente = new MySqlParameter("p_IdCliente", MySqlDbType.Int32);
+                pIdCliente.Direction = ParameterDirection.Output;
+                cmd.Parameters.Add(pIdCliente);
+
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "select last_insert_id()";
-                cmd.ExecuteNonQuery();
-                var dr = cmd.ExecuteReader();
-                if (dr.Read())
-                {
-                    IdCliente = dr.GetInt32(0);
-                }
+
+                // Obter o valor do parâmetro de saída
+                IdCliente = Convert.ToInt32(pIdCliente.Value);
+
                 cmd.Connection.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao inserir cliente: {ex.Message}");
-                throw; // Re-lança a exceção para ser tratada em camadas superiores
+                throw;
             }
         }
 
@@ -92,22 +93,23 @@ namespace coldmakClass
             try
             {
                 var cmd = Banco.Abrir();
-                cmd.CommandText = $"select * from clientes where id = {id}";
+                cmd.CommandText = $"select * from cliente where IdCliente = {id}"; // Corrigido para 'cliente' e 'IdCliente'
                 var dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
                     cliente = new Cliente(
-                        dr.GetInt32(0),
-                        dr.GetString(1),
-                        dr.GetString(2),
-                        dr.GetString(3),
-                        dr.GetString(4),
-                        dr.GetString(5),
-                        dr.GetString(6),
-                        dr.GetDateTime(7), // Correção aqui
-                        dr.GetInt32(8) // Correção aqui
+                        dr.GetInt32("IdCliente"),
+                        dr.GetString("Nome"),
+                        dr.GetString("Rg"),
+                        dr.GetString("Cpf"),
+                        dr.GetString("Cnpj"),
+                        dr.GetString("Email"),
+                        dr.GetString("Telefone"),
+                        dr.GetDateTime("DataNascimento"),
+                        dr.GetInt32("IdadeCliente")
                     );
                 }
+                dr.Close();
             }
             catch (Exception ex)
             {
@@ -123,22 +125,23 @@ namespace coldmakClass
             try
             {
                 var cmd = Banco.Abrir();
-                cmd.CommandText = $"select * from clientes order by nome asc";
+                cmd.CommandText = "select * from cliente order by Nome asc"; // Corrigido para 'cliente'
                 var dr = cmd.ExecuteReader();
                 while (dr.Read())
                 {
                     lista.Add(new Cliente(
-                        dr.GetInt32(0),
-                        dr.GetString(1),
-                        dr.GetString(2),
-                        dr.GetString(3),
-                        dr.GetString(4),
-                        dr.GetString(5),
-                        dr.GetString(6),
-                        dr.GetDateTime(7), // Correção aqui
-                        dr.GetInt32(8) // Correção aqui
+                        dr.GetInt32("IdCliente"),
+                        dr.GetString("Nome"),
+                        dr.GetString("Rg"),
+                        dr.GetString("Cpf"),
+                        dr.GetString("Cnpj"),
+                        dr.GetString("Email"),
+                        dr.GetString("Telefone"),
+                        dr.GetDateTime("DataNascimento"),
+                        dr.GetInt32("IdadeCliente")
                     ));
                 }
+                dr.Close();
             }
             catch (Exception ex)
             {
@@ -154,7 +157,7 @@ namespace coldmakClass
             {
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_cliente_altera";
+                cmd.CommandText = "sp_cliente_update"; // Corrigido de sp_cliente_altera
                 cmd.Parameters.AddWithValue("spidcliente", IdCliente);
                 cmd.Parameters.AddWithValue("sprg", Rg);
                 cmd.Parameters.AddWithValue("spcpf", Cpf);
@@ -165,7 +168,7 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
                 cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
                 cmd.ExecuteNonQuery();
-                return cmd.ExecuteNonQuery() > 0;
+                return true; // Simplificado, pois ExecuteNonQuery() já foi chamado
             }
             catch (Exception ex)
             {
@@ -173,16 +176,17 @@ namespace coldmakClass
                 throw;
             }
         }
+
         public bool Deletar()
         {
             try
             {
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_cliente_delete";
+                cmd.CommandText = "sp_delete_cliente"; // Corrigido de sp_cliente_delete
                 cmd.Parameters.AddWithValue("spidcliente", IdCliente);
                 cmd.ExecuteNonQuery();
-                return cmd.ExecuteNonQuery() > 0;
+                return true; // Simplificado, pois ExecuteNonQuery() já foi chamado
             }
             catch (Exception ex)
             {

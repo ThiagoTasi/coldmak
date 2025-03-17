@@ -49,6 +49,7 @@
             this.textIdadeCliente = new System.Windows.Forms.TextBox();
             this.dgvCliente = new System.Windows.Forms.DataGridView();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,7 +57,6 @@
             this.ClnTelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnDataNasc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnIdade = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
@@ -222,20 +222,21 @@
             this.dgvCliente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvCliente.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClnId,
+            this.ClnRg,
             this.ClnCpf,
             this.ClnCnpj,
             this.ClnNome,
             this.ClnEmail,
             this.ClnTelefone,
             this.ClnDataNasc,
-            this.ClnIdade,
-            this.ClnRg});
+            this.ClnIdade});
             this.dgvCliente.Location = new System.Drawing.Point(12, 332);
             this.dgvCliente.Name = "dgvCliente";
             this.dgvCliente.RowHeadersWidth = 51;
             this.dgvCliente.RowTemplate.Height = 24;
             this.dgvCliente.Size = new System.Drawing.Size(980, 150);
             this.dgvCliente.TabIndex = 19;
+           
             // 
             // ClnId
             // 
@@ -245,6 +246,13 @@
             this.ClnId.ReadOnly = true;
             this.ClnId.Visible = false;
             this.ClnId.Width = 125;
+            // 
+            // ClnRg
+            // 
+            this.ClnRg.HeaderText = "Rg";
+            this.ClnRg.MinimumWidth = 6;
+            this.ClnRg.Name = "ClnRg";
+            this.ClnRg.Width = 125;
             // 
             // ClnCpf
             // 
@@ -295,13 +303,6 @@
             this.ClnIdade.Name = "ClnIdade";
             this.ClnIdade.Width = 125;
             // 
-            // ClnRg
-            // 
-            this.ClnRg.HeaderText = "Rg";
-            this.ClnRg.MinimumWidth = 6;
-            this.ClnRg.Name = "ClnRg";
-            this.ClnRg.Width = 125;
-            // 
             // btnInserir
             // 
             this.btnInserir.Location = new System.Drawing.Point(22, 504);
@@ -320,6 +321,7 @@
             this.btnAtualizar.TabIndex = 21;
             this.btnAtualizar.Text = "Atualizar";
             this.btnAtualizar.UseVisualStyleBackColor = true;
+            this.btnAtualizar.Click += new System.EventHandler(this.btnAtualizar_Click);
             // 
             // btnDeletar
             // 
@@ -329,7 +331,7 @@
             this.btnDeletar.TabIndex = 22;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
             // 
             // FrmClientes
             // 
@@ -393,6 +395,7 @@
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnRg;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnCpf;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnCnpj;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnNome;
@@ -400,6 +403,5 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnTelefone;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnDataNasc;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnIdade;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnRg;
     }
 }

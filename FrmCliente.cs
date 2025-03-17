@@ -182,14 +182,11 @@ namespace coldmakApp
             textTelefone.Text = "";
             textDataNasc.Text = "";
             textIdadeCliente.Text = "";
-            btnAtualizar.Enabled = false;
-            btnDeletar.Enabled = false;
+            btnAtualizar.Enabled = true;
+            btnDeletar.Enabled = true;
             btnInserir.Enabled = true;
         }
 
-        private void btnDeletar_Click_1(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
