@@ -165,9 +165,13 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spnome", Nome);
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
-                cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
+                //definindo explicitamente o parametro de data como MysqlDbType.Date
+                var dataNascimentoParam = new MySqlParameter("spdatanascimento", MySqlDbType.Date);
+                dataNascimentoParam.Value = DataNascimento.Date;//garante somente a data sem o horario
+                cmd.Parameters.Add(dataNascimentoParam);
                 cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
                 cmd.ExecuteNonQuery();
+                
                 return true; // Simplificado, pois ExecuteNonQuery() já foi chamado
             }
             catch (Exception ex)

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using coldmak;
 using coldmakClass;
+using Microsoft.SqlServer.Server;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace coldmakApp
@@ -29,7 +30,7 @@ namespace coldmakApp
         {
             try
             {
-                DateTime dataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime dataNascimento = DateTime.Parse( textDataNasc.Text);
                 int idadeCliente = int.Parse(textIdadeCliente.Text);
 
                 Cliente cliente = new Cliente(
@@ -55,7 +56,7 @@ namespace coldmakApp
             }
             catch (FormatException)
             {
-                MessageBox.Show("Formato de data ou idade inválido. Use AAAA-MM-DD para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Formato de data ou idade inválido. Use yyyy-MM-dd para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -130,7 +131,7 @@ namespace coldmakApp
             }
             catch (FormatException)
             {
-                MessageBox.Show("Formato de data ou idade inválido. Use AAAA-MM-DD para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Formato de data ou idade inválido. Use yyyy-MM-dd para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
