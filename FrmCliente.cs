@@ -124,6 +124,7 @@ namespace coldmakApp
                 {
                     CarregaGridClientes();
                     MessageBox.Show("Cliente atualizado com sucesso!");
+                    btnAtualizar.Enabled = false;
                     LimparCampos();
                 }
             }
@@ -152,6 +153,7 @@ namespace coldmakApp
                         {
                             CarregaGridClientes();
                             MessageBox.Show("Cliente excluído com sucesso!");
+                            btnDeletar.Enabled = false;
                             LimparCampos();
                         }
                         else
