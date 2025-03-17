@@ -67,7 +67,7 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
                 cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
-                cmd.Parameters.AddWithValue("spidade", IdadeCliente);
+                cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "select last_insert_id()";
                 cmd.ExecuteNonQuery();
@@ -155,7 +155,7 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_altera";
-                cmd.Parameters.AddWithValue("spid", IdCliente);
+                cmd.Parameters.AddWithValue("spidcliente", IdCliente);
                 cmd.Parameters.AddWithValue("sprg", Rg);
                 cmd.Parameters.AddWithValue("spcpf", Cpf);
                 cmd.Parameters.AddWithValue("spcnpj", Cnpj);
@@ -163,7 +163,7 @@ namespace coldmakClass
                 cmd.Parameters.AddWithValue("spemail", Email);
                 cmd.Parameters.AddWithValue("sptelefone", Telefone);
                 cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
-                cmd.Parameters.AddWithValue("spidade", IdadeCliente);
+                cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
             }
@@ -180,7 +180,7 @@ namespace coldmakClass
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = "sp_cliente_delete";
-                cmd.Parameters.AddWithValue("spid", IdCliente);
+                cmd.Parameters.AddWithValue("spidcliente", IdCliente);
                 cmd.ExecuteNonQuery();
                 return cmd.ExecuteNonQuery() > 0;
             }
