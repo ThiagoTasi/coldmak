@@ -70,39 +70,42 @@ namespace coldmakClass
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.CommandText = "sp_usuario_insert";
-                    cmd.Parameters.AddWithValue("spnome", Nome ?? string.Empty);
-                    cmd.Parameters.AddWithValue("sprg", Rg ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spcpf", Cpf ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spendereco", Endereco ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spcep", Cep ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spemail", Email ?? string.Empty);
-                    cmd.Parameters.AddWithValue("sptelefone", Telefone ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spsenha", Senha ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
-                    cmd.Parameters.AddWithValue("spidnivel", IdNivel);
+                    cmd.Parameters.AddWithValue("@spnome", Nome ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@sprg", Rg ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@spcpf", Cpf ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@spendereco", Endereco ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@spcep", Cep ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@spemail", Email ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@sptelefone", Telefone ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@spsenha", MD5Hash(Senha ?? string.Empty));
+                    cmd.Parameters.AddWithValue("@spdatanascimento", DataNascimento);
+                    cmd.Parameters.AddWithValue("@spidnivel", IdNivel);
+                    cmd.Parameters.AddWithValue("@spativo", Ativo ? 1 : 0); // Convertendo bool para 1 ou 0 para BIT
 
-                    // Captura o ID retornado por LAST_INSERT_ID()
                     object result = cmd.ExecuteScalar();
                     if (result == null || result == DBNull.Value)
                     {
-                        throw new Exception("Falha ao obter o ID gerado pelo banco de dados.");
+                        throw new Exception("Falha ao obter o ID gerado pelo banco de dados. Verifique a stored procedure.");
                     }
                     IdUsuario = Convert.ToInt32(result);
                 }
                 catch (MySqlException ex)
                 {
-                    // Captura erros específicos lançados pela procedure
-                    if (ex.Message.Contains("CPF já cadastrado"))
-                        throw new Exception("CPF já cadastrado.");
-                    else if (ex.Message.Contains("Erro ao inserir usuário"))
-                        throw new Exception("Erro ao inserir usuário no banco de dados.");
-                    else
-                        throw new Exception($"Erro de banco de dados ao inserir usuário: {ex.Message}");
+                    throw new Exception($"Erro de banco de dados ao inserir usuário: {ex.Message} (Código: {ex.Number})");
                 }
                 catch (Exception ex)
                 {
                     throw new Exception($"Erro ao inserir usuário: {ex.Message}");
                 }
+            }
+        }
+        private string MD5Hash(string input)
+        {
+            using (var md5 = System.Security.Cryptography.MD5.Create())
+            {
+                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
 
@@ -113,17 +116,12 @@ namespace coldmakClass
             {
                 try
                 {
-                    cmd.CommandText = "SELECT u.*, n.nome AS nivel_nome, n.sigla " +
-                                     "FROM usuario u " +
-                                     "LEFT JOIN nivel n ON u.IdNivel = n.IdNivel " +
-                                     "WHERE u.IdUsuario = @id";
+                    cmd.CommandText = "SELECT * FROM usuario WHERE IdUsuario = @id";
                     cmd.Parameters.AddWithValue("@id", id);
                     using (var dr = cmd.ExecuteReader())
                     {
                         if (dr.Read())
                         {
-                            string nivelNome = dr.IsDBNull(dr.GetOrdinal("nivel_nome")) ? null : dr.GetString("nivel_nome");
-                            string nivelSigla = dr.IsDBNull(dr.GetOrdinal("sigla")) ? null : dr.GetString("sigla");
                             usuario = new Usuario(
                                 dr.GetInt32("IdUsuario"),
                                 dr.GetString("Nome"),
@@ -136,8 +134,7 @@ namespace coldmakClass
                                 dr.GetString("Senha"),
                                 dr.GetDateTime("DataNascimento"),
                                 dr.GetInt32("IdNivel"),
-                                dr.GetBoolean("Ativo"),
-                                new Nivel(dr.GetInt32("IdNivel"), nivelNome, nivelSigla)
+                                dr.GetBoolean("Ativo")
                             );
                         }
                     }
@@ -161,16 +158,11 @@ namespace coldmakClass
             {
                 try
                 {
-                    cmd.CommandText = "SELECT u.*, n.nome AS nivel_nome, n.sigla " +
-                                     "FROM usuario u " +
-                                     "LEFT JOIN nivel n ON u.IdNivel = n.IdNivel " +
-                                     "ORDER BY u.Nome ASC";
+                    cmd.CommandText = "SELECT * FROM usuario ORDER BY Nome ASC";
                     using (var dr = cmd.ExecuteReader())
                     {
                         while (dr.Read())
                         {
-                            string nivelNome = dr.IsDBNull(dr.GetOrdinal("nivel_nome")) ? null : dr.GetString("nivel_nome");
-                            string nivelSigla = dr.IsDBNull(dr.GetOrdinal("sigla")) ? null : dr.GetString("sigla");
                             var usuario = new Usuario(
                                 dr.GetInt32("IdUsuario"),
                                 dr.GetString("Nome"),
@@ -183,8 +175,7 @@ namespace coldmakClass
                                 dr.GetString("Senha"),
                                 dr.GetDateTime("DataNascimento"),
                                 dr.GetInt32("IdNivel"),
-                                dr.GetBoolean("Ativo"),
-                                new Nivel(dr.GetInt32("IdNivel"), nivelNome, nivelSigla)
+                                dr.GetBoolean("Ativo")
                             );
                             lista.Add(usuario);
                         }
@@ -221,14 +212,13 @@ namespace coldmakClass
                     cmd.Parameters.AddWithValue("spsenha", Senha ?? string.Empty);
                     cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
                     cmd.Parameters.AddWithValue("spidnivel", IdNivel);
+                    cmd.Parameters.AddWithValue("spativo", Ativo); // Adicionado
 
-                    // Executa a procedure e verifica linhas afetadas
                     int rowsAffected = cmd.ExecuteNonQuery();
                     return rowsAffected > 0;
                 }
                 catch (MySqlException ex)
                 {
-                    // Captura erros específicos lançados pela procedure
                     if (ex.Message.Contains("Usuário não encontrado"))
                         throw new Exception("Usuário não encontrado.");
                     else if (ex.Message.Contains("CPF já cadastrado"))
@@ -255,7 +245,6 @@ namespace coldmakClass
                     cmd.CommandText = "sp_delete_usuario";
                     cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
 
-                    // A procedure retorna uma mensagem via SELECT
                     using (var dr = cmd.ExecuteReader())
                     {
                         if (dr.Read())
@@ -267,7 +256,7 @@ namespace coldmakClass
                             }
                             return true; // "Usuário deletado com sucesso"
                         }
-                        return false; // Caso não retorne nada (improvável)
+                        return false;
                     }
                 }
                 catch (MySqlException ex)

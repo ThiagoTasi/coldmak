@@ -1,31 +1,24 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows.Forms;
-using coldmak;        // Namespace assumido para a classe Banco
+using coldmak;        // Namespace para a classe Banco
 using coldmakClass;  // Namespace da classe Usuario
 
 namespace coldmakApp
 {
     public partial class FrmUsuarios : Form
     {
-        private int IdNivel => cmbNivel.SelectedValue != null ? Convert.ToInt32(cmbNivel.SelectedValue) : 0;
-
         public FrmUsuarios()
         {
             InitializeComponent();
         }
 
-        private void FrmUsuarios_Load(object sender, EventArgs e)
+        private void FrmUsuarios_Load_1(object sender, EventArgs e)
         {
             try
             {
-                CarregarComboNivel();
-                if (cmbNivel.Items.Count == 0)
-                {
-                    MessageBox.Show("Erro: Nenhum nível disponível para seleção.", "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
                 CarregaGridUsuarios();
             }
             catch (Exception ex)
@@ -35,30 +28,20 @@ namespace coldmakApp
             }
         }
 
-        private void CarregarComboNivel()
+        private int ObterIdNivel()
         {
-            // Limpa o combobox para evitar duplicatas
-            cmbNivel.Items.Clear();
-
-            // Define as opções como uma lista de KeyValuePair
-            var niveis = new List<KeyValuePair<int, string>>
+            // Método que obtém o IdNivel do textIdNivel com validação temporária
+            if (int.TryParse(textIdNivel.Text, out int idNivel))
             {
-                new KeyValuePair<int, string>(1, "ADM"), // Administrador
-                new KeyValuePair<int, string>(2, "CLI")  // Cliente
-            };
-
-            // Atribui o DataSource
-            cmbNivel.DataSource = niveis;
-            cmbNivel.DisplayMember = "Value"; // Mostra "ADM" ou "CLI"
-            cmbNivel.ValueMember = "Key";     // Usa 1 ou 2 como valor interno
-            cmbNivel.SelectedIndex = -1;      // Sem seleção inicial para inserção manual
-
-            // Verificação de depuração
-            if (cmbNivel.Items.Count != 2)
-            {
-                MessageBox.Show($"Erro: Esperado 2 itens no combobox, mas encontrado {cmbNivel.Items.Count}.",
-                    "Debug", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (idNivel == 1 || idNivel == 2) // Valores temporários (1 = ADM, 2 = CLI)
+                    return idNivel;
+                else
+                    return 2; // Valor padrão (CLI) se inválido
             }
+            return 2; // Valor padrão se não puder converter
+
+            // Quando a tabela Nivel estiver pronta, substitua por:
+            // return NivelDAO.ObterIdNivel(); // Exemplo de consulta futura
         }
 
         private void btnInserir_Click(object sender, EventArgs e)
@@ -68,13 +51,14 @@ namespace coldmakApp
                 if (!ValidarCampos()) return;
 
                 DateTime dataNascimento;
-                if (!DateTime.TryParse(textDataNascimento.Text, out dataNascimento))
+                if (!DateTime.TryParseExact(textDataNascimento.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataNascimento))
                 {
-                    MessageBox.Show("Formato de data inválido.", "Erro",
+                    MessageBox.Show("Formato de data inválido. Use dd/MM/yyyy.", "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
+                // Ajuste no instanciamento do Usuario para garantir compatibilidade com o método Inserir
                 Usuario usuario = new Usuario(
                     textNome.Text.Trim(),
                     textRg.Text.Trim(),
@@ -85,9 +69,8 @@ namespace coldmakApp
                     textTelefone.Text.Trim(),
                     textSenha.Text,
                     dataNascimento,
-                    IdNivel, // 1 para ADM, 2 para CLI
-                    chkAtivo.Checked,
-                    null
+                    ObterIdNivel(),
+                    chkAtivo.Checked 
                 );
 
                 usuario.Inserir();
@@ -100,17 +83,18 @@ namespace coldmakApp
                 }
                 else
                 {
-                    MessageBox.Show("Falha ao inserir o usuário. O ID não foi gerado.", "Erro",
+                    MessageBox.Show("Falha ao inserir o usuário. Verifique os dados e tente novamente.", "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
+                // Ajuste no log para incluir stack trace
+                File.WriteAllText("erro_log.txt", $"Erro: {ex.Message}\nStackTrace: {ex.StackTrace}\n{DateTime.Now}");
                 MessageBox.Show($"Erro ao inserir usuário: {ex.Message}", "Erro",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void CarregaGridUsuarios()
         {
             try
@@ -120,8 +104,6 @@ namespace coldmakApp
 
                 foreach (var usuario in listaDeUsuarios)
                 {
-                    string nivelNome = usuario.IdNivel == 1 ? "ADM" : usuario.IdNivel == 2 ? "CLI" : "Desconhecido";
-
                     dgvUsuarios.Rows.Add(
                         usuario.IdUsuario,
                         usuario.Nome,
@@ -130,41 +112,15 @@ namespace coldmakApp
                         usuario.Endereco,
                         usuario.Cep,
                         usuario.Email,
-                        usuario.Senha,
                         usuario.Telefone,
-                        usuario.DataNascimento.ToString("dd/MM/yyyy"),
-                        nivelNome,
-                        usuario.Ativo
+                        usuario.Senha,
+                        usuario.DataNascimento.ToString("dd/MM/yyyy")
                     );
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erro ao carregar grid: {ex.Message}", "Erro",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-
-            try
-            {
-                int idUser = Convert.ToInt32(dgvUsuarios.Rows[e.RowIndex].Cells[0].Value);
-                var usuario = Usuario.ObterPorId(idUser);
-
-                if (usuario != null)
-                {
-                    PreencherCampos(usuario);
-                    btnAtualizar.Enabled = true;
-                    btnDeletar.Enabled = true;
-                    btnInserir.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao selecionar usuário: {ex.Message}", "Erro",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -186,12 +142,13 @@ namespace coldmakApp
                     Email = textEmail.Text.Trim(),
                     Telefone = textTelefone.Text.Trim(),
                     Senha = textSenha.Text,
-                    IdNivel = IdNivel
+                    IdNivel = ObterIdNivel(),
+                    Ativo = chkAtivo.Checked
                 };
 
                 if (!DateTime.TryParse(textDataNascimento.Text, out DateTime dataNascimento))
                 {
-                    MessageBox.Show("Formato de data inválido.", "Erro",
+                    MessageBox.Show("Formato de data inválido. Use dd/MM/yyyy.", "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -264,11 +221,32 @@ namespace coldmakApp
                 textNome.Focus();
                 return false;
             }
-            if (IdNivel == 0)
+            if (textRg.Text.Length != 9)
             {
-                MessageBox.Show("Selecione um nível.", "Atenção",
+                MessageBox.Show("O RG deve ter exatamente 9 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cmbNivel.Focus();
+                textRg.Focus();
+                return false;
+            }
+            if (textCpf.Text.Length != 11)
+            {
+                MessageBox.Show("O CPF deve ter exatamente 11 caracteres.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textCpf.Focus();
+                return false;
+            }
+            if (textCep.Text.Length != 8)
+            {
+                MessageBox.Show("O CEP deve ter exatamente 8 caracteres.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textCep.Focus();
+                return false;
+            }
+            if (textSenha.Text.Length > 32)
+            {
+                MessageBox.Show("A senha não pode exceder 32 caracteres.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textSenha.Focus();
                 return false;
             }
             return true;
@@ -297,20 +275,8 @@ namespace coldmakApp
             textTelefone.Text = usuario.Telefone;
             textSenha.Text = usuario.Senha;
             textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
-
-            // Preenchimento automático baseado na chave estrangeira IdNivel
-            if (usuario.IdNivel > 0)
-            {
-                cmbNivel.SelectedValue = usuario.IdNivel; // Preenche com "ADM" (1) ou "CLI" (2)
-                cmbNivel.Enabled = false; // Inativo ao editar
-            }
-            else
-            {
-                cmbNivel.SelectedIndex = -1; // Sem seleção
-                cmbNivel.Enabled = true; // Ativo para inserção manual
-            }
-
             chkAtivo.Checked = usuario.Ativo;
+            textIdNivel.Text = usuario.IdNivel.ToString();
         }
 
         private void LimparCampos()
@@ -325,8 +291,7 @@ namespace coldmakApp
             textTelefone.Clear();
             textSenha.Clear();
             textDataNascimento.Clear();
-            cmbNivel.SelectedIndex = -1; // Reseta para inserção manual
-            cmbNivel.Enabled = true; // Ativo para seleção manual
+            textIdNivel.Clear();
             chkAtivo.Checked = false;
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
@@ -348,6 +313,5 @@ namespace coldmakApp
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
