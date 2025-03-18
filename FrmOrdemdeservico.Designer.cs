@@ -52,6 +52,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textIdusu = new System.Windows.Forms.TextBox();
             this.textIdcli = new System.Windows.Forms.TextBox();
+            this.btnListar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvords)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,9 +61,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(311, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 16);
+            this.label1.Size = new System.Drawing.Size(141, 16);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Ordem de servico";
+            this.label1.Text = "ORDEM DE SERVICO";
             // 
             // label2
             // 
@@ -205,11 +206,11 @@
             this.btnInserir.TabIndex = 12;
             this.btnInserir.Text = "Inserir";
             this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click_1);
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
             // 
             // btnAtualizar
             // 
-            this.btnAtualizar.Location = new System.Drawing.Point(366, 415);
+            this.btnAtualizar.Location = new System.Drawing.Point(311, 415);
             this.btnAtualizar.Name = "btnAtualizar";
             this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
             this.btnAtualizar.TabIndex = 13;
@@ -218,13 +219,13 @@
             // 
             // btnDeletar
             // 
-            this.btnDeletar.Location = new System.Drawing.Point(766, 415);
+            this.btnDeletar.Location = new System.Drawing.Point(537, 415);
             this.btnDeletar.Name = "btnDeletar";
             this.btnDeletar.Size = new System.Drawing.Size(75, 23);
             this.btnDeletar.TabIndex = 14;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
             // 
             // label7
             // 
@@ -260,11 +261,21 @@
             this.textIdcli.Size = new System.Drawing.Size(100, 22);
             this.textIdcli.TabIndex = 18;
             // 
+            // btnListar
+            // 
+            this.btnListar.Location = new System.Drawing.Point(766, 415);
+            this.btnListar.Name = "btnListar";
+            this.btnListar.Size = new System.Drawing.Size(75, 23);
+            this.btnListar.TabIndex = 19;
+            this.btnListar.Text = "Listar";
+            this.btnListar.UseVisualStyleBackColor = true;
+            // 
             // FrmOrdemDeServico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(872, 450);
+            this.Controls.Add(this.btnListar);
             this.Controls.Add(this.textIdcli);
             this.Controls.Add(this.textIdusu);
             this.Controls.Add(this.label8);
@@ -318,5 +329,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textIdusu;
         private System.Windows.Forms.TextBox textIdcli;
+        private System.Windows.Forms.Button btnListar;
     }
 }

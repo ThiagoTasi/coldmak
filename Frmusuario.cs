@@ -20,6 +20,12 @@ namespace coldmakApp
             try
             {
                 CarregarComboNivel();
+                if (cmbNivel.Items.Count == 0)
+                {
+                    MessageBox.Show("Erro: Nenhum nível disponível para seleção.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 CarregaGridUsuarios();
             }
             catch (Exception ex)
@@ -31,10 +37,28 @@ namespace coldmakApp
 
         private void CarregarComboNivel()
         {
-            cmbNivel.DataSource = Nivel.ObterLista(); // Assumindo que Nivel tem um método ObterLista()
-            cmbNivel.DisplayMember = "Nome";
-            cmbNivel.ValueMember = "Id";
-            cmbNivel.SelectedIndex = -1;
+            // Limpa o combobox para evitar duplicatas
+            cmbNivel.Items.Clear();
+
+            // Define as opções como uma lista de KeyValuePair
+            var niveis = new List<KeyValuePair<int, string>>
+            {
+                new KeyValuePair<int, string>(1, "ADM"), // Administrador
+                new KeyValuePair<int, string>(2, "CLI")  // Cliente
+            };
+
+            // Atribui o DataSource
+            cmbNivel.DataSource = niveis;
+            cmbNivel.DisplayMember = "Value"; // Mostra "ADM" ou "CLI"
+            cmbNivel.ValueMember = "Key";     // Usa 1 ou 2 como valor interno
+            cmbNivel.SelectedIndex = -1;      // Sem seleção inicial para inserção manual
+
+            // Verificação de depuração
+            if (cmbNivel.Items.Count != 2)
+            {
+                MessageBox.Show($"Erro: Esperado 2 itens no combobox, mas encontrado {cmbNivel.Items.Count}.",
+                    "Debug", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void btnInserir_Click(object sender, EventArgs e)
@@ -51,7 +75,6 @@ namespace coldmakApp
                     return;
                 }
 
-                // Criando o usuário com o construtor de 11 parâmetros + null para Nivel
                 Usuario usuario = new Usuario(
                     textNome.Text.Trim(),
                     textRg.Text.Trim(),
@@ -62,12 +85,11 @@ namespace coldmakApp
                     textTelefone.Text.Trim(),
                     textSenha.Text,
                     dataNascimento,
-                    IdNivel,
+                    IdNivel, // 1 para ADM, 2 para CLI
                     chkAtivo.Checked,
-                    null // Nivel será inicializado como new Nivel() pelo construtor
+                    null
                 );
 
-                // Inserir o usuário (método void, sucesso é verificado pelo IdUsuario)
                 usuario.Inserir();
                 if (usuario.IdUsuario > 0)
                 {
@@ -98,6 +120,8 @@ namespace coldmakApp
 
                 foreach (var usuario in listaDeUsuarios)
                 {
+                    string nivelNome = usuario.IdNivel == 1 ? "ADM" : usuario.IdNivel == 2 ? "CLI" : "Desconhecido";
+
                     dgvUsuarios.Rows.Add(
                         usuario.IdUsuario,
                         usuario.Nome,
@@ -109,7 +133,7 @@ namespace coldmakApp
                         usuario.Senha,
                         usuario.Telefone,
                         usuario.DataNascimento.ToString("dd/MM/yyyy"),
-                        usuario.Nivel?.Nome,
+                        nivelNome,
                         usuario.Ativo
                     );
                 }
@@ -162,8 +186,7 @@ namespace coldmakApp
                     Email = textEmail.Text.Trim(),
                     Telefone = textTelefone.Text.Trim(),
                     Senha = textSenha.Text,
-                    IdNivel = IdNivel,
-                    Ativo = chkAtivo.Checked
+                    IdNivel = IdNivel
                 };
 
                 if (!DateTime.TryParse(textDataNascimento.Text, out DateTime dataNascimento))
@@ -220,7 +243,7 @@ namespace coldmakApp
                     }
                     else
                     {
-                        MessageBox.Show("Falha ao excluir o usuário.", "Erro",
+                        MessageBox.Show("Usuário não encontrado.", "Erro",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -274,7 +297,19 @@ namespace coldmakApp
             textTelefone.Text = usuario.Telefone;
             textSenha.Text = usuario.Senha;
             textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
-            cmbNivel.SelectedValue = usuario.IdNivel;
+
+            // Preenchimento automático baseado na chave estrangeira IdNivel
+            if (usuario.IdNivel > 0)
+            {
+                cmbNivel.SelectedValue = usuario.IdNivel; // Preenche com "ADM" (1) ou "CLI" (2)
+                cmbNivel.Enabled = false; // Inativo ao editar
+            }
+            else
+            {
+                cmbNivel.SelectedIndex = -1; // Sem seleção
+                cmbNivel.Enabled = true; // Ativo para inserção manual
+            }
+
             chkAtivo.Checked = usuario.Ativo;
         }
 
@@ -290,12 +325,29 @@ namespace coldmakApp
             textTelefone.Clear();
             textSenha.Clear();
             textDataNascimento.Clear();
-            cmbNivel.SelectedIndex = -1;
+            cmbNivel.SelectedIndex = -1; // Reseta para inserção manual
+            cmbNivel.Enabled = true; // Ativo para seleção manual
             chkAtivo.Checked = false;
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
             btnInserir.Enabled = true;
             textNome.Focus();
         }
+
+        private void btnListar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CarregaGridUsuarios();
+                MessageBox.Show("Lista de usuários atualizada com sucesso!", "Sucesso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao listar usuários: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }

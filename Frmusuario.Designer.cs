@@ -39,16 +39,6 @@
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
             this.dgvUsuarios = new System.Windows.Forms.DataGridView();
-            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clnendereco = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clncep = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clnemail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clntelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clnsenha = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Clndatanascimento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Cpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label5 = new System.Windows.Forms.Label();
             this.textRg = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -65,7 +55,19 @@
             this.textDataNascimento = new System.Windows.Forms.TextBox();
             this.chkAtivo = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.btnListar = new System.Windows.Forms.Button();
             this.cmbNivel = new System.Windows.Forms.ComboBox();
+            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnRg = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Cpf = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clnendereco = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clncep = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clnemail = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnNivel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clntelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clnsenha = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Clndatanascimento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
             // 
@@ -147,7 +149,7 @@
             // 
             // btnAtualizar
             // 
-            this.btnAtualizar.Location = new System.Drawing.Point(515, 613);
+            this.btnAtualizar.Location = new System.Drawing.Point(365, 613);
             this.btnAtualizar.Name = "btnAtualizar";
             this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
             this.btnAtualizar.TabIndex = 8;
@@ -157,28 +159,29 @@
             // 
             // btnDeletar
             // 
-            this.btnDeletar.Location = new System.Drawing.Point(950, 613);
+            this.btnDeletar.Location = new System.Drawing.Point(672, 613);
             this.btnDeletar.Name = "btnDeletar";
             this.btnDeletar.Size = new System.Drawing.Size(75, 23);
             this.btnDeletar.TabIndex = 9;
             this.btnDeletar.Text = "Deletar";
             this.btnDeletar.UseVisualStyleBackColor = true;
             this.btnDeletar.UseWaitCursor = true;
-            
+            // 
             // dgvUsuarios
             // 
             this.dgvUsuarios.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvUsuarios.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClnId,
+            this.ClnNome,
+            this.ClnRg,
+            this.Cpf,
             this.Clnendereco,
             this.Clncep,
             this.Clnemail,
+            this.ClnNivel,
             this.Clntelefone,
             this.Clnsenha,
-            this.Clndatanascimento,
-            this.ClnNome,
-            this.ClnRg,
-            this.Cpf});
+            this.Clndatanascimento});
             this.dgvUsuarios.Location = new System.Drawing.Point(107, 430);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 51;
@@ -186,87 +189,6 @@
             this.dgvUsuarios.Size = new System.Drawing.Size(918, 150);
             this.dgvUsuarios.TabIndex = 10;
             this.dgvUsuarios.UseWaitCursor = true;
-            // 
-            // ClnId
-            // 
-            this.ClnId.HeaderText = "ID";
-            this.ClnId.MinimumWidth = 6;
-            this.ClnId.Name = "ClnId";
-            this.ClnId.ReadOnly = true;
-            this.ClnId.Visible = false;
-            this.ClnId.Width = 50;
-            // 
-            // Clnendereco
-            // 
-            this.Clnendereco.HeaderText = "Endereco";
-            this.Clnendereco.MinimumWidth = 6;
-            this.Clnendereco.Name = "Clnendereco";
-            this.Clnendereco.ReadOnly = true;
-            this.Clnendereco.Width = 125;
-            // 
-            // Clncep
-            // 
-            this.Clncep.HeaderText = "Cep";
-            this.Clncep.MinimumWidth = 6;
-            this.Clncep.Name = "Clncep";
-            this.Clncep.ReadOnly = true;
-            this.Clncep.Width = 125;
-            // 
-            // Clnemail
-            // 
-            this.Clnemail.HeaderText = "Email";
-            this.Clnemail.MinimumWidth = 6;
-            this.Clnemail.Name = "Clnemail";
-            this.Clnemail.ReadOnly = true;
-            this.Clnemail.Width = 80;
-            // 
-            // Clntelefone
-            // 
-            this.Clntelefone.HeaderText = "Telefone";
-            this.Clntelefone.MinimumWidth = 6;
-            this.Clntelefone.Name = "Clntelefone";
-            this.Clntelefone.ReadOnly = true;
-            this.Clntelefone.Width = 80;
-            // 
-            // Clnsenha
-            // 
-            this.Clnsenha.HeaderText = "Senha";
-            this.Clnsenha.MinimumWidth = 6;
-            this.Clnsenha.Name = "Clnsenha";
-            this.Clnsenha.ReadOnly = true;
-            this.Clnsenha.Width = 60;
-            // 
-            // Clndatanascimento
-            // 
-            this.Clndatanascimento.HeaderText = "Data nascimento";
-            this.Clndatanascimento.MinimumWidth = 6;
-            this.Clndatanascimento.Name = "Clndatanascimento";
-            this.Clndatanascimento.ReadOnly = true;
-            this.Clndatanascimento.Width = 80;
-            // 
-            // ClnNome
-            // 
-            this.ClnNome.HeaderText = "Nome";
-            this.ClnNome.MinimumWidth = 6;
-            this.ClnNome.Name = "ClnNome";
-            this.ClnNome.ReadOnly = true;
-            this.ClnNome.Width = 120;
-            // 
-            // ClnRg
-            // 
-            this.ClnRg.HeaderText = "Rg";
-            this.ClnRg.MinimumWidth = 6;
-            this.ClnRg.Name = "ClnRg";
-            this.ClnRg.ReadOnly = true;
-            this.ClnRg.Width = 80;
-            // 
-            // Cpf
-            // 
-            this.Cpf.HeaderText = "Cpf";
-            this.Cpf.MinimumWidth = 6;
-            this.Cpf.Name = "Cpf";
-            this.Cpf.ReadOnly = true;
-            this.Cpf.Width = 80;
             // 
             // label5
             // 
@@ -418,15 +340,112 @@
             this.label12.Text = "Nivel";
             this.label12.UseWaitCursor = true;
             // 
+            // btnListar
+            // 
+            this.btnListar.Location = new System.Drawing.Point(950, 613);
+            this.btnListar.Name = "btnListar";
+            this.btnListar.Size = new System.Drawing.Size(75, 23);
+            this.btnListar.TabIndex = 28;
+            this.btnListar.Text = "Listar";
+            this.btnListar.UseVisualStyleBackColor = true;
+            this.btnListar.UseWaitCursor = true;
+            this.btnListar.Click += new System.EventHandler(this.btnListar_Click);
+            // 
             // cmbNivel
             // 
-            this.cmbNivel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbNivel.FormattingEnabled = true;
-            this.cmbNivel.Location = new System.Drawing.Point(416, 273);
+            this.cmbNivel.Location = new System.Drawing.Point(415, 273);
             this.cmbNivel.Name = "cmbNivel";
             this.cmbNivel.Size = new System.Drawing.Size(121, 24);
-            this.cmbNivel.TabIndex = 27;
-            this.cmbNivel.UseWaitCursor = true;
+            this.cmbNivel.TabIndex = 29;
+            // 
+            // ClnId
+            // 
+            this.ClnId.HeaderText = "ID";
+            this.ClnId.MinimumWidth = 6;
+            this.ClnId.Name = "ClnId";
+            this.ClnId.ReadOnly = true;
+            this.ClnId.Visible = false;
+            this.ClnId.Width = 50;
+            // 
+            // ClnNome
+            // 
+            this.ClnNome.HeaderText = "Nome";
+            this.ClnNome.MinimumWidth = 6;
+            this.ClnNome.Name = "ClnNome";
+            this.ClnNome.ReadOnly = true;
+            this.ClnNome.Width = 120;
+            // 
+            // ClnRg
+            // 
+            this.ClnRg.HeaderText = "Rg";
+            this.ClnRg.MinimumWidth = 6;
+            this.ClnRg.Name = "ClnRg";
+            this.ClnRg.ReadOnly = true;
+            this.ClnRg.Width = 80;
+            // 
+            // Cpf
+            // 
+            this.Cpf.HeaderText = "Cpf";
+            this.Cpf.MinimumWidth = 6;
+            this.Cpf.Name = "Cpf";
+            this.Cpf.ReadOnly = true;
+            this.Cpf.Width = 80;
+            // 
+            // Clnendereco
+            // 
+            this.Clnendereco.HeaderText = "Endereco";
+            this.Clnendereco.MinimumWidth = 6;
+            this.Clnendereco.Name = "Clnendereco";
+            this.Clnendereco.ReadOnly = true;
+            this.Clnendereco.Width = 125;
+            // 
+            // Clncep
+            // 
+            this.Clncep.HeaderText = "Cep";
+            this.Clncep.MinimumWidth = 6;
+            this.Clncep.Name = "Clncep";
+            this.Clncep.ReadOnly = true;
+            this.Clncep.Width = 125;
+            // 
+            // Clnemail
+            // 
+            this.Clnemail.HeaderText = "Email";
+            this.Clnemail.MinimumWidth = 6;
+            this.Clnemail.Name = "Clnemail";
+            this.Clnemail.ReadOnly = true;
+            this.Clnemail.Width = 80;
+            // 
+            // ClnNivel
+            // 
+            this.ClnNivel.HeaderText = "Nivel";
+            this.ClnNivel.MinimumWidth = 6;
+            this.ClnNivel.Name = "ClnNivel";
+            this.ClnNivel.Width = 125;
+            // 
+            // Clntelefone
+            // 
+            this.Clntelefone.HeaderText = "Telefone";
+            this.Clntelefone.MinimumWidth = 6;
+            this.Clntelefone.Name = "Clntelefone";
+            this.Clntelefone.ReadOnly = true;
+            this.Clntelefone.Width = 80;
+            // 
+            // Clnsenha
+            // 
+            this.Clnsenha.HeaderText = "Senha";
+            this.Clnsenha.MinimumWidth = 6;
+            this.Clnsenha.Name = "Clnsenha";
+            this.Clnsenha.ReadOnly = true;
+            this.Clnsenha.Width = 60;
+            // 
+            // Clndatanascimento
+            // 
+            this.Clndatanascimento.HeaderText = "Data nascimento";
+            this.Clndatanascimento.MinimumWidth = 6;
+            this.Clndatanascimento.Name = "Clndatanascimento";
+            this.Clndatanascimento.ReadOnly = true;
+            this.Clndatanascimento.Width = 80;
             // 
             // FrmUsuarios
             // 
@@ -434,6 +453,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 701);
             this.Controls.Add(this.cmbNivel);
+            this.Controls.Add(this.btnListar);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.chkAtivo);
             this.Controls.Add(this.textDataNascimento);
@@ -497,18 +517,20 @@
         private System.Windows.Forms.TextBox textTelefone;
         private System.Windows.Forms.TextBox textSenha;
         private System.Windows.Forms.TextBox textDataNascimento;
+        private System.Windows.Forms.CheckBox chkAtivo;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button btnListar;
+        private System.Windows.Forms.ComboBox cmbNivel;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clnendereco;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clncep;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clnemail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clntelefone;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clnsenha;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Clndatanascimento;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnNome;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnRg;
         private System.Windows.Forms.DataGridViewTextBoxColumn Cpf;
-        private System.Windows.Forms.CheckBox chkAtivo;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox cmbNivel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clnendereco;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clncep;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clnemail;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnNivel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clntelefone;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clnsenha;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Clndatanascimento;
     }
 }

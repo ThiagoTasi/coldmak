@@ -1,12 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace coldmakClass
 {
@@ -47,94 +42,145 @@ namespace coldmakClass
 
         public void Inserir()
         {
-            var cmd = Banco.Abrir();
-
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "sp_ordem_servico_insert"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
-            cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-            cmd.Parameters.AddWithValue("spdata", Data);
-            cmd.Parameters.AddWithValue("spstatus", Status);
-            cmd.Parameters.AddWithValue("spdesconto", Desconto);
-            cmd.Parameters.AddWithValue("spvalortotal", ValorTotal);
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "select last_insert_id()";
-            cmd.ExecuteNonQuery();
-
-            var dr = cmd.ExecuteReader();
-            if (dr.Read())
+            using (var cmd = Banco.Abrir())
             {
-                IdOrdemdeServico = dr.GetInt32(0);
+                try
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_ordemdeservico_insert";
+                    cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
+                    cmd.Parameters.AddWithValue("spidcliente", IdCliente);
+                    cmd.Parameters.AddWithValue("spdata", Data);
+                    cmd.Parameters.AddWithValue("spstatus", Status);
+                    cmd.Parameters.AddWithValue("spdesconto", Desconto);
+                    cmd.Parameters.AddWithValue("spvalortotal", ValorTotal);
+                    cmd.Parameters.Add("spidordem", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+
+                    cmd.ExecuteNonQuery();
+
+                    // Recupera o ID gerado
+                    IdOrdemdeServico = cmd.Parameters["spidordem"].Value != DBNull.Value ? Convert.ToInt32(cmd.Parameters["spidordem"].Value) : -1;
+
+                    if (IdOrdemdeServico == -1)
+                    {
+                        throw new Exception("Falha na inserção. Verifique se os IDs de Usuário e Cliente existem.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao inserir ordem de serviço: " + ex.Message);
+                }
             }
-            cmd.Connection.Close();
         }
 
         public static OrdemdeServico ObterPorId(int idOrdemDeServico)
         {
-            OrdemdeServico ordemDeServico = new OrdemdeServico();
-            var cmd = Banco.Abrir(); 
-            cmd.CommandText = $"select * from ordem_de_servico where idordem_de_servico = {idOrdemDeServico}"; // Substitua pelo nome da sua tabela e coluna
-            var dr = cmd.ExecuteReader();
-            if (dr.Read())
+            using (var cmd = Banco.Abrir())
             {
-                ordemDeServico = new OrdemdeServico(
-                    dr.GetInt32(0),
-                    dr.GetInt32(1),
-                    dr.GetInt32(2),
-                    dr.GetDateTime(3),
-                    dr.GetString(4),
-                    dr.GetDecimal(5),
-                    dr.GetDecimal(6)
-                );
+                try
+                {
+                    cmd.CommandText = "SELECT * FROM ordemdeservico WHERE IdOrdemDeServico = @id";
+                    cmd.Parameters.AddWithValue("@id", idOrdemDeServico);
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            return new OrdemdeServico(
+                                dr.GetInt32("IdOrdemDeServico"),
+                                dr.GetInt32("IdUsuario"),
+                                dr.GetInt32("IdCliente"),
+                                dr.GetDateTime("Data"),
+                                dr.GetString("Status"),
+                                dr.GetDecimal("Desconto"),
+                                dr.GetDecimal("ValorTotal")
+                            );
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao obter ordem de serviço por ID: " + ex.Message);
+                }
             }
-            return ordemDeServico;
+            return null;
         }
 
         public static List<OrdemdeServico> ObterLista()
         {
-            List<OrdemdeServico> lista = new List<OrdemdeServico>();
-            var cmd = Banco.Abrir();
-            cmd.CommandText = $"select * from ordem_de_servico order by data desc"; // Substitua pelo nome da sua tabela e coluna
-            var dr = cmd.ExecuteReader();
-            while (dr.Read())
+            var lista = new List<OrdemdeServico>();
+            using (var cmd = Banco.Abrir())
             {
-                lista.Add(new OrdemdeServico(
-                    dr.GetInt32(0),
-                    dr.GetInt32(1),
-                    dr.GetInt32(2),
-                    dr.GetDateTime(3),
-                    dr.GetString(4),
-                    dr.GetDecimal(5),
-                    dr.GetDecimal(6)
-                ));
+                try
+                {
+                    cmd.CommandText = "SELECT * FROM ordemdeservico ORDER BY Data DESC";
+                    using (var dr = cmd.ExecuteReader())
+                    {
+                        while (dr.Read())
+                        {
+                            lista.Add(new OrdemdeServico(
+                                dr.GetInt32("IdOrdemDeServico"),
+                                dr.GetInt32("IdUsuario"),
+                                dr.GetInt32("IdCliente"),
+                                dr.GetDateTime("Data"),
+                                dr.GetString("Status"),
+                                dr.GetDecimal("Desconto"),
+                                dr.GetDecimal("ValorTotal")
+                            ));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao obter lista de ordens de serviço: " + ex.Message);
+                }
             }
             return lista;
         }
 
         public bool Atualizar()
         {
-            var cmd = Banco.Abrir();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "sp_ordem_servico_altera"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
-            cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
-            cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-            cmd.Parameters.AddWithValue("spdata", Data);
-            cmd.Parameters.AddWithValue("spstatus", Status);
-            cmd.Parameters.AddWithValue("spdesconto", Desconto);
-            cmd.Parameters.AddWithValue("spvalortotal", ValorTotal);
-            cmd.ExecuteNonQuery();
-            return cmd.ExecuteNonQuery() > 0;
+            using (var cmd = Banco.Abrir())
+            {
+                try
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_ordemdeservico_update";
+                    cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
+                    cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
+                    cmd.Parameters.AddWithValue("spidcliente", IdCliente);
+                    cmd.Parameters.AddWithValue("spdata", Data);
+                    cmd.Parameters.AddWithValue("spstatus", Status);
+                    cmd.Parameters.AddWithValue("spdesconto", Desconto);
+                    cmd.Parameters.AddWithValue("spvalortotal", ValorTotal);
+
+                    int linhasAfetadas = cmd.ExecuteNonQuery();
+                    return linhasAfetadas > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao atualizar ordem de serviço: " + ex.Message);
+                }
+            }
         }
+
         public bool Deletar()
         {
-            var cmd = Banco.Abrir();
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "sp_ordem_servico_delete"; // Substitua pelo nome da sua stored procedure
-            cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
-            cmd.ExecuteNonQuery();
-            return cmd.ExecuteNonQuery() > 0;
+            using (var cmd = Banco.Abrir())
+            {
+                try
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "sp_delete_ordemdeservico";
+                    cmd.Parameters.AddWithValue("spidordemdeservico", IdOrdemdeServico);
+
+                    int linhasAfetadas = cmd.ExecuteNonQuery();
+                    return linhasAfetadas > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erro ao deletar ordem de serviço: " + ex.Message);
+                }
+            }
         }
     }
 }
