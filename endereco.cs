@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace coldmakClass
@@ -34,56 +35,7 @@ namespace coldmakClass
         {
         }
 
-       public bool Inserir(out string erro)
-{
-    erro = string.Empty;
-    try
-    {
-        using (var conn = new MySqlConnection(ConnectionString))
-        {
-            conn.Open();
-            using (var cmd = new MySqlCommand("sp_endereco_insert", conn))
-            {
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@spcep", Cep);
-                cmd.Parameters.AddWithValue("@splogradouro", Logradouro);
-                cmd.Parameters.AddWithValue("@spnumeroresidencial", NumeroResidencial ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@spcomplemento", Complemento ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@spbairro", Bairro ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@spcidade", Cidade ?? (object)DBNull.Value);
-                cmd.Parameters.AddWithValue("@spuf", UF);
-
-                // Adiciona o parâmetro de saída com o nome exato da stored procedure
-                var idParam = new MySqlParameter("p_IdEndereco", MySqlDbType.Int32)
-                {
-                    Direction = ParameterDirection.Output
-                };
-                cmd.Parameters.Add(idParam);
-
-                cmd.ExecuteNonQuery();
-
-                // Verifica e obtém o valor do parâmetro de saída
-                if (idParam.Value != DBNull.Value)
-                {
-                    IdEndereco = Convert.ToInt32(idParam.Value);
-                }
-                else
-                {
-                    erro = "Parâmetro de saída p_IdEndereco não foi retornado.";
-                    return false;
-                }
-
-                return true;
-            }
-        }
-    }
-    catch (Exception ex)
-    {
-        erro = ex.Message;
-        return false;
-    }
-}
-        public bool Atualizar(out string erro)
+        public bool Inserir(out string erro)
         {
             erro = string.Empty;
             try
@@ -91,15 +43,36 @@ namespace coldmakClass
                 using (var conn = new MySqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    using (var cmd = new MySqlCommand("sp_endereco_update", conn))
+                    using (var cmd = new MySqlCommand("sp_endereco_insert", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@spidendereco", IdEndereco);
+                        cmd.Parameters.AddWithValue("@spcep", Cep);
                         cmd.Parameters.AddWithValue("@splogradouro", Logradouro);
-                        cmd.Parameters.Add("@p_rowsAffected", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+                        cmd.Parameters.AddWithValue("@spnumeroresidencial", NumeroResidencial ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@spcomplemento", Complemento ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@spbairro", Bairro ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@spcidade", Cidade ?? (object)DBNull.Value);
+                        cmd.Parameters.AddWithValue("@spuf", UF);
+
+                        var idParam = new MySqlParameter("p_IdEndereco", MySqlDbType.Int32)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(idParam);
+
                         cmd.ExecuteNonQuery();
-                        int rowsAffected = Convert.ToInt32(cmd.Parameters["@p_rowsAffected"].Value);
-                        return rowsAffected > 0;
+
+                        if (idParam.Value != DBNull.Value)
+                        {
+                            IdEndereco = Convert.ToInt32(idParam.Value);
+                        }
+                        else
+                        {
+                            erro = "Parâmetro de saída p_IdEndereco não foi retornado.";
+                            return false;
+                        }
+
+                        return true;
                     }
                 }
             }
@@ -110,28 +83,128 @@ namespace coldmakClass
             }
         }
 
-        public bool Deletar(out string erro)
+        public bool Atualizar(out string erro)
         {
             erro = string.Empty;
             try
             {
+                // Validações iniciais
+                if (IdEndereco <= 0)
+                {
+                    erro = "ID do endereço inválido.";
+                    MessageBox.Show(erro, "Depuração - Validação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return false;
+                }
+
                 using (var conn = new MySqlConnection(ConnectionString))
                 {
                     conn.Open();
-                    using (var cmd = new MySqlCommand("sp_delete_endereco", conn))
+                    MessageBox.Show("Conexão com o banco de dados bem-sucedida para atualização!", "Depuração - Conexão", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    using (var cmd = new MySqlCommand("sp_endereco_update", conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@spidendereco", IdEndereco);
-                        cmd.Parameters.Add("@p_rowsAffected", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+
+                        // Adiciona os parâmetros com os nomes exatos esperados pela stored procedure
+                        cmd.Parameters.AddWithValue("@p_IdEndereco", IdEndereco);
+                        cmd.Parameters.AddWithValue("@p_Logradouro", Logradouro ?? (object)DBNull.Value);
+
+                        // Parâmetro de saída
+                        var rowsAffectedParam = new MySqlParameter("@p_rowsAffected", MySqlDbType.Int32)
+                        {
+                            Direction = ParameterDirection.Output
+                        };
+                        cmd.Parameters.Add(rowsAffectedParam);
+
+                        // Depuração: Mostrar os valores dos parâmetros antes da execução
+                        MessageBox.Show($"Parâmetros: p_IdEndereco = {IdEndereco}, p_Logradouro = {Logradouro ?? "null"}", "Depuração - Parâmetros", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                         cmd.ExecuteNonQuery();
-                        int rowsAffected = Convert.ToInt32(cmd.Parameters["@p_rowsAffected"].Value);
-                        return rowsAffected > 0;
+
+                        // Depuração: Verificar o valor retornado pelo parâmetro de saída
+                        object rowsAffectedValue = rowsAffectedParam.Value;
+                        MessageBox.Show($"Valor retornado para p_rowsAffected: {rowsAffectedValue ?? "null"}", "Depuração - Resultado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        int rowsAffected;
+                        if (rowsAffectedValue == null || rowsAffectedValue == DBNull.Value)
+                        {
+                            rowsAffected = 0;
+                            erro = "Parâmetro p_rowsAffected retornou valor nulo ou inválido.";
+                            MessageBox.Show(erro, "Depuração - Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                        else
+                        {
+                            rowsAffected = Convert.ToInt32(rowsAffectedValue);
+                        }
+
+                        MessageBox.Show($"Linhas afetadas pela atualização: {rowsAffected}", "Depuração - Linhas Afetadas", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        if (rowsAffected > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            erro = $"Nenhuma linha foi atualizada. Verifique se o ID {IdEndereco} existe na tabela endereco.";
+                            return false;
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                erro = ex.Message;
+                erro = $"Erro na atualização: {ex.Message}";
+                MessageBox.Show($"{erro}\nDetalhes: {ex.StackTrace}", "Erro Crítico - Atualizar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        public bool Deletar(out string erro)
+        {
+            erro = string.Empty;
+            try
+            {
+                if (IdEndereco <= 0)
+                {
+                    erro = "ID do endereço inválido.";
+                    return false;
+                }
+
+                using (var conn = new MySqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    MessageBox.Show("Conexão com o banco de dados bem-sucedida para limpar o logradouro!", "Depuração", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    using (var cmd = new MySqlCommand("sp_delete_endereco", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@p_IdEndereco", IdEndereco);
+
+                        cmd.Parameters.Add("@p_rowsAffected", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+
+                        MessageBox.Show($"Parâmetro: p_IdEndereco = {IdEndereco}", "Depuração", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        cmd.ExecuteNonQuery();
+
+                        int rowsAffected = Convert.ToInt32(cmd.Parameters["@p_rowsAffected"].Value);
+                        MessageBox.Show($"Linhas afetadas pela atualização do logradouro: {rowsAffected}", "Depuração", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        if (rowsAffected > 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            erro = "Nenhuma linha foi atualizada. Verifique se o ID existe.";
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                erro = $"Erro ao limpar o logradouro: {ex.Message}";
                 return false;
             }
         }

@@ -189,26 +189,50 @@ namespace coldmakApp
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(textId.Text))
+                // Verifica se há uma linha selecionada no DataGridView
+                if (dgvEndereco.CurrentRow == null)
                 {
-                    MessageBox.Show("Por favor, selecione um endereço ou preencha o ID para atualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Por favor, selecione um endereço no DataGridView para atualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
+                // Obtém o IdEndereco diretamente do DataGridView com verificação
+                if (dgvEndereco.CurrentRow.Cells[0].Value == null || !int.TryParse(dgvEndereco.CurrentRow.Cells[0].Value.ToString(), out int idEndereco))
+                {
+                    MessageBox.Show("ID do endereço inválido ou ausente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Verifica se o campo de logradouro está preenchido
                 if (string.IsNullOrWhiteSpace(textLogra.Text))
                 {
                     MessageBox.Show("Por favor, preencha o campo de logradouro.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                int idEndereco = Convert.ToInt32(textId.Text);
+                // Criar o objeto Endereco com os dados necessários
                 Endereco endereco = new Endereco();
                 endereco.IdEndereco = idEndereco;
                 endereco.Logradouro = textLogra.Text;
 
+                // Depuração: Mostrar os valores antes de atualizar
+                MessageBox.Show($"Atualizando endereço: ID = {endereco.IdEndereco}, Logradouro = {endereco.Logradouro}", "Depuração - Passo 1", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Verificar se o ID existe no banco de dados antes de atualizar
+                string erroVerificacao;
+                var enderecoExistente = Endereco.ObterPorId(idEndereco, out erroVerificacao);
+                if (enderecoExistente == null || !string.IsNullOrEmpty(erroVerificacao))
+                {
+                    MessageBox.Show($"ID {idEndereco} não encontrado no banco de dados. Erro: {erroVerificacao}", "Erro - Verificação", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Executar a atualização
+                MessageBox.Show("Chamando método Atualizar...", "Depuração - Passo 2", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 string erro;
                 if (endereco.Atualizar(out erro))
                 {
+                    MessageBox.Show("Método Atualizar retornou sucesso.", "Depuração - Passo 3", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CarregaGridEnderecos();
                     MessageBox.Show("Logradouro atualizado com sucesso!");
                     btnAtualizar.Enabled = false;
@@ -216,48 +240,50 @@ namespace coldmakApp
                 }
                 else
                 {
-                    MessageBox.Show($"Falha ao atualizar o endereço: {erro}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Falha ao atualizar o endereço: {erro}", "Erro - Passo 4", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar endereço: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao atualizar endereço: {ex.Message}\nDetalhes: {ex.StackTrace}", "Erro Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void btnDeletar_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(textId.Text))
+                // Verifica se há uma linha selecionada no DataGridView
+                if (dgvEndereco.CurrentRow == null)
                 {
-                    MessageBox.Show("Por favor, selecione um endereço ou preencha o ID para excluir.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Por favor, selecione um endereço no DataGridView para limpar o logradouro.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                int idEndereco = Convert.ToInt32(textId.Text);
+                // Obtém o IdEndereco diretamente da linha selecionada
+                int idEndereco = Convert.ToInt32(dgvEndereco.CurrentRow.Cells[0].Value);
                 Endereco endereco = new Endereco();
                 endereco.IdEndereco = idEndereco;
 
-                if (MessageBox.Show($"Deseja realmente excluir o endereço com ID {endereco.IdEndereco}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                // Confirmação de exclusão
+                if (MessageBox.Show($"Deseja realmente limpar o logradouro do endereço com ID {endereco.IdEndereco}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     string erro;
                     if (endereco.Deletar(out erro))
                     {
                         CarregaGridEnderecos();
-                        MessageBox.Show("Endereço excluído com sucesso!");
-                        btnDeletar.Enabled = false;
+                        MessageBox.Show("Logradouro limpo com sucesso!");
+                        btnDeletar.Enabled = false; // Desativa o botão após a operação
                         LimparCampos();
                     }
                     else
                     {
-                        MessageBox.Show($"Falha ao excluir o endereço: {erro}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Falha ao limpar o logradouro: {erro}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao excluir endereço: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Erro ao limpar o logradouro: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -280,5 +306,7 @@ namespace coldmakApp
         {
             CarregaGridEnderecos();
         }
+
+       
     }
 }
