@@ -46,17 +46,18 @@
             this.textBairro = new System.Windows.Forms.TextBox();
             this.textUf = new System.Windows.Forms.TextBox();
             this.dgvEndereco = new System.Windows.Forms.DataGridView();
-            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnComple = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnBairro = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnCidade = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnUf = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnCep = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnLogra = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnNumRes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
+            this.btnListar = new System.Windows.Forms.Button();
+            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnCep = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnLogra = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnNumRes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnComple = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnCidade = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnBairro = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnUf = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvEndereco)).BeginInit();
             this.SuspendLayout();
             // 
@@ -203,19 +204,57 @@
             this.dgvEndereco.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEndereco.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ClnId,
-            this.ClnComple,
-            this.ClnBairro,
-            this.ClnCidade,
-            this.ClnUf,
             this.ClnCep,
             this.ClnLogra,
-            this.ClnNumRes});
+            this.ClnNumRes,
+            this.ClnComple,
+            this.ClnCidade,
+            this.ClnBairro,
+            this.ClnUf});
             this.dgvEndereco.Location = new System.Drawing.Point(12, 250);
             this.dgvEndereco.Name = "dgvEndereco";
             this.dgvEndereco.RowHeadersWidth = 51;
             this.dgvEndereco.RowTemplate.Height = 24;
             this.dgvEndereco.Size = new System.Drawing.Size(884, 150);
             this.dgvEndereco.TabIndex = 17;
+            // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(13, 415);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 18;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(306, 415);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 19;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(536, 415);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 20;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
+            // 
+            // btnListar
+            // 
+            this.btnListar.Location = new System.Drawing.Point(799, 415);
+            this.btnListar.Name = "btnListar";
+            this.btnListar.Size = new System.Drawing.Size(75, 23);
+            this.btnListar.TabIndex = 21;
+            this.btnListar.Text = "Listar";
+            this.btnListar.UseVisualStyleBackColor = true;
             // 
             // ClnId
             // 
@@ -225,34 +264,6 @@
             this.ClnId.ReadOnly = true;
             this.ClnId.Visible = false;
             this.ClnId.Width = 125;
-            // 
-            // ClnComple
-            // 
-            this.ClnComple.HeaderText = "Complemento";
-            this.ClnComple.MinimumWidth = 6;
-            this.ClnComple.Name = "ClnComple";
-            this.ClnComple.Width = 125;
-            // 
-            // ClnBairro
-            // 
-            this.ClnBairro.HeaderText = "Bairro";
-            this.ClnBairro.MinimumWidth = 6;
-            this.ClnBairro.Name = "ClnBairro";
-            this.ClnBairro.Width = 125;
-            // 
-            // ClnCidade
-            // 
-            this.ClnCidade.HeaderText = "Cidade";
-            this.ClnCidade.MinimumWidth = 6;
-            this.ClnCidade.Name = "ClnCidade";
-            this.ClnCidade.Width = 125;
-            // 
-            // ClnUf
-            // 
-            this.ClnUf.HeaderText = "Uf";
-            this.ClnUf.MinimumWidth = 6;
-            this.ClnUf.Name = "ClnUf";
-            this.ClnUf.Width = 125;
             // 
             // ClnCep
             // 
@@ -270,45 +281,45 @@
             // 
             // ClnNumRes
             // 
-            this.ClnNumRes.HeaderText = "Numero Res";
+            this.ClnNumRes.HeaderText = "Numero Residencial";
             this.ClnNumRes.MinimumWidth = 6;
             this.ClnNumRes.Name = "ClnNumRes";
             this.ClnNumRes.Width = 125;
             // 
-            // btnInserir
+            // ClnComple
             // 
-            this.btnInserir.Location = new System.Drawing.Point(13, 415);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 18;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            this.ClnComple.HeaderText = "Complemento";
+            this.ClnComple.MinimumWidth = 6;
+            this.ClnComple.Name = "ClnComple";
+            this.ClnComple.Width = 125;
             // 
-            // btnAtualizar
+            // ClnCidade
             // 
-            this.btnAtualizar.Location = new System.Drawing.Point(443, 415);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 19;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
+            this.ClnCidade.HeaderText = "Cidade";
+            this.ClnCidade.MinimumWidth = 6;
+            this.ClnCidade.Name = "ClnCidade";
+            this.ClnCidade.Width = 125;
             // 
-            // btnDeletar
+            // ClnBairro
             // 
-            this.btnDeletar.Location = new System.Drawing.Point(820, 415);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 20;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
+            this.ClnBairro.HeaderText = "Bairro";
+            this.ClnBairro.MinimumWidth = 6;
+            this.ClnBairro.Name = "ClnBairro";
+            this.ClnBairro.Width = 125;
+            // 
+            // ClnUf
+            // 
+            this.ClnUf.HeaderText = "Uf";
+            this.ClnUf.MinimumWidth = 6;
+            this.ClnUf.Name = "ClnUf";
+            this.ClnUf.Width = 125;
             // 
             // FrmEnderecos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 450);
+            this.Controls.Add(this.btnListar);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
@@ -358,16 +369,17 @@
         private System.Windows.Forms.TextBox textBairro;
         private System.Windows.Forms.TextBox textUf;
         private System.Windows.Forms.DataGridView dgvEndereco;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnComple;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnBairro;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCidade;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnUf;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCep;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnLogra;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnNumRes;
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.Button btnListar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCep;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnLogra;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnNumRes;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnComple;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnCidade;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnBairro;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnUf;
     }
 }

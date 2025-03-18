@@ -157,22 +157,19 @@ namespace coldmakClass
             {
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_cliente_update"; // Corrigido de sp_cliente_altera
+                cmd.CommandText = "sp_cliente_update";
                 cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-                cmd.Parameters.AddWithValue("sprg", Rg);
-                cmd.Parameters.AddWithValue("spcpf", Cpf);
-                cmd.Parameters.AddWithValue("spcnpj", Cnpj);
-                cmd.Parameters.AddWithValue("spnome", Nome);
-                cmd.Parameters.AddWithValue("spemail", Email);
-                cmd.Parameters.AddWithValue("sptelefone", Telefone);
-                //definindo explicitamente o parametro de data como MysqlDbType.Date
-                var dataNascimentoParam = new MySqlParameter("spdatanascimento", MySqlDbType.Date);
-                dataNascimentoParam.Value = DataNascimento.Date;//garante somente a data sem o horario
-                cmd.Parameters.Add(dataNascimentoParam);
-                cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente);
+                cmd.Parameters.AddWithValue("sprg", Rg ?? ""); // Usa valor atual ou string vazia se nulo
+                cmd.Parameters.AddWithValue("spcpf", Cpf ?? ""); // Usa valor atual ou string vazia se nulo
+                cmd.Parameters.AddWithValue("spcnpj", Cnpj ?? ""); // Usa valor atual ou string vazia se nulo
+                cmd.Parameters.AddWithValue("spnome", Nome); // Atualiza apenas o nome
+                cmd.Parameters.AddWithValue("spemail", Email ?? ""); // Usa valor atual ou string vazia se nulo
+                cmd.Parameters.AddWithValue("sptelefone", Telefone ?? ""); // Usa valor atual ou string vazia se nulo
+                cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento); // Usa valor atual
+                cmd.Parameters.AddWithValue("spidadecliente", IdadeCliente); // Usa valor atual
+
                 cmd.ExecuteNonQuery();
-                
-                return true; // Simplificado, pois ExecuteNonQuery() já foi chamado
+                return true;
             }
             catch (Exception ex)
             {
@@ -187,10 +184,12 @@ namespace coldmakClass
             {
                 var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_delete_cliente"; // Corrigido de sp_cliente_delete
-                cmd.Parameters.AddWithValue("spidcliente", IdCliente);
-                cmd.ExecuteNonQuery();
-                return true; // Simplificado, pois ExecuteNonQuery() já foi chamado
+                cmd.CommandText = "sp_delete_cliente";
+                cmd.Parameters.AddWithValue("spemail", Email ?? ""); // Usa string vazia se Email for null
+                int rowsAffected = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+
+                return rowsAffected > 0; // Retorna true se pelo menos uma linha foi afetada
             }
             catch (Exception ex)
             {

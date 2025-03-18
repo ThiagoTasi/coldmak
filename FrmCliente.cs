@@ -30,9 +30,40 @@ namespace coldmakApp
         {
             try
             {
-                DateTime dataNascimento = DateTime.Parse( textDataNasc.Text);
-                int idadeCliente = int.Parse(textIdadeCliente.Text);
+                // Validar se os campos obrigatórios estão preenchidos
+                if (string.IsNullOrWhiteSpace(textNome.Text))
+                {
+                    MessageBox.Show("Por favor, preencha o campo de nome do cliente.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                if (string.IsNullOrWhiteSpace(textDataNasc.Text))
+                {
+                    MessageBox.Show("Por favor, preencha o campo de data de nascimento.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(textIdadeCliente.Text))
+                {
+                    MessageBox.Show("Por favor, preencha o campo de idade.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validar o formato da data
+                if (!DateTime.TryParse(textDataNasc.Text, out DateTime dataNascimento))
+                {
+                    MessageBox.Show("Formato de data inválido. Use yyyy-MM-dd para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Validar se a idade é um número inteiro válido
+                if (!int.TryParse(textIdadeCliente.Text, out int idadeCliente))
+                {
+                    MessageBox.Show("A idade deve ser um número inteiro válido.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Criar o objeto Cliente e inserir
                 Cliente cliente = new Cliente(
                     textRg.Text,
                     textCpf.Text,
@@ -53,10 +84,6 @@ namespace coldmakApp
                     btnInserir.Enabled = false;
                     LimparCampos();
                 }
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Formato de data ou idade inválido. Use yyyy-MM-dd para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -110,28 +137,36 @@ namespace coldmakApp
         {
             try
             {
-                Cliente cliente = new Cliente();
-                cliente.IdCliente = int.Parse(textIdCliente.Text);
-                cliente.Rg = textRg.Text;
-                cliente.Cpf = textCpf.Text;
-                cliente.Cnpj = textCnpj.Text;
-                cliente.Nome = textNome.Text;
-                cliente.Email = textEmail.Text;
-                cliente.Telefone = textTelefone.Text;
-                cliente.DataNascimento = DateTime.ParseExact(textDataNasc.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                cliente.IdadeCliente = int.Parse(textIdadeCliente.Text);
+                // Verificar se uma linha foi selecionada no DataGridView
+                if (dgvCliente.CurrentRow == null)
+                {
+                    MessageBox.Show("Por favor, selecione um cliente no DataGridView para atualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
+                // Obter o IdCliente diretamente do DataGridView
+                int idCliente = Convert.ToInt32(dgvCliente.CurrentRow.Cells[0].Value);
+
+                // Validar se o campo de Nome não está vazio
+                if (string.IsNullOrWhiteSpace(textNome.Text))
+                {
+                    MessageBox.Show("Por favor, preencha o campo de nome do cliente.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Criar o objeto Cliente com os dados necessários
+                Cliente cliente = new Cliente();
+                cliente.IdCliente = idCliente;
+                cliente.Nome = textNome.Text;
+
+                // Executar a atualização
                 if (cliente.Atualizar())
                 {
                     CarregaGridClientes();
-                    MessageBox.Show("Cliente atualizado com sucesso!");
+                    MessageBox.Show("Nome do cliente atualizado com sucesso!");
                     btnAtualizar.Enabled = false;
                     LimparCampos();
                 }
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Formato de data ou idade inválido. Use yyyy-MM-dd para data.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -143,29 +178,37 @@ namespace coldmakApp
         {
             try
             {
-                int idCliente = int.Parse(textIdCliente.Text);
-                Cliente cliente = Cliente.ObterPorId(idCliente);
-
-                if (cliente != null)
+                // Validar se o campo de email não está vazio
+                if (string.IsNullOrWhiteSpace(textEmail.Text))
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir o cliente {cliente.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
-                        if (cliente.Deletar())
-                        {
-                            CarregaGridClientes();
-                            MessageBox.Show("Cliente excluído com sucesso!");
-                            btnDeletar.Enabled = false;
-                            LimparCampos();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Falha ao excluir o cliente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+                    MessageBox.Show("Por favor, preencha o campo de email.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                else
+
+                // Validação básica de formato de email
+                if (!textEmail.Text.Contains("@") || !textEmail.Text.Contains("."))
                 {
-                    MessageBox.Show("Cliente não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Por favor, insira um email válido (deve conter @ e .).", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Se chegou até aqui, o email é válido
+                Cliente cliente = new Cliente();
+                cliente.Email = textEmail.Text;
+
+                if (MessageBox.Show($"Deseja realmente excluir clientes com email {cliente.Email}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    if (cliente.Deletar())
+                    {
+                        CarregaGridClientes();
+                        MessageBox.Show("Cliente(s) excluído(s) com sucesso!");
+                        btnDeletar.Enabled = false;
+                        LimparCampos();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Falha ao excluir o cliente.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)
@@ -173,7 +216,6 @@ namespace coldmakApp
                 MessageBox.Show($"Erro ao excluir cliente: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
         private void LimparCampos()
         {
             textIdCliente.Text = "";
@@ -185,11 +227,14 @@ namespace coldmakApp
             textTelefone.Text = "";
             textDataNasc.Text = "";
             textIdadeCliente.Text = "";
-            btnAtualizar.Enabled = true;
-            btnDeletar.Enabled = true;
             btnInserir.Enabled = true;
+            btnAtualizar.Enabled = false; // Desativar ao limpar
+            btnDeletar.Enabled = false;   // Desativar ao limpar
         }
 
-        
+        private void btnListar_Click(object sender, EventArgs e)
+        {
+            CarregaGridClientes();
+        }
     }
 }

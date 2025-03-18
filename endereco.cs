@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using MySql.Data.MySqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace coldmakClass
 {
@@ -19,196 +16,201 @@ namespace coldmakClass
         public string Cidade { get; set; }
         public string UF { get; set; }
 
+        private const string ConnectionString = "Server=localhost;Database=coldmak;User=root;Password=;";
+
+        public Endereco(string cep, string logradouro, string numeroResidencial, string complemento,
+                       string bairro, string cidade, string uf)
+        {
+            Cep = cep;
+            Logradouro = logradouro;
+            NumeroResidencial = numeroResidencial;
+            Complemento = complemento;
+            Bairro = bairro;
+            Cidade = cidade;
+            UF = uf;
+        }
+
         public Endereco()
         {
         }
 
-        public Endereco(string cep, string logradouro, string numeroResidencial, string complemento, string bairro, string cidade, string uf)
+       public bool Inserir(out string erro)
+{
+    erro = string.Empty;
+    try
+    {
+        using (var conn = new MySqlConnection(ConnectionString))
         {
-            Cep = cep;
-            Logradouro = logradouro;
-            NumeroResidencial = numeroResidencial;
-            Complemento = complemento;
-            Bairro = bairro;
-            Cidade = cidade;
-            UF = uf;
-        }
-
-        public Endereco(int idEndereco, string cep, string logradouro, string numeroResidencial, string complemento, string bairro, string cidade, string uf)
-        {
-            IdEndereco = idEndereco;
-            Cep = cep;
-            Logradouro = logradouro;
-            NumeroResidencial = numeroResidencial;
-            Complemento = complemento;
-            Bairro = bairro;
-            Cidade = cidade;
-            UF = uf;
-        }
-
-        public void Inserir()
-        {
-            try
+            conn.Open();
+            using (var cmd = new MySqlCommand("sp_endereco_insert", conn))
             {
-                var cmd = Banco.Abrir();
                 cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_endereco_insert";
-                cmd.Parameters.Add("spcep", MySql.Data.MySqlClient.MySqlDbType.VarChar).Value = Cep;
-                cmd.Parameters.AddWithValue("splogradouro", Logradouro);
-                cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
-                cmd.Parameters.AddWithValue("spcomplemento", Complemento);
-                cmd.Parameters.AddWithValue("spbairro", Bairro);
-                cmd.Parameters.AddWithValue("spcidade", Cidade);
-                cmd.Parameters.AddWithValue("spuf", UF);
-                cmd.ExecuteNonQuery();
-                cmd.CommandText = "select last_insert_id()";
+                cmd.Parameters.AddWithValue("@spcep", Cep);
+                cmd.Parameters.AddWithValue("@splogradouro", Logradouro);
+                cmd.Parameters.AddWithValue("@spnumeroresidencial", NumeroResidencial ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@spcomplemento", Complemento ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@spbairro", Bairro ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@spcidade", Cidade ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@spuf", UF);
+
+                // Adiciona o parâmetro de saída com o nome exato da stored procedure
+                var idParam = new MySqlParameter("p_IdEndereco", MySqlDbType.Int32)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(idParam);
+
                 cmd.ExecuteNonQuery();
 
-                var dr = cmd.ExecuteReader();
-                if (dr.Read())
+                // Verifica e obtém o valor do parâmetro de saída
+                if (idParam.Value != DBNull.Value)
                 {
-                    IdEndereco = dr.GetInt32(0);
+                    IdEndereco = Convert.ToInt32(idParam.Value);
                 }
-                dr.Close();
-                cmd.Connection.Close();
+                else
+                {
+                    erro = "Parâmetro de saída p_IdEndereco não foi retornado.";
+                    return false;
+                }
+
+                return true;
             }
-            catch (MySqlException ex)
+        }
+    }
+    catch (Exception ex)
+    {
+        erro = ex.Message;
+        return false;
+    }
+}
+        public bool Atualizar(out string erro)
+        {
+            erro = string.Empty;
+            try
             {
-                Console.WriteLine("Erro de banco de dados ao inserir endereço: " + ex.Message);
-                throw;
+                using (var conn = new MySqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    using (var cmd = new MySqlCommand("sp_endereco_update", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@spidendereco", IdEndereco);
+                        cmd.Parameters.AddWithValue("@splogradouro", Logradouro);
+                        cmd.Parameters.Add("@p_rowsAffected", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+                        cmd.ExecuteNonQuery();
+                        int rowsAffected = Convert.ToInt32(cmd.Parameters["@p_rowsAffected"].Value);
+                        return rowsAffected > 0;
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao inserir endereço: " + ex.Message);
-                throw;
+                erro = ex.Message;
+                return false;
             }
         }
 
-        public static Endereco ObterPorId(int id)
+        public bool Deletar(out string erro)
         {
-            Endereco endereco = new Endereco();
+            erro = string.Empty;
             try
             {
-                var cmd = Banco.Abrir();
-                cmd.CommandText = $"select * from enderecos where id = {id}";
-                var dr = cmd.ExecuteReader();
-                if (dr.Read())
+                using (var conn = new MySqlConnection(ConnectionString))
                 {
-                    endereco = new Endereco(
-                        dr.GetInt32(0),
-                        dr.GetString(1),
-                        dr.GetString(2),
-                        dr.GetString(3),
-                        dr.GetString(4),
-                        dr.GetString(5),
-                        dr.GetString(6),
-                        dr.GetString(7)
-                    );
+                    conn.Open();
+                    using (var cmd = new MySqlCommand("sp_delete_endereco", conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@spidendereco", IdEndereco);
+                        cmd.Parameters.Add("@p_rowsAffected", MySqlDbType.Int32).Direction = ParameterDirection.Output;
+                        cmd.ExecuteNonQuery();
+                        int rowsAffected = Convert.ToInt32(cmd.Parameters["@p_rowsAffected"].Value);
+                        return rowsAffected > 0;
+                    }
                 }
-                dr.Close();
-                cmd.Connection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Erro de banco de dados ao obter endereço por ID: " + ex.Message);
-                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao obter endereço por ID: " + ex.Message);
-                throw;
+                erro = ex.Message;
+                return false;
             }
-            return endereco;
         }
 
-        public static List<Endereco> ObterLista()
+        public static List<Endereco> ObterLista(out string erro)
         {
-            List<Endereco> lista = new List<Endereco>();
+            erro = string.Empty;
+            var lista = new List<Endereco>();
             try
             {
-                var cmd = Banco.Abrir();
-                cmd.CommandText = $"select * from enderecos order by logradouro asc";
-                var dr = cmd.ExecuteReader();
-                while (dr.Read())
+                using (var conn = new MySqlConnection(ConnectionString))
                 {
-                    lista.Add(new Endereco(
-                        dr.GetInt32(0),
-                        dr.GetString(1),
-                        dr.GetString(2),
-                        dr.GetString(3),
-                        dr.GetString(4),
-                        dr.GetString(5),
-                        dr.GetString(6),
-                        dr.GetString(7)
-                    ));
+                    conn.Open();
+                    using (var cmd = new MySqlCommand("SELECT * FROM endereco", conn))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                lista.Add(new Endereco
+                                {
+                                    IdEndereco = reader.GetInt32("IdEndereco"),
+                                    Cep = reader.GetString("Cep"),
+                                    Logradouro = reader.GetString("Logradouro"),
+                                    NumeroResidencial = reader.IsDBNull(reader.GetOrdinal("NumeroResidencial")) ? null : reader.GetString("NumeroResidencial"),
+                                    Complemento = reader.IsDBNull(reader.GetOrdinal("Complemento")) ? null : reader.GetString("Complemento"),
+                                    Bairro = reader.IsDBNull(reader.GetOrdinal("Bairro")) ? null : reader.GetString("Bairro"),
+                                    Cidade = reader.IsDBNull(reader.GetOrdinal("Cidade")) ? null : reader.GetString("Cidade"),
+                                    UF = reader.GetString("UF")
+                                });
+                            }
+                        }
+                    }
                 }
-                dr.Close();
-                cmd.Connection.Close();
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Erro de banco de dados ao obter lista de endereços: " + ex.Message);
-                throw;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao obter lista de endereços: " + ex.Message);
-                throw;
+                erro = ex.Message;
             }
             return lista;
         }
 
-        public bool Atualizar()
+        public static Endereco ObterPorId(int id, out string erro)
         {
+            erro = string.Empty;
+            Endereco endereco = null;
             try
             {
-                var cmd = Banco.Abrir();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_endereco_altera";
-                cmd.Parameters.AddWithValue("spid", IdEndereco);
-                cmd.Parameters.AddWithValue("spcep", Cep);
-                cmd.Parameters.AddWithValue("splogradouro", Logradouro);
-                cmd.Parameters.AddWithValue("spnumeroresidencial", NumeroResidencial);
-                cmd.Parameters.AddWithValue("spcomplemento", Complemento);
-                cmd.Parameters.AddWithValue("spbairro", Bairro);
-                cmd.Parameters.AddWithValue("spcidade", Cidade);
-                cmd.Parameters.AddWithValue("spuf", UF);
-                cmd.ExecuteNonQuery();
-                return cmd.ExecuteNonQuery() > 0;
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Erro de banco de dados ao atualizar endereço: " + ex.Message);
-                throw;
+                using (var conn = new MySqlConnection(ConnectionString))
+                {
+                    conn.Open();
+                    using (var cmd = new MySqlCommand("SELECT * FROM endereco WHERE IdEndereco = @id", conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                endereco = new Endereco
+                                {
+                                    IdEndereco = reader.GetInt32("IdEndereco"),
+                                    Cep = reader.GetString("Cep"),
+                                    Logradouro = reader.GetString("Logradouro"),
+                                    NumeroResidencial = reader.IsDBNull(reader.GetOrdinal("NumeroResidencial")) ? null : reader.GetString("NumeroResidencial"),
+                                    Complemento = reader.IsDBNull(reader.GetOrdinal("Complemento")) ? null : reader.GetString("Complemento"),
+                                    Bairro = reader.IsDBNull(reader.GetOrdinal("Bairro")) ? null : reader.GetString("Bairro"),
+                                    Cidade = reader.IsDBNull(reader.GetOrdinal("Cidade")) ? null : reader.GetString("Cidade"),
+                                    UF = reader.GetString("UF")
+                                };
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao atualizar endereço: " + ex.Message);
-                throw;
+                erro = ex.Message;
             }
-        }
-
-        public bool Deletar()
-        {
-            try
-            {
-                var cmd = Banco.Abrir();
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.CommandText = "sp_endereco_delete";
-                cmd.Parameters.AddWithValue("spid", IdEndereco);
-                cmd.ExecuteNonQuery();
-                return cmd.ExecuteNonQuery() > 0;
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Erro de banco de dados ao deletar endereço: " + ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erro ao deletar endereço: " + ex.Message);
-                throw;
-            }
+            return endereco;
         }
     }
 }
