@@ -42,15 +42,16 @@
             this.textTelefone = new System.Windows.Forms.TextBox();
             this.textEmail = new System.Windows.Forms.TextBox();
             this.dgvFornecedor = new System.Windows.Forms.DataGridView();
+            this.btnInserir = new System.Windows.Forms.Button();
+            this.btnAtualizar = new System.Windows.Forms.Button();
+            this.btnDeletar = new System.Windows.Forms.Button();
+            this.btnListar = new System.Windows.Forms.Button();
             this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnRazao_soc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnFanta = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnCnpj = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnTelefone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClnEmail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnInserir = new System.Windows.Forms.Button();
-            this.btnAtualizar = new System.Windows.Forms.Button();
-            this.btnDeletar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFornecedor)).BeginInit();
             this.SuspendLayout();
             // 
@@ -77,9 +78,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(27, 111);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(90, 16);
+            this.label3.Size = new System.Drawing.Size(88, 16);
             this.label3.TabIndex = 2;
-            this.label3.Text = "Razao_social";
+            this.label3.Text = "Razao Social";
             // 
             // label4
             // 
@@ -177,17 +178,55 @@
             this.dgvFornecedor.Size = new System.Drawing.Size(799, 150);
             this.dgvFornecedor.TabIndex = 13;
             // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(12, 398);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 14;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(264, 398);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 15;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(513, 398);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 16;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
+            // 
+            // btnListar
+            // 
+            this.btnListar.Location = new System.Drawing.Point(736, 398);
+            this.btnListar.Name = "btnListar";
+            this.btnListar.Size = new System.Drawing.Size(75, 23);
+            this.btnListar.TabIndex = 17;
+            this.btnListar.Text = "Listar";
+            this.btnListar.UseVisualStyleBackColor = true;
+            this.btnListar.Click += new System.EventHandler(this.btnListar_Click);
+            // 
             // ClnId
             // 
             this.ClnId.HeaderText = "Id";
             this.ClnId.MinimumWidth = 6;
             this.ClnId.Name = "ClnId";
-            this.ClnId.Visible = false;
             this.ClnId.Width = 125;
             // 
             // ClnRazao_soc
             // 
-            this.ClnRazao_soc.HeaderText = "Razao_social";
+            this.ClnRazao_soc.HeaderText = "Razao Social";
             this.ClnRazao_soc.MinimumWidth = 6;
             this.ClnRazao_soc.Name = "ClnRazao_soc";
             this.ClnRazao_soc.Width = 125;
@@ -220,40 +259,12 @@
             this.ClnEmail.Name = "ClnEmail";
             this.ClnEmail.Width = 125;
             // 
-            // btnInserir
-            // 
-            this.btnInserir.Location = new System.Drawing.Point(12, 398);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 14;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
-            // 
-            // btnAtualizar
-            // 
-            this.btnAtualizar.Location = new System.Drawing.Point(368, 397);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 15;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletar
-            // 
-            this.btnDeletar.Location = new System.Drawing.Point(736, 397);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 16;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
-            // 
             // FrmFornecedores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(834, 450);
+            this.Controls.Add(this.btnListar);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
@@ -298,6 +309,7 @@
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.Button btnListar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnRazao_soc;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClnFanta;
