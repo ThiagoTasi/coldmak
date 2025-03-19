@@ -36,12 +36,13 @@
             this.textNome = new System.Windows.Forms.TextBox();
             this.textSigla = new System.Windows.Forms.TextBox();
             this.dgvNiveis = new System.Windows.Forms.DataGridView();
-            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnSigla = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
+            this.btnListar = new System.Windows.Forms.Button();
+            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnSigla = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNiveis)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,12 +118,51 @@
             this.dgvNiveis.Size = new System.Drawing.Size(647, 150);
             this.dgvNiveis.TabIndex = 7;
             // 
+            // btnInserir
+            // 
+            this.btnInserir.Location = new System.Drawing.Point(16, 346);
+            this.btnInserir.Name = "btnInserir";
+            this.btnInserir.Size = new System.Drawing.Size(75, 23);
+            this.btnInserir.TabIndex = 8;
+            this.btnInserir.Text = "Inserir";
+            this.btnInserir.UseVisualStyleBackColor = true;
+
+            // 
+            // btnAtualizar
+            // 
+            this.btnAtualizar.Location = new System.Drawing.Point(195, 346);
+            this.btnAtualizar.Name = "btnAtualizar";
+            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
+            this.btnAtualizar.TabIndex = 9;
+            this.btnAtualizar.Text = "Atualizar";
+            this.btnAtualizar.UseVisualStyleBackColor = true;
+            this.btnAtualizar.Click += new System.EventHandler(this.btnAtualizar_Click);
+            // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(394, 346);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 10;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click);
+            // 
+            // btnListar
+            // 
+            this.btnListar.Location = new System.Drawing.Point(588, 346);
+            this.btnListar.Name = "btnListar";
+            this.btnListar.Size = new System.Drawing.Size(75, 23);
+            this.btnListar.TabIndex = 11;
+            this.btnListar.Text = "Listar";
+            this.btnListar.UseVisualStyleBackColor = true;
+            this.btnListar.Click += new System.EventHandler(this.btnListar_Click);
+            // 
             // ClnId
             // 
-            this.ClnId.HeaderText = "Id";
+            this.ClnId.HeaderText = "IdNivel";
             this.ClnId.MinimumWidth = 6;
             this.ClnId.Name = "ClnId";
-            this.ClnId.Visible = false;
             this.ClnId.Width = 125;
             // 
             // ClnNome
@@ -139,40 +179,12 @@
             this.ClnSigla.Name = "ClnSigla";
             this.ClnSigla.Width = 125;
             // 
-            // btnInserir
-            // 
-            this.btnInserir.Location = new System.Drawing.Point(16, 346);
-            this.btnInserir.Name = "btnInserir";
-            this.btnInserir.Size = new System.Drawing.Size(75, 23);
-            this.btnInserir.TabIndex = 8;
-            this.btnInserir.Text = "Inserir";
-            this.btnInserir.UseVisualStyleBackColor = true;
-            this.btnInserir.Click += new System.EventHandler(this.btnInserir_Click);
-            // 
-            // btnAtualizar
-            // 
-            this.btnAtualizar.Location = new System.Drawing.Point(281, 345);
-            this.btnAtualizar.Name = "btnAtualizar";
-            this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
-            this.btnAtualizar.TabIndex = 9;
-            this.btnAtualizar.Text = "Atualizar";
-            this.btnAtualizar.UseVisualStyleBackColor = true;
-            // 
-            // btnDeletar
-            // 
-            this.btnDeletar.Location = new System.Drawing.Point(588, 345);
-            this.btnDeletar.Name = "btnDeletar";
-            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
-            this.btnDeletar.TabIndex = 10;
-            this.btnDeletar.Text = "Deletar";
-            this.btnDeletar.UseVisualStyleBackColor = true;
-            this.btnDeletar.Click += new System.EventHandler(this.btnDeletar_Click_1);
-            // 
             // FrmNiveis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(692, 450);
+            this.Controls.Add(this.btnListar);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.btnAtualizar);
             this.Controls.Add(this.btnInserir);
@@ -186,6 +198,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmNiveis";
             this.Text = "FrmNivel";
+
             ((System.ComponentModel.ISupportInitialize)(this.dgvNiveis)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -202,11 +215,12 @@
         private System.Windows.Forms.TextBox textNome;
         private System.Windows.Forms.TextBox textSigla;
         private System.Windows.Forms.DataGridView dgvNiveis;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnNome;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ClnSigla;
         private System.Windows.Forms.Button btnInserir;
         private System.Windows.Forms.Button btnAtualizar;
         private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.Button btnListar;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnNome;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ClnSigla;
     }
 }

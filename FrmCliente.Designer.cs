@@ -374,6 +374,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmClientes";
             this.Text = "FrmCliente";
+            this.Load += new System.EventHandler(this.FrmClientes_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCliente)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

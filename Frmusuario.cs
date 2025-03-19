@@ -15,7 +15,7 @@ namespace coldmakApp
             InitializeComponent();
         }
 
-        private void FrmUsuarios_Load_1(object sender, EventArgs e)
+        private void FrmUsuarios_Load(object sender, EventArgs e)
         {
             try
             {
@@ -30,18 +30,14 @@ namespace coldmakApp
 
         private int ObterIdNivel()
         {
-            // Método que obtém o IdNivel do textIdNivel com validação temporária
             if (int.TryParse(textIdNivel.Text, out int idNivel))
             {
-                if (idNivel == 1 || idNivel == 2) // Valores temporários (1 = ADM, 2 = CLI)
+                if (idNivel == 1 || idNivel == 2) // 1 = ADM, 2 = CLI (valores temporários)
                     return idNivel;
                 else
-                    return 2; // Valor padrão (CLI) se inválido
+                    return 2; // Padrão: CLI
             }
-            return 2; // Valor padrão se não puder converter
-
-            // Quando a tabela Nivel estiver pronta, substitua por:
-            // return NivelDAO.ObterIdNivel(); // Exemplo de consulta futura
+            return 2; // Padrão se falhar a conversão
         }
 
         private void btnInserir_Click(object sender, EventArgs e)
@@ -50,15 +46,13 @@ namespace coldmakApp
             {
                 if (!ValidarCampos()) return;
 
-                DateTime dataNascimento;
-                if (!DateTime.TryParseExact(textDataNascimento.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dataNascimento))
+                if (!DateTime.TryParseExact(textDataNascimento.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dataNascimento))
                 {
                     MessageBox.Show("Formato de data inválido. Use dd/MM/yyyy.", "Erro",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Ajuste no instanciamento do Usuario para garantir compatibilidade com o método Inserir
                 Usuario usuario = new Usuario(
                     textNome.Text.Trim(),
                     textRg.Text.Trim(),
@@ -70,52 +64,48 @@ namespace coldmakApp
                     textSenha.Text,
                     dataNascimento,
                     ObterIdNivel(),
-                    chkAtivo.Checked 
+                    chkAtivo.Checked
                 );
 
                 usuario.Inserir();
-                if (usuario.IdUsuario > 0)
-                {
-                    CarregaGridUsuarios();
-                    MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso", "Sucesso",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LimparCampos();
-                }
-                else
-                {
-                    MessageBox.Show("Falha ao inserir o usuário. Verifique os dados e tente novamente.", "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                // Removida a verificação usuario.IdUsuario > 0, pois o ID não é mais preenchido aqui
+                CarregaGridUsuarios(); // Atualiza a grade para refletir o novo usuário
+                MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso", "Sucesso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnInserir.Enabled = false;
+                LimparCampos();
             }
             catch (Exception ex)
             {
-                // Ajuste no log para incluir stack trace
                 File.WriteAllText("erro_log.txt", $"Erro: {ex.Message}\nStackTrace: {ex.StackTrace}\n{DateTime.Now}");
                 MessageBox.Show($"Erro ao inserir usuário: {ex.Message}", "Erro",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
         private void CarregaGridUsuarios()
         {
             try
             {
                 dgvUsuarios.Rows.Clear();
                 var listaDeUsuarios = Usuario.ObterLista();
-
+                int linha = 0;
                 foreach (var usuario in listaDeUsuarios)
                 {
-                    dgvUsuarios.Rows.Add(
-                        usuario.IdUsuario,
-                        usuario.Nome,
-                        usuario.Rg,
-                        usuario.Cpf,
-                        usuario.Endereco,
-                        usuario.Cep,
-                        usuario.Email,
-                        usuario.Telefone,
-                        usuario.Senha,
-                        usuario.DataNascimento.ToString("dd/MM/yyyy")
-                    );
+                    dgvUsuarios.Rows.Add();
+                    dgvUsuarios.Rows[linha].Cells[0].Value = usuario.IdUsuario;
+                    dgvUsuarios.Rows[linha].Cells[1].Value = usuario.Nome;
+                    dgvUsuarios.Rows[linha].Cells[2].Value = usuario.Rg;
+                    dgvUsuarios.Rows[linha].Cells[3].Value = usuario.Cpf;
+                    dgvUsuarios.Rows[linha].Cells[4].Value = usuario.Endereco;
+                    dgvUsuarios.Rows[linha].Cells[5].Value = usuario.Cep;
+                    dgvUsuarios.Rows[linha].Cells[6].Value = usuario.Email;
+                    dgvUsuarios.Rows[linha].Cells[7].Value = usuario.Telefone;
+                    dgvUsuarios.Rows[linha].Cells[8].Value = usuario.Senha;
+                    dgvUsuarios.Rows[linha].Cells[9].Value = usuario.DataNascimento.ToString("dd/MM/yyyy");
+                    dgvUsuarios.Rows[linha].Cells[10].Value = usuario.IdNivel;
+                    dgvUsuarios.Rows[linha].Cells[11].Value = usuario.Ativo ? "Sim" : "Não";
+                    linha++;
                 }
             }
             catch (Exception ex)
@@ -131,6 +121,13 @@ namespace coldmakApp
             {
                 if (!ValidarCamposAtualizacao()) return;
 
+                if (!DateTime.TryParseExact(textDataNascimento.Text, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dataNascimento))
+                {
+                    MessageBox.Show("Formato de data inválido. Use dd/MM/yyyy.", "Erro",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 var usuario = new Usuario
                 {
                     IdUsuario = int.Parse(textId.Text),
@@ -142,23 +139,17 @@ namespace coldmakApp
                     Email = textEmail.Text.Trim(),
                     Telefone = textTelefone.Text.Trim(),
                     Senha = textSenha.Text,
+                    DataNascimento = dataNascimento,
                     IdNivel = ObterIdNivel(),
                     Ativo = chkAtivo.Checked
                 };
-
-                if (!DateTime.TryParse(textDataNascimento.Text, out DateTime dataNascimento))
-                {
-                    MessageBox.Show("Formato de data inválido. Use dd/MM/yyyy.", "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                usuario.DataNascimento = dataNascimento;
 
                 if (usuario.Atualizar())
                 {
                     CarregaGridUsuarios();
                     MessageBox.Show("Usuário atualizado com sucesso!", "Sucesso",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    btnAtualizar.Enabled = false;
                     LimparCampos();
                 }
                 else
@@ -196,11 +187,12 @@ namespace coldmakApp
                         CarregaGridUsuarios();
                         MessageBox.Show("Usuário excluído com sucesso!", "Sucesso",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnDeletar.Enabled = false;
                         LimparCampos();
                     }
                     else
                     {
-                        MessageBox.Show("Usuário não encontrado.", "Erro",
+                        MessageBox.Show("Falha ao excluir o usuário.", "Erro",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
@@ -209,6 +201,24 @@ namespace coldmakApp
             {
                 MessageBox.Show($"Erro ao excluir usuário: {ex.Message}", "Erro",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void dgvUsuarios_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                int linhaAtual = dgvUsuarios.CurrentRow.Index;
+                int idUsuario = Convert.ToInt32(dgvUsuarios.Rows[linhaAtual].Cells[0].Value);
+                var usuario = Usuario.ObterPorId(idUsuario);
+
+                if (usuario != null)
+                {
+                    PreencherCampos(usuario);
+                    btnAtualizar.Enabled = true;
+                    btnDeletar.Enabled = true;
+                    btnInserir.Enabled = false;
+                }
             }
         }
 
@@ -240,6 +250,13 @@ namespace coldmakApp
                 MessageBox.Show("O CEP deve ter exatamente 8 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textCep.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textEmail.Text) || !textEmail.Text.Contains("@") || !textEmail.Text.Contains("."))
+            {
+                MessageBox.Show("Insira um email válido.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textEmail.Focus();
                 return false;
             }
             if (textSenha.Text.Length > 32)
@@ -275,8 +292,8 @@ namespace coldmakApp
             textTelefone.Text = usuario.Telefone;
             textSenha.Text = usuario.Senha;
             textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
-            chkAtivo.Checked = usuario.Ativo;
             textIdNivel.Text = usuario.IdNivel.ToString();
+            chkAtivo.Checked = usuario.Ativo;
         }
 
         private void LimparCampos()
@@ -293,9 +310,9 @@ namespace coldmakApp
             textDataNascimento.Clear();
             textIdNivel.Clear();
             chkAtivo.Checked = false;
+            btnInserir.Enabled = true;
             btnAtualizar.Enabled = false;
             btnDeletar.Enabled = false;
-            btnInserir.Enabled = true;
             textNome.Focus();
         }
 

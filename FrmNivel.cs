@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using coldmak;
-using coldmakClass;
-
+using MySql.Data.MySqlClient;
 
 namespace coldmakApp
+
 {
     public partial class FrmNiveis : Form
     {
@@ -21,65 +13,63 @@ namespace coldmakApp
             InitializeComponent();
         }
 
-        private void FrmNiveis_Load(object sender, EventArgs e)
-        {
-            CarregaGridNiveis();
-        }
-
-        private void btnInserir_Click(object sender, EventArgs e)
+        private void btnListar_Click(object sender, EventArgs e)
         {
             try
             {
-                Nivel nivel = new Nivel(
-                    textNome.Text,
-                    textSigla.Text
-                );
-
-                nivel.Inserir();
-
-                if (nivel.IdNivel > 0)
+                string connectionString = "server=127.0.0.1;database=coldmak;user=root;password=";
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
                 {
-                    CarregaGridNiveis();
-                    MessageBox.Show($"Nível {nivel.Nome} inserido com sucesso");
-                    btnInserir.Enabled = false;
-                    LimparCampos();
+                    conn.Open();
+                    string query = "SELECT IdNivel, Nome, Sigla FROM nivel";
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+
+                        // Limpa e configura as colunas manualmente
+                        dgvNiveis.Columns.Clear();
+                        dgvNiveis.AutoGenerateColumns = false;
+
+                        dgvNiveis.Columns.Add(new DataGridViewTextBoxColumn
+                        {
+                            Name = "colIdNivel",
+                            HeaderText = "IdNivel",
+                            DataPropertyName = "IdNivel",
+                            Visible = true
+                        });
+                        dgvNiveis.Columns.Add(new DataGridViewTextBoxColumn
+                        {
+                            Name = "colNome",
+                            HeaderText = "Nome",
+                            DataPropertyName = "Nome",
+                            Visible = true
+                        });
+                        dgvNiveis.Columns.Add(new DataGridViewTextBoxColumn
+                        {
+                            Name = "colSigla",
+                            HeaderText = "Sigla",
+                            DataPropertyName = "Sigla",
+                            Visible = true
+                        });
+
+                        // Define o DataSource apenas se houver dados
+                        if (dt.Rows.Count > 0)
+                        {
+                            dgvNiveis.DataSource = dt;
+                            MessageBox.Show("Dados carregados com sucesso! " + dt.Rows.Count + " registros.");
+                        }
+                        else
+                        {
+                            dgvNiveis.DataSource = null;
+                            MessageBox.Show("Nenhum registro encontrado na tabela 'nivel'.");
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao inserir nível: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void CarregaGridNiveis()
-        {
-            dgvNiveis.Rows.Clear();
-            var listaDeNiveis = Nivel.ObterLista();
-            int linha = 0;
-            foreach (var nivel in listaDeNiveis)
-            {
-                dgvNiveis.Rows.Add();
-                dgvNiveis.Rows[linha].Cells[0].Value = nivel.IdNivel;
-                dgvNiveis.Rows[linha].Cells[1].Value = nivel.Nome;
-                dgvNiveis.Rows[linha].Cells[2].Value = nivel.Sigla;
-                linha++;
-            }
-        }
-
-        private void dgvNiveis_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                int linhaAtual = dgvNiveis.CurrentRow.Index;
-                int idNivel = Convert.ToInt32(dgvNiveis.Rows[linhaAtual].Cells[0].Value);
-                var nivel = Nivel.ObterPorId(idNivel);
-
-                textId.Text = nivel.IdNivel.ToString();
-                textNome.Text = nivel.Nome;
-                textSigla.Text = nivel.Sigla;
-
-                btnAtualizar.Enabled = true;
-                btnDeletar.Enabled = true;
+                MessageBox.Show("Erro ao listar: " + ex.Message);
             }
         }
 
@@ -87,22 +77,40 @@ namespace coldmakApp
         {
             try
             {
-                Nivel nivel = new Nivel(
-                    int.Parse(textId.Text),
-                    textNome.Text,
-                    textSigla.Text
-                );
-
-                if (nivel.Atualizar())
+                if (dgvNiveis.SelectedRows.Count > 0)
                 {
-                    CarregaGridNiveis();
-                    MessageBox.Show("Nível atualizado com sucesso!");
-                    LimparCampos();
+                    int id = Convert.ToInt32(dgvNiveis.SelectedRows[0].Cells[0].Value);
+                    string novoValor = textNome.Text.Trim();
+
+                    if (string.IsNullOrEmpty(novoValor))
+                    {
+                        MessageBox.Show("Por favor, insira um valor para o campo Nome!");
+                        return;
+                    }
+
+                    string connectionString = "server=127.0.0.1;database=coldmak;user=root;password=";
+                    using (MySqlConnection conn = new MySqlConnection(connectionString))
+                    {
+                        conn.Open();
+                        string query = "UPDATE nivel SET Nome = @valor WHERE IdNivel = @id";
+                        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@valor", novoValor);
+                            cmd.Parameters.AddWithValue("@id", id);
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    btnListar_Click(sender, e);
+                    MessageBox.Show("Registro atualizado com sucesso!");
+                }
+                else
+                {
+                    MessageBox.Show("Selecione uma linha para atualizar!");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar nível: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro ao atualizar: " + ex.Message);
             }
         }
 
@@ -110,50 +118,38 @@ namespace coldmakApp
         {
             try
             {
-                int idNivel = int.Parse(textId.Text);
-                Nivel nivel = Nivel.ObterPorId(idNivel);
-
-                if (nivel != null)
+                if (dgvNiveis.SelectedRows.Count > 0)
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir o nível {nivel.Nome}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    int id = Convert.ToInt32(dgvNiveis.SelectedRows[0].Cells[0].Value);
+
+                    DialogResult result = MessageBox.Show("Tem certeza de que deseja deletar este registro?",
+                        "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
                     {
-                        if (nivel.Deletar())
+                        string connectionString = "server=127.0.0.1;database=coldmak;user=root;password=";
+                        using (MySqlConnection conn = new MySqlConnection(connectionString))
                         {
-                            CarregaGridNiveis();
-                            MessageBox.Show("Nível excluído com sucesso!");
-                            LimparCampos();
+                            conn.Open();
+                            string query = "DELETE FROM nivel WHERE IdNivel = @id";
+                            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@id", id);
+                                cmd.ExecuteNonQuery();
+                            }
                         }
-                        else
-                        {
-                            MessageBox.Show("Falha ao excluir o nível.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        btnListar_Click(sender, e);
+                        MessageBox.Show("Registro deletado com sucesso!");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Nível não encontrado.", "Informação", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Selecione uma linha para deletar!");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao excluir nível: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Erro ao deletar: " + ex.Message);
             }
-        }
-
-        private void LimparCampos()
-        {
-            textId.Text = "";
-            textNome.Text = "";
-            textSigla.Text = "";
-
-            btnAtualizar.Enabled = false;
-            btnDeletar.Enabled = false;
-            btnInserir.Enabled = true;
-        }
-
-        private void btnDeletar_Click_1(object sender, EventArgs e)
-        {
-            btnDeletar_Click(sender, e);
         }
     }
 }

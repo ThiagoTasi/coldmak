@@ -19,15 +19,17 @@ namespace coldmakClass
         public DateTime DataNascimento { get; set; }
         public int IdNivel { get; set; }
         public bool Ativo { get; set; }
-        public Nivel Nivel { get; set; }
+        public Nivel Nivel { get; set; } // Assumindo que Nivel é uma classe relacionada
 
+        // Construtor padrão
         public Usuario()
         {
             Nivel = new Nivel();
         }
 
+        // Construtor para inserção
         public Usuario(string nome, string rg, string cpf, string endereco, string cep, string email,
-                       string telefone, string senha, DateTime dataNascimento, int idNivel, bool ativo, Nivel nivel = null)
+                       string telefone, string senha, DateTime dataNascimento, int idNivel, bool ativo)
         {
             Nome = nome;
             Rg = rg;
@@ -40,12 +42,13 @@ namespace coldmakClass
             DataNascimento = dataNascimento;
             IdNivel = idNivel;
             Ativo = ativo;
-            Nivel = nivel ?? new Nivel();
+            Nivel = new Nivel();
         }
 
+        // Construtor completo
         public Usuario(int idUsuario, string nome, string rg, string cpf, string endereco, string cep,
                        string email, string telefone, string senha, DateTime dataNascimento, int idNivel,
-                       bool ativo, Nivel nivel = null)
+                       bool ativo)
         {
             IdUsuario = idUsuario;
             Nome = nome;
@@ -59,214 +62,166 @@ namespace coldmakClass
             DataNascimento = dataNascimento;
             IdNivel = idNivel;
             Ativo = ativo;
-            Nivel = nivel ?? new Nivel();
+            Nivel = new Nivel();
         }
 
+        // Método para inserir um usuário (sem parâmetro de saída p_idUsuario)
         public void Inserir()
         {
-            using (var cmd = Banco.Abrir())
+            try
             {
-                try
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "sp_usuario_insert";
-                    cmd.Parameters.AddWithValue("@spnome", Nome ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@sprg", Rg ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@spcpf", Cpf ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@spendereco", Endereco ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@spcep", Cep ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@spemail", Email ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@sptelefone", Telefone ?? string.Empty);
-                    cmd.Parameters.AddWithValue("@spsenha", MD5Hash(Senha ?? string.Empty));
-                    cmd.Parameters.AddWithValue("@spdatanascimento", DataNascimento);
-                    cmd.Parameters.AddWithValue("@spidnivel", IdNivel);
-                    cmd.Parameters.AddWithValue("@spativo", Ativo ? 1 : 0); // Convertendo bool para 1 ou 0 para BIT
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_usuario_insert";
+                cmd.Parameters.AddWithValue("p_nome", Nome ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_rg", Rg ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_cpf", Cpf ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_endereco", Endereco ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_cep", Cep ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_email", Email ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_telefone", Telefone ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_senha", Senha ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_dataNascimento", DataNascimento);
+                cmd.Parameters.AddWithValue("p_idNivel", IdNivel);
+                cmd.Parameters.AddWithValue("p_ativo", Ativo ? 1 : 0);
 
-                    object result = cmd.ExecuteScalar();
-                    if (result == null || result == DBNull.Value)
-                    {
-                        throw new Exception("Falha ao obter o ID gerado pelo banco de dados. Verifique a stored procedure.");
-                    }
-                    IdUsuario = Convert.ToInt32(result);
-                }
-                catch (MySqlException ex)
-                {
-                    throw new Exception($"Erro de banco de dados ao inserir usuário: {ex.Message} (Código: {ex.Number})");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erro ao inserir usuário: {ex.Message}");
-                }
+                cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
             }
-        }
-        private string MD5Hash(string input)
-        {
-            using (var md5 = System.Security.Cryptography.MD5.Create())
+            catch (Exception ex)
             {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                Console.WriteLine($"Erro ao inserir usuário: {ex.Message}");
+                throw;
             }
         }
 
+        // Método para obter um usuário por ID
         public static Usuario ObterPorId(int id)
         {
             Usuario usuario = null;
-            using (var cmd = Banco.Abrir())
+            try
             {
-                try
+                var cmd = Banco.Abrir();
+                cmd.CommandText = "SELECT * FROM usuario WHERE IdUsuario = @id";
+                cmd.Parameters.AddWithValue("@id", id);
+                var dr = cmd.ExecuteReader();
+                if (dr.Read())
                 {
-                    cmd.CommandText = "SELECT * FROM usuario WHERE IdUsuario = @id";
-                    cmd.Parameters.AddWithValue("@id", id);
-                    using (var dr = cmd.ExecuteReader())
-                    {
-                        if (dr.Read())
-                        {
-                            usuario = new Usuario(
-                                dr.GetInt32("IdUsuario"),
-                                dr.GetString("Nome"),
-                                dr.GetString("Rg"),
-                                dr.GetString("Cpf"),
-                                dr.GetString("Endereco"),
-                                dr.GetString("Cep"),
-                                dr.GetString("Email"),
-                                dr.GetString("Telefone"),
-                                dr.GetString("Senha"),
-                                dr.GetDateTime("DataNascimento"),
-                                dr.GetInt32("IdNivel"),
-                                dr.GetBoolean("Ativo")
-                            );
-                        }
-                    }
+                    usuario = new Usuario(
+                        dr.GetInt32("IdUsuario"),
+                        dr.GetString("Nome"),
+                        dr.GetString("Rg"),
+                        dr.GetString("Cpf"),
+                        dr.GetString("Endereco"),
+                        dr.GetString("Cep"),
+                        dr.GetString("Email"),
+                        dr.GetString("Telefone"),
+                        dr.GetString("Senha"),
+                        dr.GetDateTime("DataNascimento"),
+                        dr.GetInt32("IdNivel"),
+                        dr.GetBoolean("Ativo")
+                    );
                 }
-                catch (MySqlException ex)
-                {
-                    throw new Exception($"Erro de banco de dados ao obter usuário por ID: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erro ao obter usuário por ID: {ex.Message}");
-                }
+                dr.Close();
+                cmd.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao obter usuário por ID: {ex.Message}");
+                throw;
             }
             return usuario;
         }
 
+        // Método para obter a lista de usuários
         public static List<Usuario> ObterLista()
         {
             List<Usuario> lista = new List<Usuario>();
-            using (var cmd = Banco.Abrir())
+            try
             {
-                try
+                var cmd = Banco.Abrir();
+                cmd.CommandText = "SELECT * FROM usuario ORDER BY Nome ASC";
+                var dr = cmd.ExecuteReader();
+                while (dr.Read())
                 {
-                    cmd.CommandText = "SELECT * FROM usuario ORDER BY Nome ASC";
-                    using (var dr = cmd.ExecuteReader())
-                    {
-                        while (dr.Read())
-                        {
-                            var usuario = new Usuario(
-                                dr.GetInt32("IdUsuario"),
-                                dr.GetString("Nome"),
-                                dr.GetString("Rg"),
-                                dr.GetString("Cpf"),
-                                dr.GetString("Endereco"),
-                                dr.GetString("Cep"),
-                                dr.GetString("Email"),
-                                dr.GetString("Telefone"),
-                                dr.GetString("Senha"),
-                                dr.GetDateTime("DataNascimento"),
-                                dr.GetInt32("IdNivel"),
-                                dr.GetBoolean("Ativo")
-                            );
-                            lista.Add(usuario);
-                        }
-                    }
+                    lista.Add(new Usuario(
+                        dr.GetInt32("IdUsuario"),
+                        dr.GetString("Nome"),
+                        dr.GetString("Rg"),
+                        dr.GetString("Cpf"),
+                        dr.GetString("Endereco"),
+                        dr.GetString("Cep"),
+                        dr.GetString("Email"),
+                        dr.GetString("Telefone"),
+                        dr.GetString("Senha"),
+                        dr.GetDateTime("DataNascimento"),
+                        dr.GetInt32("IdNivel"),
+                        dr.GetBoolean("Ativo")
+                    ));
                 }
-                catch (MySqlException ex)
-                {
-                    throw new Exception($"Erro de banco de dados ao obter lista de usuários: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erro ao obter lista de usuários: {ex.Message}");
-                }
+                dr.Close();
+                cmd.Connection.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao obter lista de usuários: {ex.Message}");
+                throw;
             }
             return lista;
         }
 
+        // Método para atualizar um usuário
         public bool Atualizar()
         {
-            using (var cmd = Banco.Abrir())
+            try
             {
-                try
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "sp_usuario_update";
-                    cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
-                    cmd.Parameters.AddWithValue("spnome", Nome ?? string.Empty);
-                    cmd.Parameters.AddWithValue("sprg", Rg ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spcpf", Cpf ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spendereco", Endereco ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spcep", Cep ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spemail", Email ?? string.Empty);
-                    cmd.Parameters.AddWithValue("sptelefone", Telefone ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spsenha", Senha ?? string.Empty);
-                    cmd.Parameters.AddWithValue("spdatanascimento", DataNascimento);
-                    cmd.Parameters.AddWithValue("spidnivel", IdNivel);
-                    cmd.Parameters.AddWithValue("spativo", Ativo); // Adicionado
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_usuario_update";
+                cmd.Parameters.AddWithValue("p_idusuario", IdUsuario);
+                cmd.Parameters.AddWithValue("p_nome", Nome ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_rg", Rg ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_cpf", Cpf ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_endereco", Endereco ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_cep", Cep ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_email", Email ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_telefone", Telefone ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_senha", Senha ?? string.Empty);
+                cmd.Parameters.AddWithValue("p_dataNascimento", DataNascimento);
+                cmd.Parameters.AddWithValue("p_idNivel", IdNivel);
+                cmd.Parameters.AddWithValue("p_ativo", Ativo ? 1 : 0);
 
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0;
-                }
-                catch (MySqlException ex)
-                {
-                    if (ex.Message.Contains("Usuário não encontrado"))
-                        throw new Exception("Usuário não encontrado.");
-                    else if (ex.Message.Contains("CPF já cadastrado"))
-                        throw new Exception("CPF já cadastrado por outro usuário.");
-                    else if (ex.Message.Contains("Erro ao atualizar usuário"))
-                        throw new Exception("Erro ao atualizar usuário no banco de dados.");
-                    else
-                        throw new Exception($"Erro de banco de dados ao atualizar usuário: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erro ao atualizar usuário: {ex.Message}");
-                }
+                int rowsAffected = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atualizar usuário: {ex.Message}");
+                throw;
             }
         }
 
+        // Método para deletar um usuário
         public bool Deletar()
         {
-            using (var cmd = Banco.Abrir())
+            try
             {
-                try
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.CommandText = "sp_delete_usuario";
-                    cmd.Parameters.AddWithValue("spidusuario", IdUsuario);
+                var cmd = Banco.Abrir();
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = "sp_delete_usuario";
+                cmd.Parameters.AddWithValue("p_idusuario", IdUsuario);
 
-                    using (var dr = cmd.ExecuteReader())
-                    {
-                        if (dr.Read())
-                        {
-                            string mensagem = dr.GetString("Mensagem");
-                            if (mensagem.Contains("Usuário não encontrado"))
-                            {
-                                return false;
-                            }
-                            return true; // "Usuário deletado com sucesso"
-                        }
-                        return false;
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    throw new Exception($"Erro de banco de dados ao deletar usuário: {ex.Message}");
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"Erro ao deletar usuário: {ex.Message}");
-                }
+                int rowsAffected = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao deletar usuário: {ex.Message}");
+                throw;
             }
         }
     }

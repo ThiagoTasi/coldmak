@@ -137,7 +137,7 @@
             // 
             // btnInserir
             // 
-            this.btnInserir.Location = new System.Drawing.Point(107, 613);
+            this.btnInserir.Location = new System.Drawing.Point(54, 613);
             this.btnInserir.Name = "btnInserir";
             this.btnInserir.Size = new System.Drawing.Size(75, 23);
             this.btnInserir.TabIndex = 7;
@@ -148,7 +148,7 @@
             // 
             // btnAtualizar
             // 
-            this.btnAtualizar.Location = new System.Drawing.Point(365, 613);
+            this.btnAtualizar.Location = new System.Drawing.Point(368, 613);
             this.btnAtualizar.Name = "btnAtualizar";
             this.btnAtualizar.Size = new System.Drawing.Size(75, 23);
             this.btnAtualizar.TabIndex = 8;
@@ -158,7 +158,7 @@
             // 
             // btnDeletar
             // 
-            this.btnDeletar.Location = new System.Drawing.Point(672, 613);
+            this.btnDeletar.Location = new System.Drawing.Point(636, 613);
             this.btnDeletar.Name = "btnDeletar";
             this.btnDeletar.Size = new System.Drawing.Size(75, 23);
             this.btnDeletar.TabIndex = 9;
@@ -180,7 +180,7 @@
             this.Clntelefone,
             this.Clnsenha,
             this.Clndatanascimento});
-            this.dgvUsuarios.Location = new System.Drawing.Point(107, 430);
+            this.dgvUsuarios.Location = new System.Drawing.Point(54, 430);
             this.dgvUsuarios.Name = "dgvUsuarios";
             this.dgvUsuarios.RowHeadersWidth = 51;
             this.dgvUsuarios.RowTemplate.Height = 24;
@@ -421,7 +421,7 @@
             // 
             // btnListar
             // 
-            this.btnListar.Location = new System.Drawing.Point(950, 613);
+            this.btnListar.Location = new System.Drawing.Point(897, 613);
             this.btnListar.Name = "btnListar";
             this.btnListar.Size = new System.Drawing.Size(75, 23);
             this.btnListar.TabIndex = 28;
@@ -476,7 +476,7 @@
             this.Name = "FrmUsuarios";
             this.Text = "Frmusuario";
             this.UseWaitCursor = true;
-            this.Load += new System.EventHandler(this.FrmUsuarios_Load_1);
+            this.Load += new System.EventHandler(this.FrmUsuarios_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
