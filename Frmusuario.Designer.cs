@@ -67,6 +67,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.btnListar = new System.Windows.Forms.Button();
             this.textIdNivel = new System.Windows.Forms.TextBox();
+            this.cmbNivel = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).BeginInit();
             this.SuspendLayout();
             // 
@@ -439,11 +441,30 @@
             this.textIdNivel.TabIndex = 29;
             this.textIdNivel.UseWaitCursor = true;
             // 
+            // cmbNivel
+            // 
+            this.cmbNivel.FormattingEnabled = true;
+            this.cmbNivel.Location = new System.Drawing.Point(395, 348);
+            this.cmbNivel.Name = "cmbNivel";
+            this.cmbNivel.Size = new System.Drawing.Size(121, 24);
+            this.cmbNivel.TabIndex = 30;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(351, 350);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(38, 16);
+            this.label13.TabIndex = 31;
+            this.label13.Text = "Nivel";
+            // 
             // FrmUsuarios
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1147, 701);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.cmbNivel);
             this.Controls.Add(this.textIdNivel);
             this.Controls.Add(this.btnListar);
             this.Controls.Add(this.label12);
@@ -524,5 +545,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Clntelefone;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clnsenha;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clndatanascimento;
+        private System.Windows.Forms.ComboBox cmbNivel;
+        private System.Windows.Forms.Label label13;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
 namespace coldmakClass
@@ -68,6 +69,12 @@ namespace coldmakClass
         // Método para inserir um usuário (sem parâmetro de saída p_idUsuario)
         public void Inserir()
         {
+            MessageBox.Show("Método Inserir() foi chamado!", "Debug");
+            string dadosEnviados = $"Nome: '{Nome ?? string.Empty}', RG: '{Rg ?? string.Empty}', CPF: '{Cpf ?? string.Empty}', " +
+                                  $"Endereço: '{Endereco ?? string.Empty}', CEP: '{Cep ?? string.Empty}', Email: '{Email ?? string.Empty}', " +
+                                  $"Telefone: '{Telefone ?? string.Empty}', Senha: '{Senha ?? string.Empty}', " +
+                                  $"DataNasc: {DataNascimento}, IdNivel: {IdNivel}, Ativo: {(Ativo ? 1 : 0)}";
+            MessageBox.Show(dadosEnviados, "Dados Enviados ao Banco"); // Log adicional
             try
             {
                 var cmd = Banco.Abrir();

@@ -5,14 +5,19 @@ using System.Globalization;
 using System.Windows.Forms;
 using coldmak;        // Namespace para a classe Banco
 using coldmakClass;  // Namespace da classe Usuario
+using MySql.Data.MySqlClient; // Para usar MySqlCommand diretamente
+using System.Linq;   // Adicionado para Any() e First()
 
 namespace coldmakApp
 {
     public partial class FrmUsuarios : Form
     {
+        private List<Nivel> niveis; // Lista de níveis
+
         public FrmUsuarios()
         {
             InitializeComponent();
+            CarregarNiveis(); // Carrega os níveis ao abrir o formulário
         }
 
         private void FrmUsuarios_Load(object sender, EventArgs e)
@@ -28,16 +33,52 @@ namespace coldmakApp
             }
         }
 
+        private void CarregarNiveis()
+        {
+            try
+            {
+                niveis = new List<Nivel>();
+                MySqlCommand cmd = Banco.Abrir();
+                cmd.CommandText = "SELECT IdNivel, Sigla FROM Nivel"; // Busca Sigla em vez de Nome
+                var leitor = cmd.ExecuteReader();
+                while (leitor.Read())
+                {
+                    niveis.Add(new Nivel
+                    {
+                        IdNivel = leitor.GetInt32("IdNivel"),
+                        Sigla = leitor.GetString("Sigla") // Mapeia Sigla
+                    });
+                }
+                leitor.Close();
+                Banco.Fechar(cmd);
+
+                cmbNivel.DataSource = niveis;
+                cmbNivel.DisplayMember = "Sigla"; // Exibe Sigla no ComboBox
+                cmbNivel.ValueMember = "IdNivel"; // Valor associado é IdNivel
+
+                cmbNivel.SelectedIndexChanged += (s, e) =>
+                {
+                    if (cmbNivel.SelectedValue != null)
+                    {
+                        textIdNivel.Text = cmbNivel.SelectedValue.ToString();
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao carregar níveis: {ex.Message}", "Erro",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private int ObterIdNivel()
         {
-            if (int.TryParse(textIdNivel.Text, out int idNivel))
+            if (int.TryParse(textIdNivel.Text, out int idNivel) && niveis.Any(n => n.IdNivel == idNivel))
             {
-                if (idNivel == 1 || idNivel == 2) // 1 = ADM, 2 = CLI (valores temporários)
-                    return idNivel;
-                else
-                    return 2; // Padrão: CLI
+                return idNivel;
             }
-            return 2; // Padrão se falhar a conversão
+            MessageBox.Show("Nível inválido. Selecionando o primeiro nível disponível.", "Atenção",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return niveis.First().IdNivel; // Retorna o primeiro nível válido como padrão
         }
 
         private void btnInserir_Click(object sender, EventArgs e)
@@ -67,9 +108,14 @@ namespace coldmakApp
                     chkAtivo.Checked
                 );
 
-                usuario.Inserir();
-                // Removida a verificação usuario.IdUsuario > 0, pois o ID não é mais preenchido aqui
-                CarregaGridUsuarios(); // Atualiza a grade para refletir o novo usuário
+                string dados = $"Nome: '{usuario.Nome}', RG: '{usuario.Rg}', CPF: '{usuario.Cpf}', " +
+                              $"Endereço: '{usuario.Endereco}', CEP: '{usuario.Cep}', Email: '{usuario.Email}', " +
+                              $"Telefone: '{usuario.Telefone}', Senha: '{usuario.Senha}', " +
+                              $"DataNasc: {usuario.DataNascimento}, IdNivel: {usuario.IdNivel}, Ativo: {usuario.Ativo}";
+                MessageBox.Show(dados, "Dados a Inserir");
+
+                usuario.Inserir(); // Deveria chamar o método acima
+                CarregaGridUsuarios();
                 MessageBox.Show($"Usuário {usuario.Nome} inserido com sucesso", "Sucesso",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnInserir.Enabled = false;
@@ -231,21 +277,21 @@ namespace coldmakApp
                 textNome.Focus();
                 return false;
             }
-            if (textRg.Text.Length != 9)
+            if (string.IsNullOrWhiteSpace(textRg.Text) || textRg.Text.Length != 9)
             {
                 MessageBox.Show("O RG deve ter exatamente 9 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textRg.Focus();
                 return false;
             }
-            if (textCpf.Text.Length != 11)
+            if (string.IsNullOrWhiteSpace(textCpf.Text) || textCpf.Text.Length != 11)
             {
                 MessageBox.Show("O CPF deve ter exatamente 11 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textCpf.Focus();
                 return false;
             }
-            if (textCep.Text.Length != 8)
+            if (string.IsNullOrWhiteSpace(textCep.Text) || textCep.Text.Length != 8)
             {
                 MessageBox.Show("O CEP deve ter exatamente 8 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -259,11 +305,18 @@ namespace coldmakApp
                 textEmail.Focus();
                 return false;
             }
-            if (textSenha.Text.Length > 32)
+            if (string.IsNullOrWhiteSpace(textSenha.Text) || textSenha.Text.Length > 32)
             {
-                MessageBox.Show("A senha não pode exceder 32 caracteres.", "Atenção",
+                MessageBox.Show("A senha é obrigatória e não pode exceder 32 caracteres.", "Atenção",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textSenha.Focus();
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(textIdNivel.Text) || !niveis.Any(n => n.IdNivel == int.Parse(textIdNivel.Text)))
+            {
+                MessageBox.Show("Selecione um nível válido.", "Atenção",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbNivel.Focus();
                 return false;
             }
             return true;
@@ -293,6 +346,7 @@ namespace coldmakApp
             textSenha.Text = usuario.Senha;
             textDataNascimento.Text = usuario.DataNascimento.ToString("dd/MM/yyyy");
             textIdNivel.Text = usuario.IdNivel.ToString();
+            cmbNivel.SelectedValue = usuario.IdNivel;
             chkAtivo.Checked = usuario.Ativo;
         }
 
@@ -309,6 +363,7 @@ namespace coldmakApp
             textSenha.Clear();
             textDataNascimento.Clear();
             textIdNivel.Clear();
+            cmbNivel.SelectedIndex = -1;
             chkAtivo.Checked = false;
             btnInserir.Enabled = true;
             btnAtualizar.Enabled = false;
