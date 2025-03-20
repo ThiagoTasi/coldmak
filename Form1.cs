@@ -162,5 +162,10 @@ namespace coldmak
             FrmVendas.IsMdiContainer = true;
             FrmVendas.Show();
         }
+
+        private void btnSair_Click_1(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

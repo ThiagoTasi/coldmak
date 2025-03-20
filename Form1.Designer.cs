@@ -88,12 +88,13 @@
             // 
             // btnSair
             // 
-            this.btnSair.Location = new System.Drawing.Point(1241, 553);
+            this.btnSair.Location = new System.Drawing.Point(1749, 930);
             this.btnSair.Name = "btnSair";
             this.btnSair.Size = new System.Drawing.Size(109, 23);
             this.btnSair.TabIndex = 5;
             this.btnSair.Text = "SAIR";
             this.btnSair.UseVisualStyleBackColor = true;
+            this.btnSair.Click += new System.EventHandler(this.btnSair_Click_1);
             // 
             // btnCaixa
             // 
@@ -178,9 +179,9 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(171, 80);
+            this.pictureBox1.Location = new System.Drawing.Point(388, 310);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1104, 421);
+            this.pictureBox1.Size = new System.Drawing.Size(1328, 437);
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
@@ -188,7 +189,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1362, 588);
+            this.ClientSize = new System.Drawing.Size(1870, 965);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnUsuario);
             this.Controls.Add(this.btnSolicitacao);
