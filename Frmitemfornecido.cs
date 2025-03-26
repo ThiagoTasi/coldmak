@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,9 @@ namespace coldmakApp
         public FrmItemFornecido()
         {
             InitializeComponent();
+            // Desabilitar botões de atualizar e deletar inicialmente
+            btnAtualizar.Enabled = false;
+            btnDeletar.Enabled = false;
         }
 
         private void FrmItemFornecido_Load(object sender, EventArgs e)
@@ -47,7 +51,6 @@ namespace coldmakApp
                 {
                     CarregaGridItensFornecidos();
                     MessageBox.Show($"Item fornecido inserido com sucesso! ID: {itemFornecido.IdItemFornecido}", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    btnInserir.Enabled = false;
                     LimparCampos();
                 }
                 else
@@ -118,7 +121,7 @@ namespace coldmakApp
 
                 if (itemFornecido != null)
                 {
-                    if (MessageBox.Show($"Deseja realmente excluir o item fornecido {itemFornecido.IdItemFornecido}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (MessageBox.Show($"Deseja realmente excluir o item fornecido com ID: {itemFornecido.IdItemFornecido}?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
                         if (itemFornecido.Deletar())
                         {
@@ -168,16 +171,35 @@ namespace coldmakApp
             if (e.RowIndex >= 0)
             {
                 int linhaAtual = dgvitfor.CurrentRow.Index;
-                int idItemFornecido = Convert.ToInt32(dgvitfor.Rows[linhaAtual].Cells[0].Value);
-                var itemFornecido = ItemFornecido.ObterPorId(idItemFornecido);
-                textIditemfor.Text = itemFornecido.IdItemFornecido.ToString();
-                textIdFornecedor.Text = itemFornecido.IdFornecedor.ToString();
-                textIdProduto.Text = itemFornecido.IdProduto.ToString();
-                textquant.Text = itemFornecido.Quantidade.ToString();
-                textmod.Text = itemFornecido.Modelo;
-                textnome.Text = itemFornecido.Nome;
-                btnAtualizar.Enabled = true;
-                btnDeletar.Enabled = true;
+                if (dgvitfor.Rows[linhaAtual].Cells[0].Value != null)
+                {
+                    int idItemFornecido = Convert.ToInt32(dgvitfor.Rows[linhaAtual].Cells[0].Value);
+                    var itemFornecido = ItemFornecido.ObterPorId(idItemFornecido);
+                    if (itemFornecido != null)
+                    {
+                        textIditemfor.Text = itemFornecido.IdItemFornecido.ToString();
+                        textIdFornecedor.Text = itemFornecido.IdFornecedor.ToString();
+                        textIdProduto.Text = itemFornecido.IdProduto.ToString();
+                        textquant.Text = itemFornecido.Quantidade.ToString();
+                        textmod.Text = itemFornecido.Modelo;
+                        textnome.Text = itemFornecido.Nome;
+                        btnAtualizar.Enabled = false;
+                        btnDeletar.Enabled = false;
+                        btnInserir.Enabled = false; // Desativa inserir quando um item está selecionado
+                    }
+                    else
+                    {
+                        LimparCampos();
+                    }
+                }
+                else
+                {
+                    LimparCampos();
+                }
+            }
+            else
+            {
+                LimparCampos();
             }
         }
 
@@ -190,9 +212,9 @@ namespace coldmakApp
             textquant.Text = "";
             textmod.Text = "";
             textnome.Text = "";
-            btnAtualizar.Enabled = false;
-            btnDeletar.Enabled = false;
-            btnInserir.Enabled = true;
+            btnAtualizar.Enabled = true;
+            btnDeletar.Enabled = true;
+            btnInserir.Enabled = true; // Reativa inserir após limpar
         }
 
         // Método para validar os campos
