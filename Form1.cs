@@ -134,6 +134,12 @@ namespace coldmak
             frmItempedido.IsMdiContainer = true;
             frmItempedido.Show();
         }
+        private void btnItemfornecido_Click(object sender, EventArgs e)
+        {
+            FrmItemFornecido frmItemfornecido = new FrmItemFornecido();
+            frmItemfornecido.IsMdiContainer = true;
+            frmItemfornecido.Show();
+        }
 
         private void btnNivel_Click(object sender, EventArgs e)
         {

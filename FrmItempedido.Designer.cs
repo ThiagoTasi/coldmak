@@ -277,6 +277,7 @@
             this.Controls.Add(this.label1);
             this.Name = "FrmItemPedido";
             this.Text = "FrmItempedido";
+            this.Load += new System.EventHandler(this.FrmItemPedido_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvitped)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

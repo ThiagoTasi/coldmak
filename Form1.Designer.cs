@@ -43,6 +43,7 @@
             this.btnSolicitacao = new System.Windows.Forms.Button();
             this.btnUsuario = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnitemfornecido = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,7 +51,7 @@
             // 
             this.btnCliente.Location = new System.Drawing.Point(0, 65);
             this.btnCliente.Name = "btnCliente";
-            this.btnCliente.Size = new System.Drawing.Size(123, 23);
+            this.btnCliente.Size = new System.Drawing.Size(134, 23);
             this.btnCliente.TabIndex = 1;
             this.btnCliente.Text = "CLIENTE";
             this.btnCliente.UseVisualStyleBackColor = true;
@@ -58,9 +59,9 @@
             // 
             // btnProduto
             // 
-            this.btnProduto.Location = new System.Drawing.Point(0, 387);
+            this.btnProduto.Location = new System.Drawing.Point(0, 424);
             this.btnProduto.Name = "btnProduto";
-            this.btnProduto.Size = new System.Drawing.Size(123, 23);
+            this.btnProduto.Size = new System.Drawing.Size(134, 23);
             this.btnProduto.TabIndex = 2;
             this.btnProduto.Text = "PRODUTO";
             this.btnProduto.UseVisualStyleBackColor = true;
@@ -68,9 +69,9 @@
             // 
             // btnOrdem
             // 
-            this.btnOrdem.Location = new System.Drawing.Point(0, 332);
+            this.btnOrdem.Location = new System.Drawing.Point(0, 384);
             this.btnOrdem.Name = "btnOrdem";
-            this.btnOrdem.Size = new System.Drawing.Size(123, 23);
+            this.btnOrdem.Size = new System.Drawing.Size(134, 23);
             this.btnOrdem.TabIndex = 3;
             this.btnOrdem.Text = "ORDEM";
             this.btnOrdem.UseVisualStyleBackColor = true;
@@ -78,9 +79,9 @@
             // 
             // btnVenda
             // 
-            this.btnVenda.Location = new System.Drawing.Point(0, 507);
+            this.btnVenda.Location = new System.Drawing.Point(0, 541);
             this.btnVenda.Name = "btnVenda";
-            this.btnVenda.Size = new System.Drawing.Size(123, 23);
+            this.btnVenda.Size = new System.Drawing.Size(134, 23);
             this.btnVenda.TabIndex = 4;
             this.btnVenda.Text = "VENDA";
             this.btnVenda.UseVisualStyleBackColor = true;
@@ -100,7 +101,7 @@
             // 
             this.btnCaixa.Location = new System.Drawing.Point(0, 22);
             this.btnCaixa.Name = "btnCaixa";
-            this.btnCaixa.Size = new System.Drawing.Size(123, 23);
+            this.btnCaixa.Size = new System.Drawing.Size(134, 23);
             this.btnCaixa.TabIndex = 6;
             this.btnCaixa.Text = "CAIXA";
             this.btnCaixa.UseVisualStyleBackColor = true;
@@ -110,7 +111,7 @@
             // 
             this.btnEndereco.Location = new System.Drawing.Point(0, 107);
             this.btnEndereco.Name = "btnEndereco";
-            this.btnEndereco.Size = new System.Drawing.Size(123, 23);
+            this.btnEndereco.Size = new System.Drawing.Size(134, 23);
             this.btnEndereco.TabIndex = 7;
             this.btnEndereco.Text = "ENDERECO";
             this.btnEndereco.UseVisualStyleBackColor = true;
@@ -120,7 +121,7 @@
             // 
             this.btnFornecedor.Location = new System.Drawing.Point(0, 150);
             this.btnFornecedor.Name = "btnFornecedor";
-            this.btnFornecedor.Size = new System.Drawing.Size(123, 23);
+            this.btnFornecedor.Size = new System.Drawing.Size(134, 23);
             this.btnFornecedor.TabIndex = 8;
             this.btnFornecedor.Text = "FORNECEDOR";
             this.btnFornecedor.UseVisualStyleBackColor = true;
@@ -130,7 +131,7 @@
             // 
             this.btnHistoricos.Location = new System.Drawing.Point(0, 196);
             this.btnHistoricos.Name = "btnHistoricos";
-            this.btnHistoricos.Size = new System.Drawing.Size(123, 23);
+            this.btnHistoricos.Size = new System.Drawing.Size(134, 23);
             this.btnHistoricos.TabIndex = 9;
             this.btnHistoricos.Text = "HISTORICOS";
             this.btnHistoricos.UseVisualStyleBackColor = true;
@@ -140,7 +141,7 @@
             // 
             this.btnItempedido.Location = new System.Drawing.Point(-10, 243);
             this.btnItempedido.Name = "btnItempedido";
-            this.btnItempedido.Size = new System.Drawing.Size(133, 23);
+            this.btnItempedido.Size = new System.Drawing.Size(144, 23);
             this.btnItempedido.TabIndex = 10;
             this.btnItempedido.Text = "ITEM PEDIDO";
             this.btnItempedido.UseVisualStyleBackColor = true;
@@ -148,9 +149,9 @@
             // 
             // btnNivel
             // 
-            this.btnNivel.Location = new System.Drawing.Point(0, 289);
+            this.btnNivel.Location = new System.Drawing.Point(0, 345);
             this.btnNivel.Name = "btnNivel";
-            this.btnNivel.Size = new System.Drawing.Size(123, 23);
+            this.btnNivel.Size = new System.Drawing.Size(134, 23);
             this.btnNivel.TabIndex = 11;
             this.btnNivel.Text = "NIVEL";
             this.btnNivel.UseVisualStyleBackColor = true;
@@ -158,9 +159,9 @@
             // 
             // btnSolicitacao
             // 
-            this.btnSolicitacao.Location = new System.Drawing.Point(0, 428);
+            this.btnSolicitacao.Location = new System.Drawing.Point(0, 463);
             this.btnSolicitacao.Name = "btnSolicitacao";
-            this.btnSolicitacao.Size = new System.Drawing.Size(123, 23);
+            this.btnSolicitacao.Size = new System.Drawing.Size(134, 23);
             this.btnSolicitacao.TabIndex = 12;
             this.btnSolicitacao.Text = "SOLICITACAO";
             this.btnSolicitacao.UseVisualStyleBackColor = true;
@@ -168,9 +169,9 @@
             // 
             // btnUsuario
             // 
-            this.btnUsuario.Location = new System.Drawing.Point(0, 466);
+            this.btnUsuario.Location = new System.Drawing.Point(0, 501);
             this.btnUsuario.Name = "btnUsuario";
-            this.btnUsuario.Size = new System.Drawing.Size(123, 23);
+            this.btnUsuario.Size = new System.Drawing.Size(134, 23);
             this.btnUsuario.TabIndex = 13;
             this.btnUsuario.Text = "USUARIO";
             this.btnUsuario.UseVisualStyleBackColor = true;
@@ -186,12 +187,22 @@
             this.pictureBox1.TabIndex = 14;
             this.pictureBox1.TabStop = false;
             // 
+            // btnitemfornecido
+            // 
+            this.btnitemfornecido.Location = new System.Drawing.Point(0, 295);
+            this.btnitemfornecido.Name = "btnitemfornecido";
+            this.btnitemfornecido.Size = new System.Drawing.Size(134, 23);
+            this.btnitemfornecido.TabIndex = 15;
+            this.btnitemfornecido.Text = "ITEM FORNECIDO";
+            this.btnitemfornecido.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1870, 965);
+            this.Controls.Add(this.btnitemfornecido);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnUsuario);
             this.Controls.Add(this.btnSolicitacao);
@@ -229,5 +240,6 @@
         private System.Windows.Forms.Button btnSolicitacao;
         private System.Windows.Forms.Button btnUsuario;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button btnitemfornecido;
     }
 }
