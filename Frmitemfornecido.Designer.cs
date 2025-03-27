@@ -287,7 +287,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmItemFornecido";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frmitemfornecido";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmItemFornecido_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvitfor)).EndInit();
             this.ResumeLayout(false);

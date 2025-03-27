@@ -243,7 +243,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmVendas";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmVendas";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmVendas_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvendas)).EndInit();
             this.ResumeLayout(false);

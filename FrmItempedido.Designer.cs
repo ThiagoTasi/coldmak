@@ -276,7 +276,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmItemPedido";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmItempedido";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.FrmItemPedido_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvitped)).EndInit();
             this.ResumeLayout(false);

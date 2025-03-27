@@ -270,7 +270,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmHistoricos";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmHistoricos";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.dgvhist)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

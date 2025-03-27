@@ -448,6 +448,7 @@
             this.cmbNivel.Name = "cmbNivel";
             this.cmbNivel.Size = new System.Drawing.Size(121, 24);
             this.cmbNivel.TabIndex = 30;
+            this.cmbNivel.UseWaitCursor = true;
             // 
             // label13
             // 
@@ -457,6 +458,7 @@
             this.label13.Size = new System.Drawing.Size(38, 16);
             this.label13.TabIndex = 31;
             this.label13.Text = "Nivel";
+            this.label13.UseWaitCursor = true;
             // 
             // FrmUsuarios
             // 
@@ -495,7 +497,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmUsuarios";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Frmusuario";
+            this.TopMost = true;
             this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.FrmUsuarios_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarios)).EndInit();

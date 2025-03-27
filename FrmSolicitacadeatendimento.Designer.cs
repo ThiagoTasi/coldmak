@@ -213,7 +213,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmSolicitacaodeAtendimento";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmSolicitacadeatendimento";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.dgvsolaten)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

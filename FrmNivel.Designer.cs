@@ -36,13 +36,13 @@
             this.textNome = new System.Windows.Forms.TextBox();
             this.textSigla = new System.Windows.Forms.TextBox();
             this.dgvNiveis = new System.Windows.Forms.DataGridView();
+            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ClnSigla = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnInserir = new System.Windows.Forms.Button();
             this.btnAtualizar = new System.Windows.Forms.Button();
             this.btnDeletar = new System.Windows.Forms.Button();
             this.btnListar = new System.Windows.Forms.Button();
-            this.ClnId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnNome = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ClnSigla = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNiveis)).BeginInit();
             this.SuspendLayout();
             // 
@@ -118,6 +118,27 @@
             this.dgvNiveis.Size = new System.Drawing.Size(647, 150);
             this.dgvNiveis.TabIndex = 7;
             // 
+            // ClnId
+            // 
+            this.ClnId.HeaderText = "IdNivel";
+            this.ClnId.MinimumWidth = 6;
+            this.ClnId.Name = "ClnId";
+            this.ClnId.Width = 125;
+            // 
+            // ClnNome
+            // 
+            this.ClnNome.HeaderText = "Nome";
+            this.ClnNome.MinimumWidth = 6;
+            this.ClnNome.Name = "ClnNome";
+            this.ClnNome.Width = 125;
+            // 
+            // ClnSigla
+            // 
+            this.ClnSigla.HeaderText = "Sigla";
+            this.ClnSigla.MinimumWidth = 6;
+            this.ClnSigla.Name = "ClnSigla";
+            this.ClnSigla.Width = 125;
+            // 
             // btnInserir
             // 
             this.btnInserir.Location = new System.Drawing.Point(16, 346);
@@ -126,7 +147,6 @@
             this.btnInserir.TabIndex = 8;
             this.btnInserir.Text = "Inserir";
             this.btnInserir.UseVisualStyleBackColor = true;
-
             // 
             // btnAtualizar
             // 
@@ -158,27 +178,6 @@
             this.btnListar.UseVisualStyleBackColor = true;
             this.btnListar.Click += new System.EventHandler(this.btnListar_Click);
             // 
-            // ClnId
-            // 
-            this.ClnId.HeaderText = "IdNivel";
-            this.ClnId.MinimumWidth = 6;
-            this.ClnId.Name = "ClnId";
-            this.ClnId.Width = 125;
-            // 
-            // ClnNome
-            // 
-            this.ClnNome.HeaderText = "Nome";
-            this.ClnNome.MinimumWidth = 6;
-            this.ClnNome.Name = "ClnNome";
-            this.ClnNome.Width = 125;
-            // 
-            // ClnSigla
-            // 
-            this.ClnSigla.HeaderText = "Sigla";
-            this.ClnSigla.MinimumWidth = 6;
-            this.ClnSigla.Name = "ClnSigla";
-            this.ClnSigla.Width = 125;
-            // 
             // FrmNiveis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -197,8 +196,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "FrmNiveis";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmNivel";
-
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.dgvNiveis)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
